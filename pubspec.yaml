@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^2.1.0
+  flutter_masked_text2: ^0.9.1
   intl: ^0.17.0
   provider: ^5.0.0
 
