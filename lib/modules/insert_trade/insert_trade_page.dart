@@ -39,7 +39,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
               children: [
                 Text(
                   'Fill all the fields of the trade',
-                  style: AppTextStyles.titleBoldHeading,
+                  style: AppTextStyles.titleBoldGrey,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 25),
@@ -115,7 +115,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
       bottomNavigationBar: BottomButtons(
         primaryLabel: 'Cancel',
         secondaryLabel: 'Save',
-        enablePrimaryColor: true,
+        secondButtonColor: AppTextStyles.buttonSecondary,
       ),
     );
   }

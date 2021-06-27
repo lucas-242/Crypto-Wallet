@@ -7,8 +7,8 @@ class BottomButtons extends StatelessWidget {
   final VoidCallback? onPressedPrimary;
   final String secondaryLabel;
   final VoidCallback? onPressedSecondary;
-  final bool enablePrimaryColor;
-  final bool enableSecondaryColor;
+  final TextStyle? firstButtonColor;
+  final TextStyle? secondButtonColor;
 
   const BottomButtons({
     Key? key,
@@ -16,8 +16,8 @@ class BottomButtons extends StatelessWidget {
     this.onPressedPrimary,
     required this.secondaryLabel,
     this.onPressedSecondary,
-    this.enablePrimaryColor = false,
-    this.enableSecondaryColor = false,
+    this.firstButtonColor,
+    this.secondButtonColor,
   }) : super(key: key);
 
   @override
@@ -44,7 +44,7 @@ class BottomButtons extends StatelessWidget {
                     label: primaryLabel,
                     onPressed: onPressedPrimary,
                     style:
-                        enablePrimaryColor ? AppTextStyles.buttonPrimary : null,
+                        firstButtonColor ?? AppTextStyles.buttonPrimary,
                   ),
                 ),
                 VerticalDivider(),
@@ -53,7 +53,7 @@ class BottomButtons extends StatelessWidget {
                     label: secondaryLabel,
                     onPressed: onPressedSecondary,
                     style:
-                        enableSecondaryColor ? AppTextStyles.buttonPrimary : null,
+                        secondButtonColor ?? AppTextStyles.buttonPrimary,
                   ),
                 ),
               ],

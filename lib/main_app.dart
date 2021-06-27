@@ -1,9 +1,12 @@
-import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:crypto_wallet/shared/themes/app_colors.dart';
 
 import 'modules/app/app.dart';
+import 'modules/login/login.dart';
+import 'modules/splash/splash_page.dart';
 import 'modules/insert_trade/insert_trade.dart';
+import 'shared/auth/auth.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({Key? key}) : super(key: key);
@@ -17,6 +20,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProvider(create: (_) => AppBloc()),
         ChangeNotifierProvider(create: (_) => InsertTradeBloc()),
       ],
@@ -26,11 +30,12 @@ class _MainAppState extends State<MainApp> {
           primaryColor: AppColors.primary,
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/app',
+        initialRoute: '/splash',
         routes: {
+          '/splash': (context) => SplashPage(),
           '/app': (context) => App(),
+          '/login': (context) => LoginPage(),
           '/insert_trade': (context) => InsertTradePage()
-          // '/dashboard':
         },
       ),
     );
