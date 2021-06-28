@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 class InsertTradeBloc extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
-  Trade trade = Trade();
+  TradeModel trade = TradeModel();
 
   String? validateAmount(String? value) =>
       value == null || double.parse(value) == 0

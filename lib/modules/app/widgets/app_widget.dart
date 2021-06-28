@@ -18,13 +18,12 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     var appBloc = context.watch<AppBloc>();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appBloc.currentPageName),
+      body: SafeArea(
+        child: [
+          HomePage(),
+          WalletPage(),
+        ][appBloc.currentPageIndex],
       ),
-      body: [
-        HomePage(),
-        WalletPage(),
-      ][appBloc.currentPageIndex],
       bottomNavigationBar: AppBottomNavigationBar(
         currentPage: appBloc.currentPageIndex,
         onTap: (index) => appBloc.changePage(index),

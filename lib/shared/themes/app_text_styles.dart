@@ -12,7 +12,7 @@ class AppTextStyles {
   static final titleRegular = GoogleFonts.lexendDeca(
     fontSize: 20,
     fontWeight: FontWeight.w400,
-    color: AppColors.background,
+    color: AppColors.grey
   );
   static final titleBoldGrey = GoogleFonts.lexendDeca(
     fontSize: 20,

@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-class Trade {
+class TradeModel {
   final String? operationType;
   final String? crypto;
   final double? amount;
   final double? price;
   final DateTime? date;
-  Trade({
+  TradeModel({
     this.operationType,
     this.crypto,
     this.amount,
@@ -15,14 +15,14 @@ class Trade {
   });
 
 
-  Trade copyWith({
+  TradeModel copyWith({
     String? operationType,
     String? crypto,
     double? amount,
     double? price,
     DateTime? date,
   }) {
-    return Trade(
+    return TradeModel(
       operationType: operationType ?? this.operationType,
       crypto: crypto ?? this.crypto,
       amount: amount ?? this.amount,
@@ -41,8 +41,8 @@ class Trade {
     };
   }
 
-  factory Trade.fromMap(Map<String, dynamic> map) {
-    return Trade(
+  factory TradeModel.fromMap(Map<String, dynamic> map) {
+    return TradeModel(
       operationType: map['operationType'],
       crypto: map['crypto'],
       amount: map['amount'],
@@ -53,7 +53,7 @@ class Trade {
 
   String toJson() => json.encode(toMap());
 
-  factory Trade.fromJson(String source) => Trade.fromMap(json.decode(source));
+  factory TradeModel.fromJson(String source) => TradeModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -64,7 +64,7 @@ class Trade {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
   
-    return other is Trade &&
+    return other is TradeModel &&
       other.operationType == operationType &&
       other.crypto == crypto &&
       other.amount == amount &&

@@ -1,8 +1,6 @@
-import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/social_login_button/social_login_button_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'login_bloc.dart';
 
@@ -20,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    final auth = context.watch<Auth>();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -64,14 +61,14 @@ class _LoginPageState extends State<LoginPage> {
             //   height: size.height * 0.36,
             //   color: AppColors.primary,
             // ),
-            _bottomWidgets(auth: auth),
+            _googleButton(),
           ],
         ),
       ),
     );
   }
 
-  Widget _bottomWidgets({required Auth auth}) {
+  Widget _googleButton() {
     return Positioned(
       bottom: 50,
       left: 0,
@@ -81,7 +78,11 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
             padding: EdgeInsets.only(left: 40, right: 40, top: 40),
             child: SocialLoginButton(
-              onTap: () => loginBloc.signIn(auth),
+              onTap: () {
+                loginBloc.signInWithGoogle().then((value) {
+                  if (value) Navigator.of(context).pushReplacementNamed('/app');
+                });
+              },
             ),
           ),
         ],

@@ -18,7 +18,7 @@
 </p>
 
 <p>
-The first version of app will work with BTC, ETH, ADA, XRP, DOGE, BNB, DOT and SOL. Will allow you to save your buy/sell trades in Dollar and view the balance of your cryptos separately or all consolidated in a dashboard.
+The first version of the app will work with BTC, ETH, ADA, XRP, DOGE, BNB, DOT and SOL. It will allow you to save your buy/sell trades in Dollar and view the balance of your cryptos separately or all consolidated in a dashboard.
 </p>
 
 <p>
