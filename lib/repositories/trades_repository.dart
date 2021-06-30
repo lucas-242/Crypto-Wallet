@@ -13,12 +13,14 @@ class TradesRepository {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) {
+        //TODO: use fromJson method
         result.add(TradeModel(
           amount: element['amount'],
           crypto: element['crypto'],
           date: DateTime.parse(element['date'].toDate().toString()),
           operationType: element['operationType'],
           price: element['price'],
+          user: element['user'],
         ));
       });
     }).catchError((error) {
@@ -27,5 +29,16 @@ class TradesRepository {
 
     print(result);
     return result;
+  }
+
+  Future<TradeModel?> addTrade(TradeModel model) async {
+    return await FirebaseFirestore.instance
+        .collection(_collection)
+        .add(model.toMap())
+        .then((value) => model)
+        .catchError((error) {
+      print(error);
+      return null;
+    });
   }
 }

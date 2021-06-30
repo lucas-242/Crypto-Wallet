@@ -33,6 +33,8 @@ class CustomTextFormField extends StatelessWidget {
             controller: controller,
             initialValue: initialValue,
             validator: validator,
+            keyboardType: keyboardType,
+            textInputAction: textInputAction,
             onChanged: onChanged,
             style: AppTextStyles.input,
             decoration: InputDecoration(
@@ -63,14 +65,5 @@ class CustomTextFormField extends StatelessWidget {
         ],
       ),
     );
-    return Container(
-        child: TextFormField(
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      decoration: InputDecoration(
-        labelText: labelText,
-        prefixIcon: Icon(icon),
-      ),
-    ));
   }
 }

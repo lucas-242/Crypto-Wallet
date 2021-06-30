@@ -6,12 +6,14 @@ class TradeModel {
   final double? amount;
   final double? price;
   final DateTime? date;
+  final String? user;
   TradeModel({
     this.operationType,
     this.crypto,
     this.amount,
     this.price,
     this.date,
+    this.user,
   });
 
 
@@ -21,6 +23,7 @@ class TradeModel {
     double? amount,
     double? price,
     DateTime? date,
+    String? user,
   }) {
     return TradeModel(
       operationType: operationType ?? this.operationType,
@@ -28,6 +31,7 @@ class TradeModel {
       amount: amount ?? this.amount,
       price: price ?? this.price,
       date: date ?? this.date,
+      user: user ?? this.user,
     );
   }
 
@@ -38,6 +42,7 @@ class TradeModel {
       'amount': amount,
       'price': price,
       'date': date,
+      'user': user
     };
   }
 
@@ -47,6 +52,7 @@ class TradeModel {
       crypto: map['crypto'],
       amount: map['amount'],
       price: map['price'],
+      user: map['user'],
       date: DateTime.fromMillisecondsSinceEpoch(map['date']),
     );
   }
@@ -57,7 +63,7 @@ class TradeModel {
 
   @override
   String toString() {
-    return 'Trade(operationType: $operationType, crypto: $crypto, amount: $amount, price: $price, date: $date)';
+    return 'Trade(operationType: $operationType, crypto: $crypto, amount: $amount, price: $price, date: $date, user: $user)';
   }
 
   @override
@@ -69,7 +75,8 @@ class TradeModel {
       other.crypto == crypto &&
       other.amount == amount &&
       other.price == price &&
-      other.date == date;
+      other.date == date &&
+      other.user == user;
   }
 
   @override
@@ -78,6 +85,7 @@ class TradeModel {
       crypto.hashCode ^
       amount.hashCode ^
       price.hashCode ^
+      user.hashCode ^
       date.hashCode;
   }
 }

@@ -1,4 +1,4 @@
-import 'package:crypto_wallet/shared/models/status_page_model.dart';
+import 'package:crypto_wallet/shared/models/status_page.dart';
 
 class WalletStatus {
   final StatusPage statusPage;

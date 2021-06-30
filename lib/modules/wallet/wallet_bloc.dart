@@ -20,8 +20,6 @@ class WalletBloc extends ChangeNotifier {
   Future<void> getTrades(String uid) async {
     status = WalletStatus.loading();
 
-    await Future.delayed(Duration(seconds: 7));
-
     await _tradesRepository.getAllTrades(uid).then((value) {
       trades = value;
       trades.sort((a, b) => b.date!.compareTo(a.date!));
@@ -38,4 +36,14 @@ class WalletBloc extends ChangeNotifier {
 
   List<TradeModel> getTradesByDate(DateTime date) =>
       trades.where((element) => element.date == date).toList();
+
+  void addTrade(TradeModel trade) {
+    trades.add(trade);
+    trades.sort((a, b) => b.date!.compareTo(a.date!));
+
+    dates.add(trade.date!);
+    dates.sort((a, b) => b.compareTo(a));
+
+    notifyListeners();
+  }
 }

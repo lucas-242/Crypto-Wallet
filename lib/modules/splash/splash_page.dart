@@ -10,9 +10,9 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final auth = FirebaseAuth.instance;
   @override
   void initState() {
-    final auth = FirebaseAuth.instance;
     auth.userChanges().listen((user) {
       if (user != null)
         Navigator.pushReplacementNamed(context, '/app', arguments: user);
@@ -21,6 +21,11 @@ class _SplashPageState extends State<SplashPage> {
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

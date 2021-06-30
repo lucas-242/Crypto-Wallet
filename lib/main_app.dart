@@ -1,5 +1,6 @@
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';
 
@@ -9,22 +10,22 @@ import 'modules/splash/splash_page.dart';
 import 'modules/insert_trade/insert_trade.dart';
 import 'modules/wallet/wallet.dart';
 
-class MainApp extends StatefulWidget {
-  const MainApp({Key? key}) : super(key: key);
+class MainApp extends StatelessWidget {
+  MainApp() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
+  }
 
-  @override
-  _MainAppState createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
   final tradesRepository = TradesRepository();
 
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppBloc()),
-        ChangeNotifierProvider(create: (_) => InsertTradeBloc()),
         ChangeNotifierProvider(
             create: (_) => WalletBloc(tradesRepository: tradesRepository)),
       ],
@@ -32,6 +33,7 @@ class _MainAppState extends State<MainApp> {
         title: 'Crypto Wallet',
         theme: ThemeData(
           primaryColor: AppColors.primary,
+          primarySwatch: MaterialColor(0xFF264653, AppColors.primaryMaterial)
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: '/splash',
@@ -39,7 +41,7 @@ class _MainAppState extends State<MainApp> {
           '/splash': (context) => SplashPage(),
           '/app': (context) => App(),
           '/login': (context) => LoginPage(),
-          '/insert_trade': (context) => InsertTradePage()
+          '/insert_trade': (context) => InsertTradePage(tradesRepository: tradesRepository,)
         },
       ),
     );

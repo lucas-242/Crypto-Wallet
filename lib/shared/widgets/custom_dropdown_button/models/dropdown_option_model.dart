@@ -1,6 +1,6 @@
 class DropdownOption {
   final String name;
-  final String value;
+  final String? value;
 
-  DropdownOption(this.name, this.value);
+  DropdownOption({required this.name, this.value});
 }

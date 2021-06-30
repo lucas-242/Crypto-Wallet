@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/shared/models/trade_model.dart';
+import 'package:crypto_wallet/shared/models/trade_type.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class TradeTile extends StatelessWidget {
       ),
       trailing: Text.rich(
         TextSpan(
-          text: 'Buy price',
+          text: '${trade.operationType == TradeType.BUY ? "Buy" : "Sell"} price',
           style: AppTextStyles.captionBoldBody,
           children: [
             TextSpan(

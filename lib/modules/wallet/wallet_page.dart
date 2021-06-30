@@ -1,7 +1,7 @@
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/wallet/wallet_status.dart';
 import 'package:crypto_wallet/modules/wallet/widgets/trade_tile_widget.dart';
-import 'package:crypto_wallet/shared/models/status_page_model.dart';
+import 'package:crypto_wallet/shared/models/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,7 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
+//TODO: Fix Refresh
     return RefreshIndicator(
       color: AppColors.primary,
       onRefresh: () => bloc.getTrades(auth.currentUser!.uid),
@@ -45,10 +46,7 @@ class _WalletPageState extends State<WalletPage> {
           valueListenable: bloc.statusNotifier,
           builder: (context, status, child) {
             if (status.statusPage == StatusPage.loading) {
-              return Center(
-                  child: CircularProgressIndicator(
-                color: AppColors.primary,
-              ));
+              return Center(child: CircularProgressIndicator());
             } else if (status.statusPage == StatusPage.error) {
               return Center(child: Text(status.error));
             } else {
@@ -72,7 +70,7 @@ class _WalletPageState extends State<WalletPage> {
                                       Container(
                                         width: size.width,
                                         child: Text(
-                                          DateFormat.yMd().format(date),
+                                            DateFormat.yMd().format(date),
                                             textAlign: TextAlign.left,
                                             style:
                                                 AppTextStyles.captionBoldBody),

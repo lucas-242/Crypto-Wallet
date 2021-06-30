@@ -18,7 +18,7 @@ class CustomDropdownButton extends StatelessWidget {
         onChanged: (String? value) => onChanged!(value!),
         items: items.map<DropdownMenuItem<String>>((DropdownOption value) {
           return DropdownMenuItem<String>(
-            value: value.value,
+            value: value.value ?? value.name,
             child: Text(value.name),
           );
         }).toList(),
