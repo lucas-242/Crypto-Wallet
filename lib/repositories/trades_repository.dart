@@ -27,7 +27,6 @@ class TradesRepository {
       print('Erro while getting data on $_collection: $error');
     });
 
-    print(result);
     return result;
   }
 
@@ -38,7 +37,6 @@ class TradesRepository {
         .then((value) => model)
         .catchError((error) {
       print(error);
-      return null;
     });
   }
 }

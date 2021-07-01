@@ -36,75 +36,82 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-//TODO: Fix Refresh
-    return RefreshIndicator(
-      color: AppColors.primary,
-      onRefresh: () => bloc.getTrades(auth.currentUser!.uid),
+    return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.background,
-        body: ValueListenableBuilder<WalletStatus>(
-          valueListenable: bloc.statusNotifier,
-          builder: (context, status, child) {
-            if (status.statusPage == StatusPage.loading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (status.statusPage == StatusPage.error) {
-              return Center(child: Text(status.error));
-            } else {
-              return Consumer<WalletBloc>(
-                builder: (context, bloc, child) {
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25),
-                      child: Container(
-                        height: size.height,
-                        child: ListView.builder(
-                          itemCount: bloc.dates.length,
-                          itemBuilder: (context, dateIndex) {
-                            final date = bloc.dates[dateIndex];
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 15),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        width: size.width,
-                                        child: Text(
-                                            DateFormat.yMd().format(date),
-                                            textAlign: TextAlign.left,
-                                            style:
-                                                AppTextStyles.captionBoldBody),
-                                      ),
-                                      Divider(),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: 75 *
-                                      bloc
-                                          .getTradesByDate(date)
-                                          .length
-                                          .toDouble(),
-                                  child: ListView.builder(
-                                    itemCount:
-                                        bloc.getTradesByDate(date).length,
-                                    itemBuilder: (context, index) {
-                                      final trades = bloc.getTradesByDate(date);
-                                      return TradeTile(trade: trades[index]);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    ),
+        body: RefreshIndicator(
+          onRefresh: () => bloc.getTrades(auth.currentUser!.uid),
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: ValueListenableBuilder<WalletStatus>(
+              valueListenable: bloc.statusNotifier,
+              builder: (context, status, child) {
+                if (status.statusPage == StatusPage.loading) {
+                  return Container(
+                    height: size.height,
+                    child: Center(child: CircularProgressIndicator()),
                   );
-                },
-              );
-            }
-          },
+                } else if (status.statusPage == StatusPage.error) {
+                  return Center(child: Text(status.error));
+                } else {
+                  return Consumer<WalletBloc>(
+                    builder: (context, bloc, child) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        child: Container(
+                          height: size.height,
+                          child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: bloc.dates.length,
+                            itemBuilder: (context, dateIndex) {
+                              final date = bloc.dates[dateIndex];
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 15),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: size.width,
+                                          child: Text(
+                                              DateFormat.yMd().format(date),
+                                              textAlign: TextAlign.left,
+                                              style: AppTextStyles
+                                                  .captionBoldBody),
+                                        ),
+                                        Divider(),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 75 *
+                                        bloc
+                                            .getTradesByDate(date)
+                                            .length
+                                            .toDouble(),
+                                    child: ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount:
+                                          bloc.getTradesByDate(date).length,
+                                      itemBuilder: (context, index) {
+                                        final trades =
+                                            bloc.getTradesByDate(date);
+                                        return TradeTile(trade: trades[index]);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.pushNamed(context, '/insert_trade'),

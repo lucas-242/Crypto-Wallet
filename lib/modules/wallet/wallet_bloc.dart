@@ -8,6 +8,7 @@ class WalletBloc extends ChangeNotifier {
 
   List<TradeModel> trades = [];
   List<DateTime> dates = [];
+  Map<String, List<TradeModel>> groupedTrades = {};
 
   final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
 
@@ -23,8 +24,8 @@ class WalletBloc extends ChangeNotifier {
     await _tradesRepository.getAllTrades(uid).then((value) {
       trades = value;
       trades.sort((a, b) => b.date!.compareTo(a.date!));
-      dates = trades.map((e) => e.date!).toList();
-      print('Trades: $trades');
+      dates = trades.map((e) => e.date!).toSet().toList();
+      
       print('Dates: $dates');
     }).catchError((error) {
       status = WalletStatus.error(error);
@@ -41,8 +42,10 @@ class WalletBloc extends ChangeNotifier {
     trades.add(trade);
     trades.sort((a, b) => b.date!.compareTo(a.date!));
 
-    dates.add(trade.date!);
-    dates.sort((a, b) => b.compareTo(a));
+    if (dates.where((element) => element == trade.date!).isEmpty) {
+      dates.add(trade.date!);
+      dates.sort((a, b) => b.compareTo(a));
+    }
 
     notifyListeners();
   }
