@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 class CryptoModel {
-
   final String crypto;
   final double amount;
   final double averagePrice;
   final double totalInvested;
   final double gainLoss;
+  final DateTime updatedAt;
 
   CryptoModel({
     required this.crypto,
@@ -14,9 +14,8 @@ class CryptoModel {
     required this.averagePrice,
     required this.totalInvested,
     this.gainLoss = 0,
-  });
-
-
+    DateTime? updatedAt,
+  }) : this.updatedAt = updatedAt ?? DateTime.now();
 
   CryptoModel copyWith({
     String? crypto,
@@ -24,6 +23,7 @@ class CryptoModel {
     double? averagePrice,
     double? totalInvested,
     double? gainLoss,
+    DateTime? updatedAt,
   }) {
     return CryptoModel(
       crypto: crypto ?? this.crypto,
@@ -31,6 +31,7 @@ class CryptoModel {
       averagePrice: averagePrice ?? this.averagePrice,
       totalInvested: totalInvested ?? this.totalInvested,
       gainLoss: gainLoss ?? this.gainLoss,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -41,6 +42,7 @@ class CryptoModel {
       'averagePrice': averagePrice,
       'totalInvested': totalInvested,
       'gainLoss': gainLoss,
+      'updatedAt': updatedAt.millisecondsSinceEpoch,
     };
   }
 
@@ -51,16 +53,18 @@ class CryptoModel {
       averagePrice: map['averagePrice'],
       totalInvested: map['totalInvested'],
       gainLoss: map['gainLoss'],
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory CryptoModel.fromJson(String source) => CryptoModel.fromMap(json.decode(source));
+  factory CryptoModel.fromJson(String source) =>
+      CryptoModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'CryptoModel(crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, gainLoss: $gainLoss)';
+    return 'CryptoModel(crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, gainLoss: $gainLoss, updatedAt: $updatedAt)';
   }
 
   @override
@@ -72,7 +76,8 @@ class CryptoModel {
       other.amount == amount &&
       other.averagePrice == averagePrice &&
       other.totalInvested == totalInvested &&
-      other.gainLoss == gainLoss;
+      other.gainLoss == gainLoss &&
+      other.updatedAt == updatedAt;
   }
 
   @override
@@ -81,6 +86,7 @@ class CryptoModel {
       amount.hashCode ^
       averagePrice.hashCode ^
       totalInvested.hashCode ^
-      gainLoss.hashCode;
+      gainLoss.hashCode ^
+      updatedAt.hashCode;
   }
 }

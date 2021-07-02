@@ -19,7 +19,7 @@ class CryptoSummary extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                Cryptos.BTC,
+                Cryptos.cryptos.firstWhere((e) => e == crypto.crypto),
                 textAlign: TextAlign.left,
               ),
               SizedBox(height: 25),

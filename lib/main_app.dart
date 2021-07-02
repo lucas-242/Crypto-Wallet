@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/repositories/cryptos_repository.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ class MainApp extends StatelessWidget {
   }
 
   final tradesRepository = TradesRepository();
+  final cryptosRepository = CryptosRepository();
 
   @override
   Widget build(BuildContext context) {
