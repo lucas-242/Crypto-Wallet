@@ -1,25 +1,25 @@
-import 'package:crypto_wallet/modules/wallet/wallet_status.dart';
+import 'package:crypto_wallet/modules/trades/trades_status.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:flutter/cupertino.dart';
 
-class WalletBloc extends ChangeNotifier {
+class TradesBloc extends ChangeNotifier {
   TradesRepository _tradesRepository;
 
   List<TradeModel> trades = [];
   List<DateTime> dates = [];
   Map<String, List<TradeModel>> groupedTrades = {};
 
-  final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
+  final statusNotifier = ValueNotifier<TradesStatus>(TradesStatus());
 
-  WalletStatus get status => statusNotifier.value;
-  set status(WalletStatus status) => statusNotifier.value = status;
+  TradesStatus get status => statusNotifier.value;
+  set status(TradesStatus status) => statusNotifier.value = status;
 
-  WalletBloc({required TradesRepository tradesRepository})
+  TradesBloc({required TradesRepository tradesRepository})
       : _tradesRepository = tradesRepository;
 
   Future<void> getTrades(String uid) async {
-    status = WalletStatus.loading();
+    status = TradesStatus.loading();
 
     await _tradesRepository.getAllTrades(uid).then((value) {
       trades = value;
@@ -28,11 +28,11 @@ class WalletBloc extends ChangeNotifier {
       
       print('Dates: $dates');
     }).catchError((error) {
-      status = WalletStatus.error(error);
+      status = TradesStatus.error(error);
       print(error);
     });
 
-    status = WalletStatus();
+    status = TradesStatus();
   }
 
   List<TradeModel> getTradesByDate(DateTime date) =>

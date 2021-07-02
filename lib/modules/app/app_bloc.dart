@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class AppBloc extends ChangeNotifier {
-  List<String> _pages = ['Home', 'Wallet'];
+  List<String> _pages = ['Home', 'Wallet', 'Trades'];
 
   int _currentPageIndex = 0;
   late String _currentPageName;

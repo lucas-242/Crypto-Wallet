@@ -1,7 +1,4 @@
-import 'package:crypto_wallet/modules/home/widgets/crypto_summary_widget.dart';
-import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/models/cryptos.dart';
-import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
+import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   final auth = FirebaseAuth.instance;
 
   @override
-  Widget build(BuildContext context) {
+   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
@@ -24,15 +21,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             _header(),
             SizedBox(height: 40),
-            CryptoSummary(
-              crypto: CryptoModel(
-                crypto: Cryptos.BTC,
-                amount: 0.002,
-                averagePrice: 33425.25,
-                totalInvested: 1587.51,
-                gainLoss: 2741.45,
-              ),
-            ),
+            
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/modules/home/home_page.dart';
+import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/wallet/wallet_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _AppState extends State<App> {
         child: [
           HomePage(),
           WalletPage(),
+          TradesPage(),
         ][appBloc.currentPageIndex],
       ),
       bottomNavigationBar: AppBottomNavigationBar(

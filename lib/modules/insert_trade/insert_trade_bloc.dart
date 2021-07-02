@@ -1,4 +1,4 @@
-import 'package:crypto_wallet/modules/wallet/wallet.dart';
+import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:crypto_wallet/shared/models/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
@@ -79,7 +79,7 @@ class InsertTradeBloc extends ChangeNotifier {
     );
   }
 
-  Future<void> addTrade(WalletBloc walletBloc) async {
+  Future<void> addTrade(TradesBloc tradesBloc) async {
     final form = formKey.currentState;
 
     if (!form!.validate()) return;
@@ -92,7 +92,7 @@ class InsertTradeBloc extends ChangeNotifier {
         return null;
       }
 
-      walletBloc.addTrade(value);
+      tradesBloc.addTrade(value);
       trade = TradeModel();
       status = InsertTradeStatus();
     }).catchError((error) {

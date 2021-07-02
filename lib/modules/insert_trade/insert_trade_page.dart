@@ -1,5 +1,4 @@
 import 'package:crypto_wallet/modules/insert_trade/insert_trade_status.dart';
-import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:crypto_wallet/shared/models/cryptos.dart';
 import 'package:crypto_wallet/shared/models/status_page.dart';
@@ -14,6 +13,7 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:provider/provider.dart';
 
 import 'insert_trade_bloc.dart';
+import '/modules/trades/trades.dart';
 
 class InsertTradePage extends StatefulWidget {
   final TradesRepository tradesRepository;
@@ -53,7 +53,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
   }
 
   void onPressedSecondary() async {
-    final walletBloc = context.read<WalletBloc>();
+    final walletBloc = context.read<TradesBloc>();
     await bloc
         .addTrade(walletBloc)
         .then((value) => Navigator.pop(context));

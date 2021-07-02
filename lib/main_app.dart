@@ -9,7 +9,7 @@ import 'modules/app/app.dart';
 import 'modules/login/login.dart';
 import 'modules/splash/splash_page.dart';
 import 'modules/insert_trade/insert_trade.dart';
-import 'modules/wallet/wallet.dart';
+import 'modules/trades/trades.dart';
 
 class MainApp extends StatelessWidget {
   MainApp() {
@@ -29,7 +29,7 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AppBloc()),
         ChangeNotifierProvider(
-            create: (_) => WalletBloc(tradesRepository: tradesRepository)),
+            create: (_) => TradesBloc(tradesRepository: tradesRepository)),
       ],
       child: MaterialApp(
         title: 'Crypto Wallet',

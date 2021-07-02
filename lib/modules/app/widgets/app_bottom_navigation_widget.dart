@@ -51,7 +51,11 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.account_balance_wallet),
             icon: Icon(Icons.account_balance_wallet_outlined),
-            label: 'Cryptos',
+            label: 'Wallet',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Trades',
           ),
         ],
       ),
