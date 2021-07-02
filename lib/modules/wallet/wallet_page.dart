@@ -1,6 +1,6 @@
 import 'package:crypto_wallet/modules/wallet/bloc/wallet_status.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
-import 'package:crypto_wallet/modules/wallet/wallet_bloc.dart';
+import 'package:crypto_wallet/modules/wallet/bloc/wallet_bloc.dart';
 import 'package:crypto_wallet/shared/models/status_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

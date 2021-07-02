@@ -1,4 +1,3 @@
-import 'package:crypto_wallet/modules/wallet/wallet_bloc.dart';
 import 'package:crypto_wallet/repositories/cryptos_repository.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'modules/login/login.dart';
 import 'modules/splash/splash_page.dart';
 import 'modules/insert_trade/insert_trade.dart';
 import 'modules/trades/trades.dart';
+import 'modules/wallet/wallet.dart';
 
 class MainApp extends StatelessWidget {
   MainApp() {

@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import 'bloc/trades_status.dart';
-
 class TradesPage extends StatefulWidget {
   const TradesPage({Key? key}) : super(key: key);
 

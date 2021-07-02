@@ -1,4 +1,4 @@
-import 'package:crypto_wallet/modules/insert_trade/insert_trade_status.dart';
+import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:crypto_wallet/shared/models/cryptos.dart';
 import 'package:crypto_wallet/shared/models/status_page.dart';
@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:provider/provider.dart';
 
-import 'insert_trade_bloc.dart';
 import '/modules/trades/trades.dart';
 
 class InsertTradePage extends StatefulWidget {

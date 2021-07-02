@@ -1,7 +1,7 @@
-import 'package:crypto_wallet/modules/trades/bloc/trades_status.dart';
+import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class TradesBloc extends ChangeNotifier {
   TradesRepository _tradesRepository;

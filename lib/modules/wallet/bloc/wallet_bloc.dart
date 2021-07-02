@@ -2,7 +2,7 @@ import 'package:crypto_wallet/repositories/cryptos_repository.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:flutter/foundation.dart';
 
-import 'bloc/wallet_status.dart';
+import 'wallet_status.dart';
 
 class WalletBloc extends ChangeNotifier {
   CryptosRepository _cryptosRepository;
