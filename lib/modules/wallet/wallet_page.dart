@@ -27,12 +27,6 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   @override
-  void dispose() {
-    bloc.statusNotifier.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 

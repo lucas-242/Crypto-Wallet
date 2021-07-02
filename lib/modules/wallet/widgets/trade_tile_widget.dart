@@ -2,6 +2,7 @@ import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/models/trade_type.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TradeTile extends StatelessWidget {
   final TradeModel trade;
@@ -25,7 +26,7 @@ class TradeTile extends StatelessWidget {
           style: AppTextStyles.captionBoldBody,
           children: [
             TextSpan(
-              text: "\n\$${trade.price!.toStringAsFixed(2)}",
+              text: "\n${NumberFormat.currency(symbol: '\$').format(trade.price!)}",
               style: AppTextStyles.captionBody
             ),
           ],
