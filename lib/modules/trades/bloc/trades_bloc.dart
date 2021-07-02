@@ -1,4 +1,4 @@
-import 'package:crypto_wallet/modules/trades/trades_status.dart';
+import 'package:crypto_wallet/modules/trades/bloc/trades_status.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +8,6 @@ class TradesBloc extends ChangeNotifier {
 
   List<TradeModel> trades = [];
   List<DateTime> dates = [];
-  Map<String, List<TradeModel>> groupedTrades = {};
 
   final statusNotifier = ValueNotifier<TradesStatus>(TradesStatus());
 

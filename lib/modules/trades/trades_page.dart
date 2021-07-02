@@ -1,11 +1,12 @@
 import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/modules/trades/trades_status.dart';
 import 'package:crypto_wallet/shared/models/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+
+import 'bloc/trades_status.dart';
 
 class TradesPage extends StatefulWidget {
   const TradesPage({Key? key}) : super(key: key);

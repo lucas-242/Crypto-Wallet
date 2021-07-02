@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/modules/wallet/wallet_bloc.dart';
 import 'package:crypto_wallet/repositories/cryptos_repository.dart';
 import 'package:crypto_wallet/repositories/trades_repository.dart';
 import 'package:flutter/material.dart';
@@ -24,26 +25,29 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppBloc()),
         ChangeNotifierProvider(
             create: (_) => TradesBloc(tradesRepository: tradesRepository)),
+        ChangeNotifierProvider(
+            create: (_) => WalletBloc(cryptosRepository: cryptosRepository)),
       ],
       child: MaterialApp(
         title: 'Crypto Wallet',
         theme: ThemeData(
-          primaryColor: AppColors.primary,
-          primarySwatch: MaterialColor(0xFF264653, AppColors.primaryMaterial)
-        ),
+            primaryColor: AppColors.primary,
+            primarySwatch:
+                MaterialColor(0xFF264653, AppColors.primaryMaterial)),
         debugShowCheckedModeBanner: false,
         initialRoute: '/splash',
         routes: {
           '/splash': (context) => SplashPage(),
           '/app': (context) => App(),
           '/login': (context) => LoginPage(),
-          '/insert_trade': (context) => InsertTradePage(tradesRepository: tradesRepository,)
+          '/insert_trade': (context) => InsertTradePage(
+                tradesRepository: tradesRepository,
+              )
         },
       ),
     );

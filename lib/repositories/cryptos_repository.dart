@@ -15,11 +15,12 @@ class CryptosRepository {
       querySnapshot.docs.forEach((element) {
         //TODO: use fromJson method
         result.add(CryptoModel(
-            crypto: element['crypto'],
-            amount: element['amount'],
-            averagePrice: element['averagePrice'],
-            totalInvested: element['totalInvested'],
-            updatedAt: element['updatedAt']));
+          crypto: element['crypto'],
+          amount: element['amount'],
+          averagePrice: element['averagePrice'],
+          totalInvested: element['totalInvested'],
+          updatedAt: DateTime.parse(element['updatedAt'].toDate().toString()),
+        ));
       });
     }).catchError((error) {
       print('Erro while getting data on $_collection: $error');
