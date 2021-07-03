@@ -1,5 +1,6 @@
 import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/repositories/trades_repository.dart';
+import 'package:crypto_wallet/modules/wallet/wallet.dart';
+import 'package:crypto_wallet/repositories/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/models/trade_type.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'insert_trade_status.dart';
 
 class InsertTradeBloc extends ChangeNotifier {
-  TradesRepository _tradesRepository;
+  WalletRepository _walletRepository;
 
   final formKey = GlobalKey<FormState>();
   TradeModel trade = TradeModel();
@@ -21,14 +22,31 @@ class InsertTradeBloc extends ChangeNotifier {
   InsertTradeStatus get status => statusNotifier.value;
   set status(InsertTradeStatus status) => statusNotifier.value = status;
 
-  InsertTradeBloc({required TradesRepository tradesRepository})
-      : _tradesRepository = tradesRepository;
+  InsertTradeBloc({required WalletRepository walletRepository})
+      : _walletRepository = walletRepository;
 
-  String? validateAmount(String? value) {
+  String? validateCryptoAmount(String? value) {
     return value == null ||
             double.parse(value.replaceAll(RegExp(','), '.')) == 0
         ? "The amount can't be null"
         : null;
+  }
+
+
+String? validateTradedAmount(String? value) {
+    if (value != null) {
+      //Remove $, . from the middle of the number and change , to .
+      value = value
+          .substring(1)
+          .replaceAll(RegExp(r'\.'), '')
+          .replaceAll(RegExp(','), '.');
+
+      return   double.parse(value) < 0
+        ? "The amount can't be null"
+        : null;
+    }
+
+    return null;
   }
 
   String? validateDate(String? value) {
@@ -43,8 +61,6 @@ class InsertTradeBloc extends ChangeNotifier {
           .replaceAll(RegExp(r'\.'), '')
           .replaceAll(RegExp(','), '.');
 
-      print(value);
-
       return double.parse(value) < 0
           ? "The trade must be equals or greater than \$0,00"
           : null;
@@ -57,6 +73,7 @@ class InsertTradeBloc extends ChangeNotifier {
     String? operationType,
     String? crypto,
     double? amount,
+    double? ammountInvested,
     double? price,
     String? date,
     String? user,
@@ -72,6 +89,7 @@ class InsertTradeBloc extends ChangeNotifier {
     trade = trade.copyWith(
       operationType: operationType,
       amount: amount,
+      amountInvested: ammountInvested,
       crypto: crypto,
       date: formattedDate,
       price: price,
@@ -79,20 +97,27 @@ class InsertTradeBloc extends ChangeNotifier {
     );
   }
 
-  Future<void> addTrade(TradesBloc tradesBloc) async {
+  Future<void> addTrade({
+    required WalletBloc walletBloc,
+    required TradesBloc tradesBloc,
+    required String uid,
+  }) async {
     final form = formKey.currentState;
 
     if (!form!.validate()) return;
 
     status = InsertTradeStatus.loading();
 
-    return await _tradesRepository.addTrade(trade).then((value) {
+    var cryptos = await _walletRepository.getAllCryptos(uid);
+
+    return await _walletRepository.addTrade(cryptos, trade).then((value) {
       if (value == null) {
         status = InsertTradeStatus.error('Error to add trade');
         return null;
       }
 
-      tradesBloc.addTrade(value);
+      tradesBloc.getTrades(uid);
+      walletBloc.getCryptos(uid);
       trade = TradeModel();
       status = InsertTradeStatus();
     }).catchError((error) {

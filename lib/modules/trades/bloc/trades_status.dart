@@ -11,4 +11,6 @@ class TradesStatus {
 
   factory TradesStatus.loading() =>
       TradesStatus(statusPage: StatusPage.loading);
+
+  factory TradesStatus.noData() => TradesStatus(statusPage: StatusPage.noData);
 }

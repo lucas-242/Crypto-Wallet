@@ -1,5 +1,6 @@
 import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
-import 'package:crypto_wallet/repositories/trades_repository.dart';
+import 'package:crypto_wallet/modules/wallet/wallet.dart';
+import 'package:crypto_wallet/repositories/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/cryptos.dart';
 import 'package:crypto_wallet/shared/models/status_page.dart';
 import 'package:crypto_wallet/shared/models/trade_type.dart';
@@ -15,8 +16,8 @@ import 'package:provider/provider.dart';
 import '/modules/trades/trades.dart';
 
 class InsertTradePage extends StatefulWidget {
-  final TradesRepository tradesRepository;
-  const InsertTradePage({Key? key, required this.tradesRepository})
+  final WalletRepository walletRepository;
+  const InsertTradePage({Key? key, required this.walletRepository})
       : super(key: key);
 
   @override
@@ -25,22 +26,25 @@ class InsertTradePage extends StatefulWidget {
 
 class _InsertTradePageState extends State<InsertTradePage> {
   late final InsertTradeBloc bloc;
+  late final String uid;
 
   final priceController =
       MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.');
-  final amountController =
+  final tradedAmoutController =
+      MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.');
+  final cryptoAmountController =
       MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
   final dateController = MaskedTextController(mask: '00/00/0000');
 
   @override
   void initState() {
-    final auth = FirebaseAuth.instance;
-    bloc = InsertTradeBloc(tradesRepository: widget.tradesRepository);
+    uid = FirebaseAuth.instance.currentUser!.uid;
+    bloc = InsertTradeBloc(walletRepository: widget.walletRepository);
 
     bloc.onChange(
       operationType: bloc.initialValueOperationType,
       crypto: bloc.initialValueCrypto,
-      user: auth.currentUser!.uid,
+      user: uid,
     );
     super.initState();
   }
@@ -52,9 +56,10 @@ class _InsertTradePageState extends State<InsertTradePage> {
   }
 
   void onPressedSecondary() async {
-    final walletBloc = context.read<TradesBloc>();
+    final tradesBloc = context.read<TradesBloc>();
+    final walletBloc = context.read<WalletBloc>();
     await bloc
-        .addTrade(walletBloc)
+        .addTrade(tradesBloc: tradesBloc, walletBloc: walletBloc, uid: uid)
         .then((value) => Navigator.pop(context));
   }
 
@@ -141,13 +146,22 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 ],
               ),
               CustomTextFormField(
-                labelText: 'Amount',
+                labelText: 'Crypto amount',
                 icon: Icons.plus_one,
                 keyboardType: TextInputType.number,
-                controller: amountController,
-                validator: bloc.validateAmount,
+                controller: cryptoAmountController,
+                validator: bloc.validateCryptoAmount,
                 onChanged: (value) =>
-                    bloc.onChange(amount: amountController.numberValue),
+                    bloc.onChange(amount: cryptoAmountController.numberValue),
+              ),
+              CustomTextFormField(
+                labelText: 'Invested amount',
+                icon: Icons.attach_money,
+                keyboardType: TextInputType.number,
+                controller: tradedAmoutController,
+                validator: bloc.validateTradedAmount,
+                onChanged: (value) =>
+                    bloc.onChange(ammountInvested: tradedAmoutController.numberValue),
               ),
               CustomTextFormField(
                 labelText: 'Trade Price',

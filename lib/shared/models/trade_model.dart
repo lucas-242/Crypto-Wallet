@@ -4,13 +4,16 @@ class TradeModel {
   final String? operationType;
   final String? crypto;
   final double? amount;
+  final double? amountInvested;
   final double? price;
   final DateTime? date;
   final String? user;
+  
   TradeModel({
     this.operationType,
     this.crypto,
     this.amount,
+    this.amountInvested,
     this.price,
     this.date,
     this.user,
@@ -21,6 +24,7 @@ class TradeModel {
     String? operationType,
     String? crypto,
     double? amount,
+    double? amountInvested,
     double? price,
     DateTime? date,
     String? user,
@@ -29,6 +33,7 @@ class TradeModel {
       operationType: operationType ?? this.operationType,
       crypto: crypto ?? this.crypto,
       amount: amount ?? this.amount,
+      amountInvested: amountInvested ?? this.amountInvested,
       price: price ?? this.price,
       date: date ?? this.date,
       user: user ?? this.user,
@@ -40,9 +45,10 @@ class TradeModel {
       'operationType': operationType,
       'crypto': crypto,
       'amount': amount,
+      'amountInvested': amountInvested,
       'price': price,
       'date': date,
-      'user': user
+      'user': user,
     };
   }
 
@@ -51,9 +57,10 @@ class TradeModel {
       operationType: map['operationType'],
       crypto: map['crypto'],
       amount: map['amount'],
+      amountInvested: map['amountInvested'],
       price: map['price'],
-      user: map['user'],
       date: DateTime.fromMillisecondsSinceEpoch(map['date']),
+      user: map['user'],
     );
   }
 
@@ -63,7 +70,7 @@ class TradeModel {
 
   @override
   String toString() {
-    return 'Trade(operationType: $operationType, crypto: $crypto, amount: $amount, price: $price, date: $date, user: $user)';
+    return 'TradeModel(operationType: $operationType, crypto: $crypto, amount: $amount, amountInvested: $amountInvested, price: $price, date: $date, user: $user)';
   }
 
   @override
@@ -74,6 +81,7 @@ class TradeModel {
       other.operationType == operationType &&
       other.crypto == crypto &&
       other.amount == amount &&
+      other.amountInvested == amountInvested &&
       other.price == price &&
       other.date == date &&
       other.user == user;
@@ -84,8 +92,9 @@ class TradeModel {
     return operationType.hashCode ^
       crypto.hashCode ^
       amount.hashCode ^
+      amountInvested.hashCode ^
       price.hashCode ^
-      user.hashCode ^
-      date.hashCode;
+      date.hashCode ^
+      user.hashCode;
   }
 }

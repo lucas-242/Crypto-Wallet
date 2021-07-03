@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
 
@@ -44,7 +43,15 @@ class _WalletPageState extends State<WalletPage> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 } else if (status.statusPage == StatusPage.error) {
-                  return Center(child: Text(status.error));
+                  return Container(
+                    height: size.height,
+                    child: Center(child: Text(status.error)),
+                  );
+                } else if (status.statusPage == StatusPage.noData) {
+                  return Container(
+                    height: size.height,
+                    child: Center(child: Text('No cryptos in the wallet')),
+                  );
                 } else {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),

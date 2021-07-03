@@ -44,7 +44,15 @@ class _TradesPageState extends State<TradesPage> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 } else if (status.statusPage == StatusPage.error) {
-                  return Center(child: Text(status.error));
+                  return Container(
+                    height: size.height,
+                    child: Center(child: Text(status.error)),
+                  );
+                } else if (status.statusPage == StatusPage.noData) {
+                  return Container(
+                    height: size.height,
+                    child: Center(child: Text('No trades in the wallet')),
+                  );
                 } else {
                   return Consumer<TradesBloc>(
                     builder: (context, bloc, child) {

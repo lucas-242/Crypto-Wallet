@@ -11,4 +11,7 @@ class WalletStatus {
 
   factory WalletStatus.loading() =>
       WalletStatus(statusPage: StatusPage.loading);
+
+  factory WalletStatus.noData() =>
+      WalletStatus(statusPage: StatusPage.noData);
 }
