@@ -1,7 +1,9 @@
 import 'package:crypto_wallet/modules/trades/trades.dart';
+import 'package:crypto_wallet/modules/wallet/bloc/wallet_bloc.dart';
 import 'package:crypto_wallet/repositories/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:flutter/foundation.dart';
+import 'package:crypto_wallet/shared/extensions/date_time_extension.dart';
 
 class TradesBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
@@ -25,6 +27,7 @@ class TradesBloc extends ChangeNotifier {
       trades.sort((a, b) => b.date!.compareTo(a.date!));
       dates = trades.map((e) => e.date!).toSet().toList();
 
+//TODO: If there is an error in repository, the catchError doesn't trigger
       print('Dates: $dates');
     }).catchError((error) {
       status = TradesStatus.error(error);
@@ -50,6 +53,33 @@ class TradesBloc extends ChangeNotifier {
       dates.add(trade.date!);
       dates.sort((a, b) => b.compareTo(a));
     }
+
+    notifyListeners();
+  }
+
+  Future<void> deleteTrade({
+    required TradeModel trade,
+    required String uid,
+    required WalletBloc walletBloc,
+  }) async {
+    status = TradesStatus.loading();
+
+    var cryptos = await _walletRepository.getAllCryptos(uid);
+
+    await _walletRepository.deleteTrade(cryptos, trade).then((value) {
+      trades.removeWhere((element) => element.id == trade.id);
+
+      var findTrades =
+          trades.where((element) => element.date!.isSameDate(trade.date!));
+      if (findTrades.isEmpty) {
+        dates.removeWhere((element) => element.isSameDate(trade.date!));
+      }
+
+      walletBloc.getCryptos(uid);
+      status = TradesStatus();
+    }).catchError((error) {
+      status = TradesStatus.error(error);
+    });
 
     notifyListeners();
   }

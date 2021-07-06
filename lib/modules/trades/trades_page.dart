@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/modules/trades/trades.dart';
+import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/models/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,25 +15,28 @@ class TradesPage extends StatefulWidget {
 }
 
 class _TradesPageState extends State<TradesPage> {
-  final auth = FirebaseAuth.instance;
+  final uid = FirebaseAuth.instance.currentUser!.uid;
   late final TradesBloc bloc;
 
   @override
   void initState() {
     bloc = context.read<TradesBloc>();
-    if (bloc.trades.isEmpty) bloc.getTrades(auth.currentUser!.uid);
+    if (bloc.trades.isEmpty) bloc.getTrades(uid);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+//TODO: Fix Error
+//E/flutter (25758): [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: This widget has been unmounted, so the State no longer has a context (and should be considered defunct).
+//E/flutter (25758): Consider canceling any active work during "dispose" or using the "mounted" getter to determine if the State is still active.
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: RefreshIndicator(
-          onRefresh: () => bloc.getTrades(auth.currentUser!.uid),
+          onRefresh: () => bloc.getTrades(uid),
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: ValueListenableBuilder<TradesStatus>(
@@ -96,7 +100,17 @@ class _TradesPageState extends State<TradesPage> {
                                       itemBuilder: (context, index) {
                                         final trades =
                                             bloc.getTradesByDate(date);
-                                        return TradeTile(trade: trades[index]);
+                                        return TradeTile(
+                                          trade: trades[index],
+                                          onDelete: () {
+                                            final walletBloc =
+                                                context.read<WalletBloc>();
+                                            bloc.deleteTrade(
+                                                trade: trades[index],
+                                                uid: uid,
+                                                walletBloc: walletBloc);
+                                          },
+                                        );
                                       },
                                     ),
                                   ),

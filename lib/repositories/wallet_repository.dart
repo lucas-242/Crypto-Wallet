@@ -38,17 +38,25 @@ class WalletRepository {
         .where('user', isEqualTo: uid)
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((element) {
-        //TODO: use fromJson method
-        result.add(TradeModel(
-          amount: element['amount'],
-          crypto: element['crypto'],
-          date: DateTime.parse(element['date'].toDate().toString()),
-          operationType: element['operationType'],
-          price: element['price'],
-          user: element['user'],
-        ));
-      });
+      result = querySnapshot.docs
+          .map((e) => TradeModel.fromMap(e.data() as dynamic))
+          .toList();
+
+      //TODO:find a better way to fill the ids
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        result[i] = result[i].copyWith(id: querySnapshot.docs[i].id);
+      }
+      // querySnapshot.docs.forEach((element) {
+      //   result.add(TradeModel(
+      //     id: element.id,
+      //     amount: element['amount'],
+      //     crypto: element['crypto'],
+      //     date: DateTime.parse(element['date'].toDate().toString()),
+      //     operationType: element['operationType'],
+      //     price: element['price'],
+      //     user: element['user'],
+      //   ));
+      // });
     }).catchError((error) {
       print('Erro while getting data on trades: $error');
     });
@@ -76,6 +84,7 @@ class WalletRepository {
       }
     }).then((value) {
       print(value);
+      //TODO: Fill trade and crypto with Id if it's possible
       return {'trade': trade, 'crypto': crypto};
     }).catchError((error) {
       print("Failed to add trade: $error");
@@ -91,7 +100,8 @@ class WalletRepository {
       amount: trade.amount!,
       averagePrice: trade.price!,
       totalInvested: trade.amountInvested!,
-      user: trade.user!, //TODO: the property user from CryptoModel is empty here
+      user:
+          trade.user!, //TODO: the property user from CryptoModel is empty here
       updatedAt: DateTime.now(),
     );
 
@@ -110,6 +120,26 @@ class WalletRepository {
     print('transaction updated:  $crypto');
   }
 
+  Future<void> deleteTrade(List<CryptoModel> cryptos, TradeModel trade) async {
+    DocumentReference tradesReference =
+        FirebaseFirestore.instance.collection('trades').doc(trade.id);
+
+    late CryptoModel crypto;
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      crypto = _calculateCryptoMetrics(
+        cryptos.single,
+        trade.copyWith(operationType: TradeType.SELL),
+      );
+      updateCrypto(transaction, crypto);
+      transaction.delete(tradesReference);
+    }).then((value) {
+      print(value);
+    }).catchError((error) {
+      print("Failed to delete trade: $error");
+    });
+  }
+
   CryptoModel _calculateCryptoMetrics(CryptoModel crypto, TradeModel trade) {
     var updatedDate = DateTime.now();
     if (trade.operationType == TradeType.BUY) {
@@ -121,7 +151,8 @@ class WalletRepository {
         totalInvested: totalInvested,
         averagePrice: totalInvested / amount,
         updatedAt: updatedDate,
-        user: trade.user, //TODO: the property user from CryptoModel is empty here
+        user:
+            trade.user, //TODO: the property user from CryptoModel is empty here
       );
     } else {
       var amount = crypto.amount - trade.amount!;
@@ -132,7 +163,8 @@ class WalletRepository {
         totalInvested: totalInvested,
         averagePrice: totalInvested / amount,
         updatedAt: updatedDate,
-        user: trade.user, //TODO: the property user from CryptoModel is empty here
+        user:
+            trade.user, //TODO: the property user from CryptoModel is empty here
       );
     }
 
