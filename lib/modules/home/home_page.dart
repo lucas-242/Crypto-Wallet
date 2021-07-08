@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Bem vindo', style: AppTextStyles.titleRegular),
+            Text('Welcome', style: AppTextStyles.titleRegular),
             Text(auth.currentUser!.displayName ?? '',
                 style: AppTextStyles.titleRegular)
           ],

@@ -2,11 +2,13 @@ import 'dart:convert';
 
 class CryptoModel {
   final String? id;
+  //TODO: Create name
   final String crypto;
   final double amount;
   final double averagePrice;
   final double totalInvested;
   final double gainLoss;
+  final double price;
   final DateTime updatedAt;
   final String user;
 
@@ -19,6 +21,7 @@ class CryptoModel {
     required this.totalInvested,
     this.user = '',
     this.gainLoss = 0,
+    this.price = 0,
   }) : this.updatedAt = updatedAt ?? DateTime.now();
 
   CryptoModel copyWith({
@@ -28,6 +31,7 @@ class CryptoModel {
     double? averagePrice,
     double? totalInvested,
     double? gainLoss,
+    double? price,
     DateTime? updatedAt,
     String? user,
   }) {
@@ -38,6 +42,7 @@ class CryptoModel {
       averagePrice: averagePrice ?? this.averagePrice,
       totalInvested: totalInvested ?? this.totalInvested,
       gainLoss: gainLoss ?? this.gainLoss,
+      price: price ?? this.price,
       updatedAt: updatedAt ?? this.updatedAt,
       user: user ?? this.user,
     );
@@ -61,7 +66,6 @@ class CryptoModel {
       amount: map['amount'],
       averagePrice: map['averagePrice'],
       totalInvested: map['totalInvested'],
-      gainLoss: map['gainLoss'],
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt']),
       user: map['user'],
     );
@@ -74,7 +78,7 @@ class CryptoModel {
 
   @override
   String toString() {
-    return 'CryptoModel(id: $id, crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, gainLoss: $gainLoss, updatedAt: $updatedAt, user: $user)';
+    return 'CryptoModel(id: $id, crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, gainLoss: $gainLoss, price: $price, updatedAt: $updatedAt, user: $user)';
   }
 
   @override
@@ -87,7 +91,6 @@ class CryptoModel {
         other.amount == amount &&
         other.averagePrice == averagePrice &&
         other.totalInvested == totalInvested &&
-        other.gainLoss == gainLoss &&
         other.updatedAt == updatedAt &&
         other.user == user;
   }
@@ -99,7 +102,6 @@ class CryptoModel {
         amount.hashCode ^
         averagePrice.hashCode ^
         totalInvested.hashCode ^
-        gainLoss.hashCode ^
         updatedAt.hashCode ^
         user.hashCode;
   }
