@@ -22,6 +22,10 @@ The first version of the app will work with BTC, ETH, ADA, XRP, DOGE, BNB, DOT a
 </p>
 
 <p>
+I'm using <a href="https://www.coingecko.com/api">CoinGecko API</a> to get the crypto currencies.
+</p>
+
+<p>
 This project has been develop for personal use at first moment, but feel free to contribute with ideas or code. Maybe one day this could be at the stores.
 </p>
 
