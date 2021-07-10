@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:crypto_wallet/shared/environment/environment.dart';
-import 'package:crypto_wallet/shared/models/cryptos.dart';
 import 'package:http/http.dart' as http;
 
 class CoinRepository {
@@ -28,21 +27,5 @@ class CoinRepository {
       print(error);
       throw Exception('Error getting prices: $error');
     }
-  }
-
-  /// Get a list of coins to send to the API
-  List<String> getCoins() {
-    var result = <String>[];
-    Cryptos.cryptos.forEach((coin) {
-      switch (coin) {
-        case Cryptos.BTC:
-          result.add('bitcoin');
-          break;
-        default:
-          throw Exception('Error to get coins');
-      }
-    });
-
-    return result;
   }
 }

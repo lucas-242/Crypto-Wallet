@@ -41,11 +41,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
     uid = FirebaseAuth.instance.currentUser!.uid;
     bloc = InsertTradeBloc(walletRepository: widget.walletRepository);
 
-    bloc.onChange(
-      operationType: bloc.initialValueOperationType,
-      crypto: bloc.initialValueCrypto,
-      user: uid,
-    );
+    bloc.onChange(user: uid);
     super.initState();
   }
 
@@ -120,12 +116,12 @@ class _InsertTradePageState extends State<InsertTradePage> {
                   SizedBox(width: 30),
                   Expanded(
                     child: CustomDropdownButton(
-                      value: bloc.initialValueOperationType,
-                      items: [
-                        DropdownOption(name: TradeType.BUY),
-                        DropdownOption(name: TradeType.SELL),
-                      ],
-                      onChanged: (value) => bloc.onChange(operationType: value),
+                      value: bloc.trade.operationType!,
+                      items: TradeType.LIST,
+                      onChanged: (value) {
+                        bloc.onChange(operationType: value);
+                        setState(() {});
+                      },
                     ),
                   ),
                 ],
@@ -136,11 +132,12 @@ class _InsertTradePageState extends State<InsertTradePage> {
                   SizedBox(width: 30),
                   Expanded(
                     child: CustomDropdownButton(
-                      value: bloc.initialValueCrypto,
-                      items: [
-                        DropdownOption(name: Cryptos.BTC),
-                      ],
-                      onChanged: (value) => bloc.onChange(crypto: value),
+                      value: bloc.trade.crypto!,
+                      items: Cryptos.LIST,
+                      onChanged: (value) {
+                        bloc.onChange(crypto: value);
+                        setState(() {});
+                      },
                     ),
                   ),
                 ],
@@ -160,8 +157,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 keyboardType: TextInputType.number,
                 controller: tradedAmoutController,
                 validator: bloc.validateTradedAmount,
-                onChanged: (value) =>
-                    bloc.onChange(ammountInvested: tradedAmoutController.numberValue),
+                onChanged: (value) => bloc.onChange(
+                    ammountInvested: tradedAmoutController.numberValue),
               ),
               CustomTextFormField(
                 labelText: 'Trade Price',

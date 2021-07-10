@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
+import 'package:crypto_wallet/shared/models/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/models/trade_type.dart';
 
@@ -97,6 +98,7 @@ class WalletRepository {
         FirebaseFirestore.instance.collection('cryptos').doc();
 
     var crypto = CryptoModel(
+      name: Cryptos.MAP[trade.crypto!]!,
       crypto: trade.crypto!,
       amount: trade.amount!,
       averagePrice: trade.price!,
@@ -121,6 +123,7 @@ class WalletRepository {
     print('transaction updated:  $crypto');
   }
 
+//TODO: ERROR TO DELETE TRADE
   Future<void> deleteTrade(List<CryptoModel> cryptos, TradeModel trade) async {
     DocumentReference tradesReference =
         FirebaseFirestore.instance.collection('trades').doc(trade.id);

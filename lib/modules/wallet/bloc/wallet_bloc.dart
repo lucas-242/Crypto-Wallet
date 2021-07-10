@@ -37,7 +37,7 @@ class WalletBloc extends ChangeNotifier {
     if (cryptos.isEmpty) {
       status = WalletStatus.noData();
     } else {
-      setTimerToGetPrices();
+      // setTimerToGetPrices();
       status = WalletStatus();
     }
 
@@ -59,7 +59,7 @@ class WalletBloc extends ChangeNotifier {
   }
 
   /// Init a timer to refresh crypto prices
-  setTimerToGetPrices() {
+  void setTimerToGetPrices() {
     Timer.periodic(Duration(seconds: 60), (timer) async {
       var result = await getCryptosPrice(cryptos);
       if (result.isNotEmpty) cryptos = result;
