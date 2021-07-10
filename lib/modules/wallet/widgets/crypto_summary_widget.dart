@@ -20,7 +20,8 @@ class CryptoSummary extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(crypto.crypto),
-                  Text(crypto.price.toStringAsFixed(8)),
+                  Text(
+                      NumberFormat.currency(symbol: '\$').format(crypto.price)),
                 ],
               ),
               SizedBox(height: 25),

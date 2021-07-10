@@ -1,4 +1,3 @@
-import 'package:crypto_wallet/repositories/wallet_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +9,8 @@ import 'modules/splash/splash_page.dart';
 import 'modules/insert_trade/insert_trade.dart';
 import 'modules/trades/trades.dart';
 import 'modules/wallet/wallet.dart';
+import 'repositories/coin_repository.dart';
+import 'repositories/wallet_repository.dart';
 
 class MainApp extends StatelessWidget {
   MainApp() {
@@ -20,6 +21,7 @@ class MainApp extends StatelessWidget {
   }
 
   final walletRepository = WalletRepository();
+  final coinRepository = CoinRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,11 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => TradesBloc(walletRepository: walletRepository)),
         ChangeNotifierProvider(
-            create: (_) => WalletBloc(walletRepository: walletRepository)),
+          create: (_) => WalletBloc(
+            walletRepository: walletRepository,
+            coinRepository: coinRepository,
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Crypto Wallet',

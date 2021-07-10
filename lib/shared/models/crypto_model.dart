@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class CryptoModel {
   final String? id;
-  //TODO: Create name
+  final String name;
   final String crypto;
   final double amount;
   final double averagePrice;
@@ -15,6 +15,7 @@ class CryptoModel {
   CryptoModel({
     DateTime? updatedAt,
     this.id,
+    this.name = '',
     required this.crypto,
     required this.amount,
     required this.averagePrice,
@@ -26,6 +27,7 @@ class CryptoModel {
 
   CryptoModel copyWith({
     String? id,
+    String? name,
     String? crypto,
     double? amount,
     double? averagePrice,
@@ -37,6 +39,7 @@ class CryptoModel {
   }) {
     return CryptoModel(
       id: id ?? this.id,
+      name: name ?? this.name,
       crypto: crypto ?? this.crypto,
       amount: amount ?? this.amount,
       averagePrice: averagePrice ?? this.averagePrice,
@@ -50,6 +53,7 @@ class CryptoModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'name': name,
       'crypto': crypto,
       'amount': amount,
       'averagePrice': averagePrice,
@@ -62,6 +66,7 @@ class CryptoModel {
   factory CryptoModel.fromMap(Map<String, dynamic> map) {
     return CryptoModel(
       id: map['id'],
+      name: map['name'],
       crypto: map['crypto'],
       amount: map['amount'],
       averagePrice: map['averagePrice'],
@@ -78,7 +83,7 @@ class CryptoModel {
 
   @override
   String toString() {
-    return 'CryptoModel(id: $id, crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, gainLoss: $gainLoss, price: $price, updatedAt: $updatedAt, user: $user)';
+    return 'CryptoModel(id: $id, name: $name, crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, gainLoss: $gainLoss, price: $price, updatedAt: $updatedAt, user: $user)';
   }
 
   @override
@@ -87,6 +92,7 @@ class CryptoModel {
 
     return other is CryptoModel &&
         other.id == id &&
+        other.name == name &&
         other.crypto == crypto &&
         other.amount == amount &&
         other.averagePrice == averagePrice &&
@@ -98,6 +104,7 @@ class CryptoModel {
   @override
   int get hashCode {
     return id.hashCode ^
+        name.hashCode ^
         crypto.hashCode ^
         amount.hashCode ^
         averagePrice.hashCode ^

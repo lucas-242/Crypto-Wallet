@@ -16,6 +16,7 @@ class WalletRepository {
         //TODO: use fromJson method
         result.add(CryptoModel(
           id: element.id,
+          name: element['name'],
           crypto: element['crypto'],
           amount: element['amount'],
           averagePrice: element['averagePrice'],
@@ -24,7 +25,7 @@ class WalletRepository {
         ));
       });
     }).catchError((error) {
-      print('Erro while getting data on cryptos: $error');
+      print('Error while getting data on cryptos: $error');
     });
 
     return result;
@@ -58,7 +59,7 @@ class WalletRepository {
       //   ));
       // });
     }).catchError((error) {
-      print('Erro while getting data on trades: $error');
+      print('Error while getting data on trades: $error');
     });
 
     return result;
