@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crypto_wallet/repositories/coin_repository.dart';
 import 'package:crypto_wallet/repositories/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
@@ -26,7 +28,7 @@ class WalletBloc extends ChangeNotifier {
     status = WalletStatus.loading();
 
     await _walletRepository.getAllCryptos(uid).then((value) async {
-      await getCryptosPrice(value);
+      cryptos = await getCryptosPrice(value);
     }).catchError((error) {
       status = WalletStatus.error(error);
       print(error);
@@ -35,15 +37,16 @@ class WalletBloc extends ChangeNotifier {
     if (cryptos.isEmpty) {
       status = WalletStatus.noData();
     } else {
+      setTimerToGetPrices();
       status = WalletStatus();
     }
 
     notifyListeners();
   }
 
-  Future<void> getCryptosPrice(List<CryptoModel> coins) async {
+  Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
-    await _coinRepository
+    return await _coinRepository
         .getPrices(coins: coins.map((e) => e.name).toList())
         .then((response) {
       coins.forEach((coin) {
@@ -51,7 +54,17 @@ class WalletBloc extends ChangeNotifier {
         result.add(coin.copyWith(price: price));
       });
 
-      cryptos = result;
+      return result;
+    });
+  }
+
+  /// Init a timer to refresh crypto prices
+  setTimerToGetPrices() {
+    Timer.periodic(Duration(seconds: 60), (timer) async {
+      var result = await getCryptosPrice(cryptos);
+      if (result.isNotEmpty) cryptos = result;
+      print('refreshed');
+      notifyListeners();
     });
   }
 
