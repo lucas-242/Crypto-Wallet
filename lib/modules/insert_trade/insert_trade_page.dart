@@ -116,7 +116,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                   SizedBox(width: 30),
                   Expanded(
                     child: CustomDropdownButton(
-                      value: bloc.trade.operationType!,
+                      value: bloc.trade.operationType,
                       items: TradeType.LIST,
                       onChanged: (value) {
                         bloc.onChange(operationType: value);
@@ -132,7 +132,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                   SizedBox(width: 30),
                   Expanded(
                     child: CustomDropdownButton(
-                      value: bloc.trade.crypto!,
+                      value: bloc.trade.crypto,
                       items: Cryptos.LIST,
                       onChanged: (value) {
                         bloc.onChange(crypto: value);

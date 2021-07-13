@@ -24,8 +24,8 @@ class TradesBloc extends ChangeNotifier {
 
     await _walletRepository.getAllTrades(uid).then((value) {
       trades = value;
-      trades.sort((a, b) => b.date!.compareTo(a.date!));
-      dates = trades.map((e) => e.date!).toSet().toList();
+      trades.sort((a, b) => b.date.compareTo(a.date));
+      dates = trades.map((e) => e.date).toSet().toList();
 
 //TODO: If there is an error in repository, the catchError doesn't trigger
       print('Dates: $dates');
@@ -47,10 +47,10 @@ class TradesBloc extends ChangeNotifier {
 
   void addTrade(TradeModel trade) {
     trades.add(trade);
-    trades.sort((a, b) => b.date!.compareTo(a.date!));
+    trades.sort((a, b) => b.date.compareTo(a.date));
 
-    if (dates.where((element) => element == trade.date!).isEmpty) {
-      dates.add(trade.date!);
+    if (dates.where((element) => element == trade.date).isEmpty) {
+      dates.add(trade.date);
       dates.sort((a, b) => b.compareTo(a));
     }
 
@@ -65,20 +65,28 @@ class TradesBloc extends ChangeNotifier {
     status = TradesStatus.loading();
 
     var cryptos = await _walletRepository.getAllCryptos(uid);
+    var finded =
+        cryptos.where((element) => element.crypto.compareTo(trade.crypto) == 0);
 
-    await _walletRepository.deleteTrade(cryptos, trade).then((value) {
+    if (finded.isEmpty) {
+      status = TradesStatus.error('Something is wrong. Please, restart the app');
+      return;
+    }
+
+    var crypto = finded.first;
+    await _walletRepository.deleteTrade(crypto, trade).then((value) {
       trades.removeWhere((element) => element.id == trade.id);
 
       var findTrades =
-          trades.where((element) => element.date!.isSameDate(trade.date!));
+          trades.where((element) => element.date.isSameDate(trade.date));
       if (findTrades.isEmpty) {
-        dates.removeWhere((element) => element.isSameDate(trade.date!));
+        dates.removeWhere((element) => element.isSameDate(trade.date));
       }
 
       walletBloc.getCryptos(uid);
       status = TradesStatus();
     }).catchError((error) {
-      status = TradesStatus.error(error);
+      status = TradesStatus.error(error.toString());
     });
 
     notifyListeners();

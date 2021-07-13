@@ -5,6 +5,8 @@ import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/models/trade_type.dart';
 
 class WalletRepository {
+
+  ///Fetch for all user's cryptos 
   Future<List<CryptoModel>> getAllCryptos(String uid) async {
     List<CryptoModel> result = [];
 
@@ -32,6 +34,7 @@ class WalletRepository {
     return result;
   }
 
+  ///Fetch for all user's trades
   Future<List<TradeModel>> getAllTrades(String uid) async {
     List<TradeModel> result = [];
 
@@ -66,8 +69,9 @@ class WalletRepository {
     return result;
   }
 
-  Future<Map<String, dynamic>?> addTrade(
+  Future<void> addTrade(
       List<CryptoModel> cryptos, TradeModel trade) async {
+        try {
     DocumentReference tradesReference =
         FirebaseFirestore.instance.collection('trades').doc();
 
@@ -79,30 +83,54 @@ class WalletRepository {
       cryptos =
           cryptos.where((element) => element.crypto == trade.crypto).toList();
       if (cryptos.isEmpty) {
-        crypto = createCrypto(transaction, trade);
+        _createCryptoInTransaction(transaction, trade);
       } else {
         crypto = _calculateCryptoMetrics(cryptos.single, trade);
-        updateCrypto(transaction, crypto);
+        _updateCryptoInTransaction(transaction, crypto);
       }
-    }).then((value) {
-      print(value);
-      //TODO: Fill trade and crypto with Id if it's possible
-      return {'trade': trade, 'crypto': crypto};
-    }).catchError((error) {
-      print("Failed to add trade: $error");
     });
+    }
+    catch(error) {
+      print("Failed to add trade: ${error.toString()}");
+      throw new Exception(error.toString());
+
+    }
   }
 
-  CryptoModel createCrypto(Transaction transaction, TradeModel trade) {
+  Future<void> deleteTrade(CryptoModel crypto, TradeModel trade) async {
+    try {
+      DocumentReference tradesReference =
+          FirebaseFirestore.instance.collection('trades').doc(trade.id);
+
+      return await FirebaseFirestore.instance
+          .runTransaction((transaction) async {
+        crypto = _calculateCryptoMetrics(
+          crypto,
+          trade.copyWith(operationType: TradeType.SELL),
+        );
+        if (crypto.totalInvested == 0) {
+          _deleteCryptoInTransaction(transaction, crypto);
+        } else {
+          _updateCryptoInTransaction(transaction, crypto);
+        }
+        transaction.delete(tradesReference);
+      });
+    } catch (error) {
+      print("Failed to delete trade: ${error.toString()}");
+      throw new Exception("Failed to delete trade: ${error.toString()}");
+    }
+  }
+
+  void _createCryptoInTransaction(Transaction transaction, TradeModel trade) {
     DocumentReference cryptosReference =
         FirebaseFirestore.instance.collection('cryptos').doc();
 
     var crypto = CryptoModel(
-      name: Cryptos.MAP[trade.crypto!]!,
-      crypto: trade.crypto!,
-      amount: trade.amount!,
-      averagePrice: trade.price!,
-      totalInvested: trade.amountInvested!,
+      name: Cryptos.MAP[trade.crypto]!,
+      crypto: trade.crypto,
+      amount: trade.amount,
+      averagePrice: trade.price,
+      totalInvested: trade.amountInvested,
       user:
           trade.user!, //TODO: the property user from CryptoModel is empty here
       updatedAt: DateTime.now(),
@@ -111,11 +139,9 @@ class WalletRepository {
     transaction.set(cryptosReference, crypto.toMap());
 
     print('transaction created:  $crypto');
-
-    return crypto;
   }
 
-  void updateCrypto(Transaction transaction, CryptoModel crypto) {
+  void _updateCryptoInTransaction(Transaction transaction, CryptoModel crypto) {
     DocumentReference cryptosReference =
         FirebaseFirestore.instance.collection('cryptos').doc(crypto.id);
 
@@ -123,32 +149,19 @@ class WalletRepository {
     print('transaction updated:  $crypto');
   }
 
-//TODO: ERROR TO DELETE TRADE
-  Future<void> deleteTrade(List<CryptoModel> cryptos, TradeModel trade) async {
-    DocumentReference tradesReference =
-        FirebaseFirestore.instance.collection('trades').doc(trade.id);
+  void _deleteCryptoInTransaction(Transaction transaction, CryptoModel crypto) {
+    DocumentReference cryptosReference =
+        FirebaseFirestore.instance.collection('cryptos').doc(crypto.id);
 
-    late CryptoModel crypto;
-
-    await FirebaseFirestore.instance.runTransaction((transaction) async {
-      crypto = _calculateCryptoMetrics(
-        cryptos.single,
-        trade.copyWith(operationType: TradeType.SELL),
-      );
-      updateCrypto(transaction, crypto);
-      transaction.delete(tradesReference);
-    }).then((value) {
-      print(value);
-    }).catchError((error) {
-      print("Failed to delete trade: $error");
-    });
+    transaction.delete(cryptosReference);
+    print('transaction deleted:  $crypto');
   }
 
   CryptoModel _calculateCryptoMetrics(CryptoModel crypto, TradeModel trade) {
     var updatedDate = DateTime.now();
     if (trade.operationType == TradeType.BUY) {
-      var amount = crypto.amount + trade.amount!;
-      var totalInvested = crypto.totalInvested + trade.amountInvested!;
+      var amount = crypto.amount + trade.amount;
+      var totalInvested = crypto.totalInvested + trade.amountInvested;
 
       crypto = crypto.copyWith(
         amount: amount,
@@ -159,8 +172,8 @@ class WalletRepository {
             trade.user, //TODO: the property user from CryptoModel is empty here
       );
     } else {
-      var amount = crypto.amount - trade.amount!;
-      var totalInvested = crypto.totalInvested - trade.amountInvested!;
+      var amount = crypto.amount - trade.amount;
+      var totalInvested = crypto.totalInvested - trade.amountInvested;
 
       crypto = crypto.copyWith(
         amount: amount,

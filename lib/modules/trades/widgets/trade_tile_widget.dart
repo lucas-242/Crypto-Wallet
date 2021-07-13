@@ -29,11 +29,11 @@ class TradeTile extends StatelessWidget {
           child: ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(
-              trade.crypto!,
+              trade.crypto,
               style: AppTextStyles.captionBoldBody,
             ),
             subtitle: Text(
-              '${trade.amount!.toStringAsFixed(8)}',
+              '${trade.amount.toStringAsFixed(8)}',
               style: AppTextStyles.captionBody,
             ),
             trailing: Text.rich(
@@ -44,7 +44,7 @@ class TradeTile extends StatelessWidget {
                 children: [
                   TextSpan(
                       text:
-                          "\n${NumberFormat.currency(symbol: '\$').format(trade.price!)}",
+                          "\n${NumberFormat.currency(symbol: '\$').format(trade.price)}",
                       style: AppTextStyles.captionBody),
                 ],
               ),

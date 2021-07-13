@@ -1,25 +1,27 @@
 import 'dart:convert';
 
+import 'package:crypto_wallet/shared/models/trade_type.dart';
+
 class TradeModel {
   final String? id;
-  final String? operationType;
-  final String? crypto;
-  final double? amount;
-  final double? amountInvested;
-  final double? price;
-  final DateTime? date;
+  final String operationType;
+  final String crypto;
+  final double amount;
+  final double amountInvested;
+  final double price;
+  final DateTime date;
   final String? user;
 
   TradeModel({
     this.id,
-    this.operationType,
-    this.crypto,
-    this.amount,
-    this.amountInvested,
-    this.price,
-    this.date,
+    required this.operationType,
+    this.crypto = '',
+    this.amount = 0,
+    this.amountInvested = 0,
+    this.price = 0,
+    DateTime? date,
     this.user,
-  });
+  }): this.date = date != null ? date : DateTime.now();
 
   TradeModel copyWith({
     String? id,

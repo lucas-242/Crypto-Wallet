@@ -108,11 +108,6 @@ class InsertTradeBloc extends ChangeNotifier {
     var cryptos = await _walletRepository.getAllCryptos(uid);
 
     return await _walletRepository.addTrade(cryptos, trade).then((value) {
-      if (value == null) {
-        status = InsertTradeStatus.error('Error to add trade');
-        return null;
-      }
-
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
       trade = TradeModel(

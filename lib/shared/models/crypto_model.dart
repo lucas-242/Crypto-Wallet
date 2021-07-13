@@ -11,7 +11,7 @@ class CryptoModel {
   final DateTime updatedAt;
   final String user;
 
-  double get gainLoss => price * amount - totalInvested;
+  double get gainLoss => totalInvested - (price * amount);
 
   CryptoModel({
     DateTime? updatedAt,
