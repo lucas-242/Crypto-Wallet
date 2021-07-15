@@ -15,18 +15,11 @@ class WalletRepository {
           .where('user', isEqualTo: uid)
           .get()
           .then((QuerySnapshot querySnapshot) {
-        querySnapshot.docs.forEach((element) {
-          //TODO: use fromJson method
-          result.add(CryptoModel(
-            id: element.id,
-            name: element['name'],
-            crypto: element['crypto'],
-            amount: element['amount'],
-            averagePrice: element['averagePrice'],
-            totalInvested: element['totalInvested'],
-            updatedAt: DateTime.parse(element['updatedAt'].toDate().toString()),
-          ));
-        });
+        result = querySnapshot.docs
+            .map((e) => CryptoModel.fromMap(e.data() as dynamic))
+            .toList();
+        querySnapshot.docs.asMap().forEach((index, data) =>
+            result[index] = result[index].copyWith(id: data.id));
       });
 
       return result;
@@ -49,22 +42,8 @@ class WalletRepository {
         result = querySnapshot.docs
             .map((e) => TradeModel.fromMap(e.data() as dynamic))
             .toList();
-
-        //TODO:find a better way to fill the ids
-        for (var i = 0; i < querySnapshot.docs.length; i++) {
-          result[i] = result[i].copyWith(id: querySnapshot.docs[i].id);
-        }
-        // querySnapshot.docs.forEach((element) {
-        //   result.add(TradeModel(
-        //     id: element.id,
-        //     amount: element['amount'],
-        //     crypto: element['crypto'],
-        //     date: DateTime.parse(element['date'].toDate().toString()),
-        //     operationType: element['operationType'],
-        //     price: element['price'],
-        //     user: element['user'],
-        //   ));
-        // });
+        querySnapshot.docs.asMap().forEach((index, data) =>
+            result[index] = result[index].copyWith(id: data.id));
       });
 
       return result;
@@ -134,8 +113,7 @@ class WalletRepository {
       amount: trade.amount,
       averagePrice: trade.price,
       totalInvested: trade.amountInvested,
-      user:
-          trade.user!, //TODO: the property user from CryptoModel is empty here
+      user: trade.user!,
       updatedAt: DateTime.now(),
     );
 
@@ -171,8 +149,7 @@ class WalletRepository {
         totalInvested: totalInvested,
         averagePrice: totalInvested / amount,
         updatedAt: updatedDate,
-        user:
-            trade.user, //TODO: the property user from CryptoModel is empty here
+        user: crypto.user,
       );
     } else {
       var amount = crypto.amount - trade.amount;
@@ -183,8 +160,7 @@ class WalletRepository {
         totalInvested: totalInvested,
         averagePrice: totalInvested / amount,
         updatedAt: updatedDate,
-        user:
-            trade.user, //TODO: the property user from CryptoModel is empty here
+        user: crypto.user,
       );
     }
 

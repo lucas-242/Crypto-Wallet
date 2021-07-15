@@ -72,7 +72,7 @@ class CryptoModel {
       amount: map['amount'],
       averagePrice: map['averagePrice'],
       totalInvested: map['totalInvested'],
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt']),
+      updatedAt: DateTime.parse(map['updatedAt'].toDate().toString()),
       user: map['user'],
     );
   }
