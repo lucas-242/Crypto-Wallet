@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:crypto_wallet/shared/models/trade_type.dart';
-
 class TradeModel {
   final String? id;
   final String operationType;

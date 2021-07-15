@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
+import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,9 +20,11 @@ class CryptoSummary extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(crypto.crypto),
+                  Text(crypto.crypto, style: AppTextStyles.cryptoTitleBold),
                   Text(
-                      NumberFormat.currency(symbol: '\$').format(crypto.price)),
+                    NumberFormat.currency(symbol: '\$').format(crypto.price),
+                    style: AppTextStyles.cryptoTitle,
+                  ),
                 ],
               ),
               SizedBox(height: 25),
@@ -57,6 +60,18 @@ class CryptoSummary extends StatelessWidget {
                   ),
                 ],
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: Divider(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Total:'),
+                  Text(NumberFormat.currency(symbol: '\$')
+                      .format(crypto.totalNow))
+                ],
+              )
             ],
           ),
         ),
