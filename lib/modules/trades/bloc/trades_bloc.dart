@@ -26,9 +26,6 @@ class TradesBloc extends ChangeNotifier {
       trades = value;
       trades.sort((a, b) => b.date.compareTo(a.date));
       dates = trades.map((e) => e.date).toSet().toList();
-
-//TODO: If there is an error in repository, the catchError doesn't trigger
-      print('Dates: $dates');
     }).catchError((error) {
       status = TradesStatus.error(error);
       print(error);
