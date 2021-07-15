@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +13,11 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   final auth = FirebaseAuth.instance;
+  late StreamSubscription<User?> userStream;
+
   @override
   void initState() {
-    auth.userChanges().listen((user) {
+    userStream = auth.userChanges().listen((user) {
       if (user != null)
         Navigator.pushReplacementNamed(context, '/app', arguments: user);
       else
@@ -25,6 +29,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void dispose() {
+    userStream.cancel();
     super.dispose();
   }
 

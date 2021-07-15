@@ -28,9 +28,6 @@ class _TradesPageState extends State<TradesPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-//TODO: Fix Error
-//E/flutter (25758): [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: This widget has been unmounted, so the State no longer has a context (and should be considered defunct).
-//E/flutter (25758): Consider canceling any active work during "dispose" or using the "mounted" getter to determine if the State is still active.
 
     return SafeArea(
       child: Scaffold(
