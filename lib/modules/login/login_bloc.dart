@@ -24,7 +24,7 @@ class LoginBloc {
         .signInWithCredential(credential)
         .then((response) => true)
         .catchError((error) {
-      print('Erro ao efetuar login: $error');
+      print('Erro ao efetuar login: ${error.toString()}');
       return false;
     });
   }

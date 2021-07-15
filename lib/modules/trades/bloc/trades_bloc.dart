@@ -27,7 +27,7 @@ class TradesBloc extends ChangeNotifier {
       trades.sort((a, b) => b.date.compareTo(a.date));
       dates = trades.map((e) => e.date).toSet().toList();
     }).catchError((error) {
-      status = TradesStatus.error(error);
+      status = TradesStatus.error(error.toString());
       print(error);
     });
 

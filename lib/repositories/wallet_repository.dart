@@ -49,7 +49,7 @@ class WalletRepository {
       return result;
     } catch (error) {
       print('Error while getting data on trades: ${error.toString()}');
-      throw new Exception(error.toString());
+      throw new Exception('Error while getting data on trades: ${error.toString()}');
     }
   }
 
@@ -75,7 +75,7 @@ class WalletRepository {
       });
     } catch (error) {
       print("Failed to add trade: ${error.toString()}");
-      throw new Exception(error.toString());
+      throw new Exception("Failed to add trade: ${error.toString()}");
     }
   }
 

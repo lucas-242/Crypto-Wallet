@@ -34,6 +34,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
       MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.');
   final cryptoAmountController =
       MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
+  final feeController =
+      MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
   final dateController = MaskedTextController(mask: '00/00/0000');
 
   @override
@@ -173,10 +175,18 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 labelText: 'Date',
                 icon: Icons.calendar_today,
                 keyboardType: TextInputType.datetime,
-                textInputAction: TextInputAction.done,
                 controller: dateController,
                 validator: bloc.validateDate,
                 onChanged: (value) => bloc.onChange(date: value),
+              ),
+              CustomTextFormField(
+                labelText: 'Fee',
+                icon: Icons.attach_money,
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                controller: feeController,
+                onChanged: (value) =>
+                    bloc.onChange(fee: feeController.numberValue),
               ),
               SizedBox(height: 25),
             ],

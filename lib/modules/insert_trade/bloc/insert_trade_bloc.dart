@@ -72,6 +72,7 @@ class InsertTradeBloc extends ChangeNotifier {
     double? amount,
     double? ammountInvested,
     double? price,
+    double? fee,
     String? date,
     String? user,
   }) {
@@ -90,6 +91,7 @@ class InsertTradeBloc extends ChangeNotifier {
       crypto: crypto,
       date: formattedDate,
       price: price,
+      fee: fee,
       user: user,
     );
   }
@@ -118,7 +120,7 @@ class InsertTradeBloc extends ChangeNotifier {
       status = InsertTradeStatus();
     }).catchError((error) {
       print(error);
-      status = InsertTradeStatus.error(error);
+      status = InsertTradeStatus.error(error.toString());
     });
   }
 }

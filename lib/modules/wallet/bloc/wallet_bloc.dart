@@ -30,7 +30,7 @@ class WalletBloc extends ChangeNotifier {
     await _walletRepository.getAllCryptos(uid).then((value) async {
       cryptos = await getCryptosPrice(value);
     }).catchError((error) {
-      status = WalletStatus.error(error);
+      status = WalletStatus.error(error.toString());
       print(error);
     });
 
