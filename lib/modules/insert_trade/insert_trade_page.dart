@@ -79,7 +79,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 builder: (context, status, child) {
                   if (status.statusPage == StatusPage.loading) {
                     return Container(
-                      height: MediaQuery.of(context).size.height,
+                      height: MediaQuery.of(context).size.height * 70,
                       child: Center(child: CircularProgressIndicator()),
                     );
                   }
