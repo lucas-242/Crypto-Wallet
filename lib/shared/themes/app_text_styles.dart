@@ -24,6 +24,16 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: AppColors.background,
   );
+  static final cryptoTitle = GoogleFonts.lexendDeca(
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+    color: AppColors.grey,
+  );
+  static final cryptoTitleBold = GoogleFonts.lexendDeca(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.grey,
+  );
   static final buttonPrimary = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,
@@ -32,7 +42,7 @@ class AppTextStyles {
   static final buttonSecondary = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,
-    color: AppColors.secondary
+    color: AppColors.primary
   );
   static final buttonGrey = GoogleFonts.inter(
     fontSize: 15,

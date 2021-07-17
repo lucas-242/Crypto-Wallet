@@ -12,10 +12,10 @@ class InsertTradeBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
 
   final formKey = GlobalKey<FormState>();
-  TradeModel trade = TradeModel();
-
-  final initialValueOperationType = TradeType.BUY;
-  final initialValueCrypto = Cryptos.BTC;
+  TradeModel trade = TradeModel(
+    operationType: TradeType.BUY,
+    crypto: Cryptos.BTC,
+  );
 
   final statusNotifier = ValueNotifier<InsertTradeStatus>(InsertTradeStatus());
 
@@ -32,8 +32,7 @@ class InsertTradeBloc extends ChangeNotifier {
         : null;
   }
 
-
-String? validateTradedAmount(String? value) {
+  String? validateTradedAmount(String? value) {
     if (value != null) {
       //Remove $, . from the middle of the number and change , to .
       value = value
@@ -41,9 +40,7 @@ String? validateTradedAmount(String? value) {
           .replaceAll(RegExp(r'\.'), '')
           .replaceAll(RegExp(','), '.');
 
-      return   double.parse(value) < 0
-        ? "The amount can't be null"
-        : null;
+      return double.parse(value) < 0 ? "The amount can't be null" : null;
     }
 
     return null;
@@ -75,6 +72,7 @@ String? validateTradedAmount(String? value) {
     double? amount,
     double? ammountInvested,
     double? price,
+    double? fee,
     String? date,
     String? user,
   }) {
@@ -93,6 +91,7 @@ String? validateTradedAmount(String? value) {
       crypto: crypto,
       date: formattedDate,
       price: price,
+      fee: fee,
       user: user,
     );
   }
@@ -111,18 +110,17 @@ String? validateTradedAmount(String? value) {
     var cryptos = await _walletRepository.getAllCryptos(uid);
 
     return await _walletRepository.addTrade(cryptos, trade).then((value) {
-      if (value == null) {
-        status = InsertTradeStatus.error('Error to add trade');
-        return null;
-      }
-
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
-      trade = TradeModel();
+      trade = TradeModel(
+        operationType: TradeType.BUY,
+        crypto: Cryptos.BTC,
+        user: uid,
+      );
       status = InsertTradeStatus();
     }).catchError((error) {
       print(error);
-      status = InsertTradeStatus.error(error);
+      status = InsertTradeStatus.error(error.toString());
     });
   }
 }

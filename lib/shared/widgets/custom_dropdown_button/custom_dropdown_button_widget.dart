@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'models/dropdown_option_model.dart';
-
 class CustomDropdownButton extends StatelessWidget {
   final String value;
-  final List<DropdownOption> items;
+  final List<String> items;
   final Function(String value)? onChanged;
   const CustomDropdownButton(
       {Key? key, required this.value, this.onChanged, required this.items})
@@ -16,10 +13,10 @@ class CustomDropdownButton extends StatelessWidget {
       child: DropdownButton<String>(
         value: value,
         onChanged: (String? value) => onChanged!(value!),
-        items: items.map<DropdownMenuItem<String>>((DropdownOption value) {
+        items: items.map<DropdownMenuItem<String>>((value) {
           return DropdownMenuItem<String>(
-            value: value.value ?? value.name,
-            child: Text(value.name),
+            value: value,
+            child: Text(value),
           );
         }).toList(),
       ),

@@ -19,12 +19,11 @@ class LoginBloc {
       idToken: googleAuth.idToken,
     );
 
-    // Once signed in, return the UserCredential
     return await FirebaseAuth.instance
         .signInWithCredential(credential)
         .then((response) => true)
         .catchError((error) {
-      print('Erro ao efetuar login: $error');
+      print('Erro ao efetuar login: ${error.toString()}');
       return false;
     });
   }

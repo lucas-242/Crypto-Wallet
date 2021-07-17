@@ -2,42 +2,51 @@ import 'dart:convert';
 
 class CryptoModel {
   final String? id;
+  final String name;
   final String crypto;
   final double amount;
   final double averagePrice;
   final double totalInvested;
-  final double gainLoss;
+  final double price;
   final DateTime updatedAt;
   final String user;
+
+  /// Total amount at current quote of selected currency
+  double get totalNow => price * amount;
+
+  double get gainLoss => totalNow - totalInvested;
 
   CryptoModel({
     DateTime? updatedAt,
     this.id,
+    this.name = '',
     required this.crypto,
     required this.amount,
     required this.averagePrice,
     required this.totalInvested,
     this.user = '',
-    this.gainLoss = 0,
+    this.price = 0,
   }) : this.updatedAt = updatedAt ?? DateTime.now();
 
   CryptoModel copyWith({
     String? id,
+    String? name,
     String? crypto,
     double? amount,
     double? averagePrice,
     double? totalInvested,
-    double? gainLoss,
+    double? price,
     DateTime? updatedAt,
     String? user,
   }) {
     return CryptoModel(
       id: id ?? this.id,
+      name: name ?? this.name,
       crypto: crypto ?? this.crypto,
       amount: amount ?? this.amount,
       averagePrice: averagePrice ?? this.averagePrice,
       totalInvested: totalInvested ?? this.totalInvested,
-      gainLoss: gainLoss ?? this.gainLoss,
+      price: price ?? this.price,
       updatedAt: updatedAt ?? this.updatedAt,
       user: user ?? this.user,
     );
@@ -45,6 +54,7 @@ class CryptoModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'name': name,
       'crypto': crypto,
       'amount': amount,
       'averagePrice': averagePrice,
@@ -57,12 +67,12 @@ class CryptoModel {
   factory CryptoModel.fromMap(Map<String, dynamic> map) {
     return CryptoModel(
       id: map['id'],
+      name: map['name'],
       crypto: map['crypto'],
       amount: map['amount'],
       averagePrice: map['averagePrice'],
       totalInvested: map['totalInvested'],
-      gainLoss: map['gainLoss'],
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt']),
+      updatedAt: DateTime.parse(map['updatedAt'].toDate().toString()),
       user: map['user'],
     );
   }
@@ -74,7 +84,7 @@ class CryptoModel {
 
   @override
   String toString() {
-    return 'CryptoModel(id: $id, crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, gainLoss: $gainLoss, updatedAt: $updatedAt, user: $user)';
+    return 'CryptoModel(id: $id, name: $name, crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, price: $price, updatedAt: $updatedAt, user: $user)';
   }
 
   @override
@@ -83,11 +93,11 @@ class CryptoModel {
 
     return other is CryptoModel &&
         other.id == id &&
+        other.name == name &&
         other.crypto == crypto &&
         other.amount == amount &&
         other.averagePrice == averagePrice &&
         other.totalInvested == totalInvested &&
-        other.gainLoss == gainLoss &&
         other.updatedAt == updatedAt &&
         other.user == user;
   }
@@ -95,11 +105,11 @@ class CryptoModel {
   @override
   int get hashCode {
     return id.hashCode ^
+        name.hashCode ^
         crypto.hashCode ^
         amount.hashCode ^
         averagePrice.hashCode ^
         totalInvested.hashCode ^
-        gainLoss.hashCode ^
         updatedAt.hashCode ^
         user.hashCode;
   }

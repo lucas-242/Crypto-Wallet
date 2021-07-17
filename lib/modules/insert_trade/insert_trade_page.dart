@@ -34,6 +34,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
       MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.');
   final cryptoAmountController =
       MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
+  final feeController =
+      MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
   final dateController = MaskedTextController(mask: '00/00/0000');
 
   @override
@@ -41,11 +43,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
     uid = FirebaseAuth.instance.currentUser!.uid;
     bloc = InsertTradeBloc(walletRepository: widget.walletRepository);
 
-    bloc.onChange(
-      operationType: bloc.initialValueOperationType,
-      crypto: bloc.initialValueCrypto,
-      user: uid,
-    );
+    bloc.onChange(user: uid);
     super.initState();
   }
 
@@ -81,7 +79,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 builder: (context, status, child) {
                   if (status.statusPage == StatusPage.loading) {
                     return Container(
-                      height: MediaQuery.of(context).size.height,
+                      height: MediaQuery.of(context).size.height * 70,
                       child: Center(child: CircularProgressIndicator()),
                     );
                   }
@@ -120,12 +118,12 @@ class _InsertTradePageState extends State<InsertTradePage> {
                   SizedBox(width: 30),
                   Expanded(
                     child: CustomDropdownButton(
-                      value: bloc.initialValueOperationType,
-                      items: [
-                        DropdownOption(name: TradeType.BUY),
-                        DropdownOption(name: TradeType.SELL),
-                      ],
-                      onChanged: (value) => bloc.onChange(operationType: value),
+                      value: bloc.trade.operationType,
+                      items: TradeType.LIST,
+                      onChanged: (value) {
+                        bloc.onChange(operationType: value);
+                        setState(() {});
+                      },
                     ),
                   ),
                 ],
@@ -136,11 +134,12 @@ class _InsertTradePageState extends State<InsertTradePage> {
                   SizedBox(width: 30),
                   Expanded(
                     child: CustomDropdownButton(
-                      value: bloc.initialValueCrypto,
-                      items: [
-                        DropdownOption(name: Cryptos.BTC),
-                      ],
-                      onChanged: (value) => bloc.onChange(crypto: value),
+                      value: bloc.trade.crypto,
+                      items: Cryptos.LIST,
+                      onChanged: (value) {
+                        bloc.onChange(crypto: value);
+                        setState(() {});
+                      },
                     ),
                   ),
                 ],
@@ -160,8 +159,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 keyboardType: TextInputType.number,
                 controller: tradedAmoutController,
                 validator: bloc.validateTradedAmount,
-                onChanged: (value) =>
-                    bloc.onChange(ammountInvested: tradedAmoutController.numberValue),
+                onChanged: (value) => bloc.onChange(
+                    ammountInvested: tradedAmoutController.numberValue),
               ),
               CustomTextFormField(
                 labelText: 'Trade Price',
@@ -176,10 +175,18 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 labelText: 'Date',
                 icon: Icons.calendar_today,
                 keyboardType: TextInputType.datetime,
-                textInputAction: TextInputAction.done,
                 controller: dateController,
                 validator: bloc.validateDate,
                 onChanged: (value) => bloc.onChange(date: value),
+              ),
+              CustomTextFormField(
+                labelText: 'Fee',
+                icon: Icons.attach_money,
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                controller: feeController,
+                onChanged: (value) =>
+                    bloc.onChange(fee: feeController.numberValue),
               ),
               SizedBox(height: 25),
             ],

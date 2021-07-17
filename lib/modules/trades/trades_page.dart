@@ -28,9 +28,6 @@ class _TradesPageState extends State<TradesPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-//TODO: Fix Error
-//E/flutter (25758): [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: This widget has been unmounted, so the State no longer has a context (and should be considered defunct).
-//E/flutter (25758): Consider canceling any active work during "dispose" or using the "mounted" getter to determine if the State is still active.
 
     return SafeArea(
       child: Scaffold(
@@ -39,91 +36,102 @@ class _TradesPageState extends State<TradesPage> {
           onRefresh: () => bloc.getTrades(uid),
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            child: ValueListenableBuilder<TradesStatus>(
-              valueListenable: bloc.statusNotifier,
-              builder: (context, status, child) {
-                if (status.statusPage == StatusPage.loading) {
-                  return Container(
-                    height: size.height,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                } else if (status.statusPage == StatusPage.error) {
-                  return Container(
-                    height: size.height,
-                    child: Center(child: Text(status.error)),
-                  );
-                } else if (status.statusPage == StatusPage.noData) {
-                  return Container(
-                    height: size.height,
-                    child: Center(child: Text('No trades in the wallet')),
-                  );
-                } else {
-                  return Consumer<TradesBloc>(
-                    builder: (context, bloc, child) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25),
-                        child: Container(
-                          height: size.height,
-                          child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: bloc.dates.length,
-                            itemBuilder: (context, dateIndex) {
-                              final date = bloc.dates[dateIndex];
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 15),
-                                    child: Column(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('My Trades', style: AppTextStyles.titleBoldGrey),
+                    SizedBox(height: 25),
+                    ValueListenableBuilder<TradesStatus>(
+                      valueListenable: bloc.statusNotifier,
+                      builder: (context, status, child) {
+                        if (status.statusPage == StatusPage.loading) {
+                          return Container(
+                            height: size.height * 0.7,
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        } else if (status.statusPage == StatusPage.error) {
+                          return Container(
+                            height: size.height * 0.7,
+                            child: Center(child: Text(status.error)),
+                          );
+                        } else if (status.statusPage == StatusPage.noData) {
+                          return Container(
+                            height: size.height * 0.7,
+                            child:
+                                Center(child: Text('No trades in the wallet')),
+                          );
+                        } else {
+                          return Consumer<TradesBloc>(
+                            builder: (context, bloc, child) {
+                              return Container(
+                                height: size.height,
+                                child: ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: bloc.dates.length,
+                                  itemBuilder: (context, dateIndex) {
+                                    final date = bloc.dates[dateIndex];
+                                    return Column(
                                       children: [
-                                        Container(
-                                          width: size.width,
-                                          child: Text(
-                                              DateFormat.yMd().format(date),
-                                              textAlign: TextAlign.left,
-                                              style: AppTextStyles
-                                                  .captionBoldBody),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 15),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: size.width,
+                                                child: Text(
+                                                    DateFormat.yMd()
+                                                        .format(date),
+                                                    textAlign: TextAlign.left,
+                                                    style: AppTextStyles
+                                                        .captionBoldBody),
+                                              ),
+                                              Divider(),
+                                            ],
+                                          ),
                                         ),
-                                        Divider(),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 75 *
-                                        bloc
-                                            .getTradesByDate(date)
-                                            .length
-                                            .toDouble(),
-                                    child: ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          bloc.getTradesByDate(date).length,
-                                      itemBuilder: (context, index) {
-                                        final trades =
-                                            bloc.getTradesByDate(date);
-                                        return TradeTile(
-                                          trade: trades[index],
-                                          onDelete: () {
-                                            final walletBloc =
-                                                context.read<WalletBloc>();
-                                            bloc.deleteTrade(
+                                        Container(
+                                          height: 75 *
+                                              bloc
+                                                  .getTradesByDate(date)
+                                                  .length
+                                                  .toDouble(),
+                                          child: ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            itemCount: bloc
+                                                .getTradesByDate(date)
+                                                .length,
+                                            itemBuilder: (context, index) {
+                                              final trades =
+                                                  bloc.getTradesByDate(date);
+                                              return TradeTile(
                                                 trade: trades[index],
-                                                uid: uid,
-                                                walletBloc: walletBloc);
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+                                                onDelete: () {
+                                                  final walletBloc = context
+                                                      .read<WalletBloc>();
+                                                  bloc.deleteTrade(
+                                                      trade: trades[index],
+                                                      uid: uid,
+                                                      walletBloc: walletBloc);
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
                               );
                             },
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
+                          );
+                        }
+                      },
+                    ),
+                  ]),
             ),
           ),
         ),
