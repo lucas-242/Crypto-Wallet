@@ -1,9 +1,6 @@
-import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:intl/intl.dart';
-import 'indicator_widget.dart';
 
 class DonutChart extends StatefulWidget {
   @override
@@ -16,75 +13,29 @@ class DonutChartState extends State {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Padding(
-      padding: EdgeInsets.only(top: 25),
-      child: Stack(
-        children: [
-          Container(
-            height: size.height * 0.3,
-            child: PieChart(
-              PieChartData(
-                  pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                    setState(() {
-                      final desiredTouch =
-                          pieTouchResponse.touchInput is! PointerExitEvent &&
-                              pieTouchResponse.touchInput is! PointerUpEvent;
-                      if (desiredTouch &&
-                          pieTouchResponse.touchedSection != null) {
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      } else {
-                        touchedIndex = -1;
-                      }
-                    });
-                  }),
-                  borderData: FlBorderData(show: false),
-                  sectionsSpace: 0,
-                  centerSpaceRadius: 100,
-                  sections: showingSections()),
-            ),
-          ),
-          Positioned(
-            child: Text(
-              NumberFormat.currency(symbol: '\$').format(19852.45),
-              style: AppTextStyles.titleRegular,
-            ),
-            top: size.height * 0.13,
-            left: size.width * 0.3,
-          )
-          // Column(
-          //   mainAxisSize: MainAxisSize.max,
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     Indicator(
-          //       color: Color(0xff0293ee),
-          //       text: 'Bitcoin',
-          //       isSquare: true,
-          //     ),
-          //     SizedBox(height: 4),
-          //     Indicator(
-          //       color: Color(0xfff8b250),
-          //       text: 'Ethereum',
-          //       isSquare: true,
-          //     ),
-          //     SizedBox(height: 4),
-          //     Indicator(
-          //       color: Color(0xff845bef),
-          //       text: 'Dogecoin',
-          //       isSquare: true,
-          //     ),
-          //     SizedBox(height: 4),
-          //     Indicator(
-          //       color: Color(0xff13d38e),
-          //       text: 'XRP',
-          //       isSquare: true,
-          //     ),
-          //     SizedBox(height: 18),
-          //   ],
-          // ),
-          // SizedBox(width: 28),
-        ],
+    return Container(
+      height: size.height * 0.25,
+      width: size.width * 0.37,
+      child: PieChart(
+        PieChartData(
+            pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+              setState(() {
+                final desiredTouch =
+                    pieTouchResponse.touchInput is! PointerExitEvent &&
+                        pieTouchResponse.touchInput is! PointerUpEvent;
+                if (desiredTouch &&
+                    pieTouchResponse.touchedSection != null) {
+                  touchedIndex = pieTouchResponse
+                      .touchedSection!.touchedSectionIndex;
+                } else {
+                  touchedIndex = -1;
+                }
+              });
+            }),
+            borderData: FlBorderData(show: false),
+            sectionsSpace: 10,
+            centerSpaceRadius: 55,
+            sections: showingSections()),
       ),
     );
   }
