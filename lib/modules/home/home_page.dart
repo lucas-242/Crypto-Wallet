@@ -2,6 +2,7 @@ import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,9 +35,12 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _header(),
-            SizedBox(height: 40),
+            SizedBox(height: 35),
+            _total(),
+            SizedBox(height: 15),
             DonutChart(),
           ],
         ),
@@ -66,6 +70,20 @@ class _HomePageState extends State<HomePage> {
                   image: NetworkImage(auth.currentUser!.photoURL!))),
         ),
       ],
+    );
+  }
+
+  Widget _total() {
+    return Text.rich(
+      TextSpan(
+        text: 'Total Equity\n',
+        style: AppTextStyles.titleRegular,
+        children: [
+          TextSpan(
+            text: NumberFormat.currency(symbol: '\$').format(19852.45)
+          )
+        ]
+      ),
     );
   }
 }

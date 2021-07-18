@@ -1,6 +1,8 @@
+import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:intl/intl.dart';
 import 'indicator_widget.dart';
 
 class DonutChart extends StatefulWidget {
@@ -13,84 +15,75 @@ class DonutChartState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.3,
-      child: Row(
+    final size = MediaQuery.of(context).size;
+    return Padding(
+      padding: EdgeInsets.only(top: 25),
+      child: Stack(
         children: [
-          SizedBox(
-            height: 18,
-          ),
-          Expanded(
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: PieChart(
-                PieChartData(
-                    pieTouchData:
-                        PieTouchData(touchCallback: (pieTouchResponse) {
-                      setState(() {
-                        final desiredTouch =
-                            pieTouchResponse.touchInput is! PointerExitEvent &&
-                                pieTouchResponse.touchInput is! PointerUpEvent;
-                        if (desiredTouch &&
-                            pieTouchResponse.touchedSection != null) {
-                          touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                        } else {
-                          touchedIndex = -1;
-                        }
-                      });
-                    }),
-                    borderData: FlBorderData(
-                      show: false,
-                    ),
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 40,
-                    sections: showingSections()),
-              ),
+          Container(
+            height: size.height * 0.3,
+            child: PieChart(
+              PieChartData(
+                  pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                    setState(() {
+                      final desiredTouch =
+                          pieTouchResponse.touchInput is! PointerExitEvent &&
+                              pieTouchResponse.touchInput is! PointerUpEvent;
+                      if (desiredTouch &&
+                          pieTouchResponse.touchedSection != null) {
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      } else {
+                        touchedIndex = -1;
+                      }
+                    });
+                  }),
+                  borderData: FlBorderData(show: false),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 100,
+                  sections: showingSections()),
             ),
           ),
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Indicator(
-                color: Color(0xff0293ee),
-                text: 'Bitcoin',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Color(0xfff8b250),
-                text: 'Ethereum',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Color(0xff845bef),
-                text: 'Dogecoin',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Color(0xff13d38e),
-                text: 'XRP',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 18,
-              ),
-            ],
-          ),
-          SizedBox(
-            width: 28,
-          ),
+          Positioned(
+            child: Text(
+              NumberFormat.currency(symbol: '\$').format(19852.45),
+              style: AppTextStyles.titleRegular,
+            ),
+            top: size.height * 0.13,
+            left: size.width * 0.3,
+          )
+          // Column(
+          //   mainAxisSize: MainAxisSize.max,
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     Indicator(
+          //       color: Color(0xff0293ee),
+          //       text: 'Bitcoin',
+          //       isSquare: true,
+          //     ),
+          //     SizedBox(height: 4),
+          //     Indicator(
+          //       color: Color(0xfff8b250),
+          //       text: 'Ethereum',
+          //       isSquare: true,
+          //     ),
+          //     SizedBox(height: 4),
+          //     Indicator(
+          //       color: Color(0xff845bef),
+          //       text: 'Dogecoin',
+          //       isSquare: true,
+          //     ),
+          //     SizedBox(height: 4),
+          //     Indicator(
+          //       color: Color(0xff13d38e),
+          //       text: 'XRP',
+          //       isSquare: true,
+          //     ),
+          //     SizedBox(height: 18),
+          //   ],
+          // ),
+          // SizedBox(width: 28),
         ],
       ),
     );
@@ -100,13 +93,13 @@ class DonutChartState extends State {
     return List.generate(4, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 50.0;
+      final radius = isTouched ? 30.0 : 20.0;
       switch (i) {
         case 0:
           return PieChartSectionData(
             color: const Color(0xff0293ee),
             value: 40,
-            title: '40%',
+            showTitle: false,
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -117,7 +110,7 @@ class DonutChartState extends State {
           return PieChartSectionData(
             color: Color(0xfff8b250),
             value: 30,
-            title: '30%',
+            showTitle: false,
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -128,7 +121,7 @@ class DonutChartState extends State {
           return PieChartSectionData(
             color: Color(0xff845bef),
             value: 15,
-            title: '15%',
+            showTitle: false,
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -139,7 +132,7 @@ class DonutChartState extends State {
           return PieChartSectionData(
             color: Color(0xff13d38e),
             value: 15,
-            title: '15%',
+            showTitle: false,
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
