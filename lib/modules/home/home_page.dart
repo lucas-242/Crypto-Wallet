@@ -1,10 +1,12 @@
 import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/modules/home/widgets/indicator_widget.dart';
+import 'package:crypto_wallet/shared/models/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/watch_list/watch_list_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,30 +17,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final auth = FirebaseAuth.instance;
+  late final HomeBloc bloc;
+  late Size size;
 
-  var cryptos = [
-    //  new Series<LinearSales, int>(
-    //     id: 'Sales',
-    //     domainFn: (LinearSales sales, _) => sales.year,
-    //     measureFn: (LinearSales sales, _) => sales.sales,
-    //     data: data,
-    //     // Set a label accessor to control the text of the arc label.
-    //     labelAccessorFn: (LinearSales row, _) => '${row.year}: ${row.sales}',
-    //   )
-    // new Series(id: id, data: data, domainFn: domainFn, measureFn: measureFn)
-    {"name": "btc", "value": "0.0017"},
-    {"name": "eth", "value": "0.000085"},
-    {"name": "ada", "value": "30.5"}
-  ];
+  @override
+  void initState() {
+    bloc = context.read<HomeBloc>();
+    if (bloc.cryptos.isEmpty) bloc.getCryptos(auth.currentUser!.uid);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
         actions: [
-          IconButton(
-              onPressed: () {}, icon: Icon(Icons.remove_red_eye_sharp))
+          IconButton(onPressed: () {}, icon: Icon(Icons.remove_red_eye_sharp))
         ],
       ),
       body: Padding(
@@ -46,8 +42,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // _header(),
-            // SizedBox(height: 35),
             _totalCard(),
             _chart(),
             _variations(),
@@ -57,31 +51,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget _header() {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Text(auth.currentUser!.displayName ?? '',
-  //               style: AppTextStyles.titleRegular),
-  //           Text('Wallet', style: AppTextStyles.titleRegular),
-  //         ],
-  //       ),
-  //       Container(
-  //         height: 56,
-  //         width: 56,
-  //         decoration: BoxDecoration(
-  //             color: Colors.black,
-  //             borderRadius: BorderRadius.circular(5),
-  //             image: DecorationImage(
-  //                 image: NetworkImage(auth.currentUser!.photoURL!))),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget _totalCard() {
     return Card(
       color: AppColors.shape,
@@ -90,30 +59,51 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Padding(
         padding: EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Today',
-              style: AppTextStyles.titleRegular,
-            ),
-            SizedBox(height: 15),
-            Text(
-              NumberFormat.currency(symbol: '\$').format(19852.45),
-              style: AppTextStyles.titleHome,
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text(
-                  '+${NumberFormat.currency(symbol: '\$').format(1856.45)} (22.1%)',
-                  style: AppTextStyles.titleRegular,
-                ),
-                Icon(Icons.arrow_upward, color: AppColors.secondary),
-              ],
-            )
-          ],
-        ),
+        child: ValueListenableBuilder<HomeStatus>(
+            valueListenable: bloc.statusNotifier,
+            builder: (context, status, widget) {
+              if (status.statusPage == StatusPage.loading) {
+                return Container(
+                  height: size.height * 0.7,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              } else {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Today',
+                      style: AppTextStyles.titleRegular,
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      NumberFormat.currency(symbol: '\$')
+                          .format(bloc.dashboardData.total),
+                      style: AppTextStyles.titleHome,
+                    ),
+                    SizedBox(height: 15),
+                    Row(
+                      children: [
+                        Text(
+                          !bloc.dashboardData.variation.isNegative
+                              ? '+'
+                              : '' +
+                                  '${NumberFormat.currency(symbol: '\$').format(bloc.dashboardData.variation)} (${bloc.dashboardData.percentVariation.toStringAsFixed(1)}%)', //(${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(bloc.dashboardData.percentVariation)})',
+                          style: AppTextStyles.titleRegular,
+                        ),
+                        Icon(
+                            bloc.dashboardData.variation.isNegative
+                                ? Icons.arrow_downward
+                                : Icons.arrow_upward,
+                            color: bloc.dashboardData.variation.isNegative
+                                ? AppColors.red
+                                : AppColors.secondary),
+                      ],
+                    )
+                  ],
+                );
+              }
+            }),
       ),
     );
   }

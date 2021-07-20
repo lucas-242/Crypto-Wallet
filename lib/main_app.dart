@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';
 
 import 'modules/app/app.dart';
+import 'modules/home/home.dart';
 import 'modules/login/login.dart';
 import 'modules/splash/splash_page.dart';
 import 'modules/insert_trade/insert_trade.dart';
@@ -28,6 +29,10 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppBloc()),
+        ChangeNotifierProvider(
+            create: (_) => HomeBloc(
+                walletRepository: walletRepository,
+                coinRepository: coinRepository)),
         ChangeNotifierProvider(
             create: (_) => TradesBloc(walletRepository: walletRepository)),
         ChangeNotifierProvider(
