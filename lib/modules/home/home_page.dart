@@ -2,6 +2,7 @@ import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/modules/home/widgets/indicator_widget.dart';
 import 'package:crypto_wallet/shared/models/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
+import 'package:crypto_wallet/shared/widgets/donut_chart/donut_chart.dart';
 import 'package:crypto_wallet/shared/widgets/watch_list/watch_list_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final auth = FirebaseAuth.instance;
   late final HomeBloc bloc;
-  late Size size;
 
   @override
   void initState() {
@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
@@ -63,10 +62,7 @@ class _HomePageState extends State<HomePage> {
             valueListenable: bloc.statusNotifier,
             builder: (context, status, widget) {
               if (status.statusPage == StatusPage.loading) {
-                return Container(
-                  height: size.height * 0.7,
-                  child: Center(child: CircularProgressIndicator()),
-                );
+                return Center(child: CircularProgressIndicator());
               } else {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,40 +105,47 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _chart() {
-    return Row(
-      children: [
-        DonutChart(),
-        Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Indicator(
-                color: Color(0xff0293ee),
-                text: '0.05610231 BTC',
-              ),
-              SizedBox(height: 10),
-              Indicator(
-                color: Color(0xfff8b250),
-                text: '0.05610231 ETH',
-              ),
-              SizedBox(height: 10),
-              Indicator(
-                color: Color(0xff845bef),
-                text: '1520.54665874 DOGE',
-              ),
-              SizedBox(height: 10),
-              Indicator(
-                color: Color(0xff13d38e),
-                text: '784.23456879 XRP',
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    return ValueListenableBuilder<HomeStatus>(
+        valueListenable: bloc.statusNotifier,
+        builder: (context, status, widget) {
+          if (status.statusPage == StatusPage.success) {
+            return Row(
+              children: [
+                DonutChart(
+                  data: bloc.dashboardData.cryptosSummary
+                      .asMap()
+                      .entries
+                      .map((e) => DonutChartModel(
+                          percent: e.value.percent,
+                          color: bloc.chartColors[e.key]))
+                      .toList(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:
+                          bloc.dashboardData.cryptosSummary.asMap().entries.map(
+                        (e) {
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: Indicator(
+                              color: bloc.chartColors[e.key],
+                              text:
+                                  '${e.value.crypto}: ${e.value.amount.toStringAsFixed(8)}',
+                            ),
+                          );
+                        },
+                      ).toList()),
+                ),
+              ],
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 
   Widget _variations() {

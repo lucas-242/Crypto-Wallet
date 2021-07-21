@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/repositories/coin_repository.dart';
 import 'package:crypto_wallet/repositories/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
+import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:flutter/foundation.dart';
 
 class HomeBloc extends ChangeNotifier {
@@ -16,7 +19,7 @@ class HomeBloc extends ChangeNotifier {
   HomeStatus get status => statusNotifier.value;
   set status(HomeStatus status) => statusNotifier.value = status;
 
-  Dashboard dashboardData = new Dashboard();
+  DashboardModel dashboardData = new DashboardModel();
 
   HomeBloc({
     required WalletRepository walletRepository,
@@ -25,6 +28,8 @@ class HomeBloc extends ChangeNotifier {
         _coinRepository = coinRepository;
 
   Future<void> getCryptos(String uid) async {
+    //TODO: This method being called twice and throwing setState() or markNeedsBuild() called during build.
+    //Probably because of the fist navigator from the splash page
     status = HomeStatus.loading();
 
     await _walletRepository.getAllCryptos(uid).then((value) async {
@@ -68,6 +73,40 @@ class HomeBloc extends ChangeNotifier {
 
     double percentVariation = (variation.abs() * 100) / total;
 
-    dashboardData = dashboardData.copyWith(total: total, variation: variation, percentVariation: percentVariation);
+    List<CryptoSummary> cryptosSummary = [];
+    var sortedCryptos = cryptos;
+    sortedCryptos.sort((a, b) => b.totalNow.compareTo(a.totalNow));
+    sortedCryptos.forEach((crypto) {
+      cryptosSummary.add(CryptoSummary(
+        crypto: crypto.crypto,
+        value: crypto.totalNow,
+        amount: crypto.amount,
+        percent: (crypto.totalNow * 100) / total,
+      ));
+    });
+
+    dashboardData = dashboardData.copyWith(
+      total: total,
+      variation: variation,
+      percentVariation: percentVariation,
+      cryptosSummary: cryptosSummary,
+    );
+  }
+
+  List<Color> get chartColors {
+    return [
+      AppColors.primary,
+      AppColors.secondary,
+      AppColors.orange,
+      AppColors.yellow,
+      AppColors.grey,
+      AppColors.red,
+      AppColors.primary,
+      AppColors.secondary,
+      AppColors.orange,
+      AppColors.yellow,
+      AppColors.grey,
+      AppColors.red,
+    ];
   }
 }

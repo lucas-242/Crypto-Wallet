@@ -1,64 +1,63 @@
-import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
-class Dashboard {
+class DashboardModel {
   double total;
   double variation;
   double percentVariation;
 
-  Dashboard({
+  List<CryptoSummary> cryptosSummary;
+
+  DashboardModel({
     this.total = 0,
     this.variation = 0,
     this.percentVariation = 0,
+    this.cryptosSummary = const [],
   });
 
-  Dashboard copyWith({
+  DashboardModel copyWith({
     double? total,
     double? variation,
     double? percentVariation,
+    List<CryptoSummary>? cryptosSummary,
   }) {
-    return Dashboard(
+    return DashboardModel(
       total: total ?? this.total,
       variation: variation ?? this.variation,
       percentVariation: percentVariation ?? this.percentVariation,
+      cryptosSummary: cryptosSummary ?? this.cryptosSummary,
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'total': total,
-      'variation': variation,
-      'percentVariation': percentVariation,
-    };
-  }
-
-  factory Dashboard.fromMap(Map<String, dynamic> map) {
-    return Dashboard(
-      total: map['total'],
-      variation: map['variation'],
-      percentVariation: map['percentVariation'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Dashboard.fromJson(String source) =>
-      Dashboard.fromMap(json.decode(source));
-
-  @override
-  String toString() =>
-      'Dashboard(total: $total, variation: $variation, percentVariation: $percentVariation)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Dashboard &&
+    return other is DashboardModel &&
         other.total == total &&
         other.variation == variation &&
-        other.percentVariation == percentVariation;
+        other.percentVariation == percentVariation &&
+        listEquals(other.cryptosSummary, cryptosSummary);
   }
 
   @override
-  int get hashCode =>
-      total.hashCode ^ variation.hashCode ^ percentVariation.hashCode;
+  int get hashCode {
+    return total.hashCode ^
+        variation.hashCode ^
+        percentVariation.hashCode ^
+        cryptosSummary.hashCode;
+  }
+}
+
+class CryptoSummary {
+  String crypto;
+  double value;
+  double amount;
+  double percent;
+
+  CryptoSummary({
+    required this.crypto,
+    this.value = 0,
+    this.amount = 0,
+    this.percent = 0,
+  });
 }
