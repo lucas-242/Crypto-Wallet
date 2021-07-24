@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
+      elevation: 3,
       child: Padding(
         padding: EdgeInsets.all(30),
         child: ValueListenableBuilder<HomeStatus>(
@@ -81,10 +82,7 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       Text(
-                        !bloc.dashboardData.variation.isNegative
-                            ? '+'
-                            : '' +
-                                '${NumberFormat.currency(symbol: '\$').format(bloc.dashboardData.variation)} (${bloc.dashboardData.percentVariation.toStringAsFixed(1)}%)', //(${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(bloc.dashboardData.percentVariation)})',
+                        '${bloc.dashboardData.variation.isNegative ? '' : '+'} ${NumberFormat.currency(symbol: '\$').format(bloc.dashboardData.variation)} (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(bloc.dashboardData.percentVariation / 100)})',
                         style: AppTextStyles.titleRegular,
                       ),
                       Icon(
