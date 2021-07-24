@@ -17,11 +17,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final auth = FirebaseAuth.instance;
   late final HomeBloc bloc;
 
   @override
   void initState() {
+    final auth = FirebaseAuth.instance;
     bloc = context.read<HomeBloc>();
     if (bloc.cryptos.isEmpty) bloc.getCryptos(auth.currentUser!.uid);
     super.initState();
@@ -63,42 +63,41 @@ class _HomePageState extends State<HomePage> {
             builder: (context, status, widget) {
               if (status.statusPage == StatusPage.loading) {
                 return Center(child: CircularProgressIndicator());
-              } else {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Today',
-                      style: AppTextStyles.titleRegular,
-                    ),
-                    SizedBox(height: 15),
-                    Text(
-                      NumberFormat.currency(symbol: '\$')
-                          .format(bloc.dashboardData.total),
-                      style: AppTextStyles.titleHome,
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          !bloc.dashboardData.variation.isNegative
-                              ? '+'
-                              : '' +
-                                  '${NumberFormat.currency(symbol: '\$').format(bloc.dashboardData.variation)} (${bloc.dashboardData.percentVariation.toStringAsFixed(1)}%)', //(${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(bloc.dashboardData.percentVariation)})',
-                          style: AppTextStyles.titleRegular,
-                        ),
-                        Icon(
-                            bloc.dashboardData.variation.isNegative
-                                ? Icons.arrow_downward
-                                : Icons.arrow_upward,
-                            color: bloc.dashboardData.variation.isNegative
-                                ? AppColors.red
-                                : AppColors.secondary),
-                      ],
-                    )
-                  ],
-                );
               }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Today',
+                    style: AppTextStyles.titleRegular,
+                  ),
+                  SizedBox(height: 15),
+                  Text(
+                    NumberFormat.currency(symbol: '\$')
+                        .format(bloc.dashboardData.total),
+                    style: AppTextStyles.titleHome,
+                  ),
+                  SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Text(
+                        !bloc.dashboardData.variation.isNegative
+                            ? '+'
+                            : '' +
+                                '${NumberFormat.currency(symbol: '\$').format(bloc.dashboardData.variation)} (${bloc.dashboardData.percentVariation.toStringAsFixed(1)}%)', //(${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(bloc.dashboardData.percentVariation)})',
+                        style: AppTextStyles.titleRegular,
+                      ),
+                      Icon(
+                          bloc.dashboardData.variation.isNegative
+                              ? Icons.arrow_downward
+                              : Icons.arrow_upward,
+                          color: bloc.dashboardData.variation.isNegative
+                              ? AppColors.red
+                              : AppColors.secondary),
+                    ],
+                  )
+                ],
+              );
             }),
       ),
     );

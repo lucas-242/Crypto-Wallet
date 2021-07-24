@@ -28,8 +28,6 @@ class HomeBloc extends ChangeNotifier {
         _coinRepository = coinRepository;
 
   Future<void> getCryptos(String uid) async {
-    //TODO: This method being called twice and throwing setState() or markNeedsBuild() called during build.
-    //Probably because of the fist navigator from the splash page
     status = HomeStatus.loading();
 
     await _walletRepository.getAllCryptos(uid).then((value) async {
