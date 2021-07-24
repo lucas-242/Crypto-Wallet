@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Indicator extends StatelessWidget {
   final Color color;
   final String text;
+  final String? subtext;
   final bool isSquare;
   final double size;
   final Color textColor;
@@ -11,6 +12,7 @@ class Indicator extends StatelessWidget {
     Key? key,
     required this.color,
     required this.text,
+    this.subtext,
     this.isSquare = false,
     this.size = 16,
     this.textColor = const Color(0xff505050),
@@ -28,14 +30,28 @@ class Indicator extends StatelessWidget {
             color: color,
           ),
         ),
-        SizedBox(width: 5),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-            color: textColor,
-          ),
+        SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: textColor,
+              ),
+            ),
+            if (subtext != null)
+              Text(
+                subtext!,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
+              ),
+          ],
         )
       ],
     );

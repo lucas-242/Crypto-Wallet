@@ -32,9 +32,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.remove_red_eye_sharp))
-        ],
+        // actions: [
+        //   IconButton(onPressed: () {}, icon: Icon(Icons.remove_red_eye_sharp))
+        // ],
       ),
       body: Padding(
         padding: EdgeInsets.only(left: 25, right: 25, top: 25),
@@ -130,8 +130,8 @@ class _HomePageState extends State<HomePage> {
                             padding: EdgeInsets.only(bottom: 10),
                             child: Indicator(
                               color: bloc.chartColors[e.key],
-                              text:
-                                  '${e.value.crypto}: ${e.value.amount.toStringAsFixed(8)}',
+                              text: '${e.value.crypto} (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(e.value.percent / 100)})',
+                              subtext: e.value.amount.toStringAsFixed(8),
                             ),
                           );
                         },
