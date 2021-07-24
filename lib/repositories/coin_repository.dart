@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class CoinRepository {
   ///Get the [coins] currency in the [currencies]
   ///
-  ///Return: [{"bitcoin": { "usd": 32524.45 }]
+  ///Returns [{"bitcoin": { "usd": 32524.45 }]
   Future<Map<String, dynamic>> getPrices({
     required List<String> coins,
     List<String> currencies = const ['usd'],
@@ -34,7 +34,7 @@ class CoinRepository {
 
   /// Get the [coin] Open-high-low-close chart data based on [currency] in [days]
   ///
-  /// Return: [[1626552000000, 31833.02, 31845.12, 31738.99, 31787.61]]
+  /// Returns [[1626552000000, 31833.02, 31845.12, 31738.99, 31787.61]]
   ///
   ///Where
   ///
