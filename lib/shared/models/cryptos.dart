@@ -10,7 +10,7 @@ class Cryptos {
 
   static const LIST = [BTC, ADA, ETH, DOGE, XRP, BNB, DOT, SOL];
 
-  static const MAP = {
+  static const API_NAME = {
     BTC: 'bitcoin',
     ADA: 'cardano',
     ETH: 'ethereum',

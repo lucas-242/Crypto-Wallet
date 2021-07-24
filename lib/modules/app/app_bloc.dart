@@ -9,6 +9,8 @@ class AppBloc extends ChangeNotifier {
   int get currentPageIndex => _currentPageIndex;
   String get currentPageName => _currentPageName;
 
+  final bottomNavigationKey = GlobalKey();
+
   AppBloc() {
     _currentPageName = _pages[_currentPageIndex];
   }

@@ -108,7 +108,7 @@ class WalletRepository {
         FirebaseFirestore.instance.collection('cryptos').doc();
 
     var crypto = CryptoModel(
-      name: Cryptos.MAP[trade.crypto]!,
+      name: Cryptos.API_NAME[trade.crypto]!,
       crypto: trade.crypto,
       amount: trade.amount,
       averagePrice: trade.price,
