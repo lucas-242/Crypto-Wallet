@@ -1,6 +1,6 @@
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/wallet/bloc/wallet_bloc.dart';
-import 'package:crypto_wallet/repositories/wallet_repository.dart';
+import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crypto_wallet/shared/extensions/date_time_extension.dart';

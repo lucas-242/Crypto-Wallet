@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:crypto_wallet/modules/home/home.dart';
-import 'package:crypto_wallet/repositories/coin_repository.dart';
-import 'package:crypto_wallet/repositories/wallet_repository.dart';
+import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
+import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';

@@ -12,16 +12,8 @@ class CoinRepository {
     List<String> currencies = const ['usd'],
   }) async {
     try {
-      String formattedCoins = coins.toString();
-      formattedCoins = formattedCoins
-          .substring(1, formattedCoins.length - 1)
-          .replaceAll(RegExp(r"\s+"), '');
-
-      String formattedCurrencies = currencies.toString();
-      formattedCurrencies = formattedCurrencies
-          .substring(1, formattedCurrencies.length - 1)
-          .replaceAll(RegExp(r"\s+"), '');
-
+      String formattedCoins = _formatToUrl(coins);
+      String formattedCurrencies = _formatToUrl(currencies);
       var uri =
           '${Environment.coingeckoApi}simple/price?ids=$formattedCoins&vs_currencies=$formattedCurrencies';
       var response = await http.get(Uri.parse(uri));
@@ -62,5 +54,32 @@ class CoinRepository {
       print(error.toString());
       throw Exception('Error getting OHLC: $error');
     }
+  }
+
+  ///Get the [coins] market date in the [currency]
+  Future<List<dynamic>> getMarketData({
+    required List<String> coins,
+    String currency = 'usd',
+  }) async {
+    try {
+      String formattedCoins = _formatToUrl(coins);
+
+      var uri =
+          '${Environment.coingeckoApi}coins/markets?ids=$formattedCoins&vs_currency=$currency&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h,7d,30d,1y';
+
+      var response = await http.get(Uri.parse(uri));
+      return json.decode(response.body);
+    } catch (error) {
+      print(error.toString());
+      throw Exception('Error getting Market Data: $error');
+    }
+  }
+
+  /// Format [urlParameter] to a string to use in URL
+  String _formatToUrl(List<String> urlParameter) {
+    var result = urlParameter.toString();
+    result =
+        result.substring(1, result.length - 1).replaceAll(RegExp(r"\s+"), '');
+    return result;
   }
 }
