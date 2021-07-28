@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crypto_wallet/repositories/coin_repository/models/market_data_api_response_model.dart';
 import 'package:crypto_wallet/shared/environment/environment.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,7 +58,7 @@ class CoinRepository {
   }
 
   ///Get the [coins] market date in the [currency]
-  Future<List<dynamic>> getMarketData({
+  Future<List<MarketDataApiResponse>> getMarketData({
     required List<String> coins,
     String currency = 'usd',
   }) async {
@@ -68,7 +69,10 @@ class CoinRepository {
           '${Environment.coingeckoApi}coins/markets?ids=$formattedCoins&vs_currency=$currency&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h,7d,30d,1y';
 
       var response = await http.get(Uri.parse(uri));
-      return json.decode(response.body);
+      Iterable body = json.decode(response.body);
+      var result = List<MarketDataApiResponse>.from(
+          body.map((x) => MarketDataApiResponse.fromMap(x)));
+      return result;
     } catch (error) {
       print(error.toString());
       throw Exception('Error getting Market Data: $error');

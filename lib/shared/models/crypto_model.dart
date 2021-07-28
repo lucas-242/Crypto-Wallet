@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
+
 class CryptoModel {
   final String? id;
   final String name;
+  final String? image;
   final String crypto;
   final double amount;
   final double averagePrice;
@@ -10,6 +13,7 @@ class CryptoModel {
   final double price;
   final DateTime updatedAt;
   final String user;
+  final CryptoHistory? history;
 
   /// Total amount at current quote of selected currency
   double get totalNow => price * amount;
@@ -20,17 +24,20 @@ class CryptoModel {
     DateTime? updatedAt,
     this.id,
     this.name = '',
+    this.image,
     required this.crypto,
     required this.amount,
     required this.averagePrice,
     required this.totalInvested,
     this.user = '',
     this.price = 0,
+    this.history,
   }) : this.updatedAt = updatedAt ?? DateTime.now();
 
   CryptoModel copyWith({
     String? id,
     String? name,
+    String? image,
     String? crypto,
     double? amount,
     double? averagePrice,
@@ -38,10 +45,12 @@ class CryptoModel {
     double? price,
     DateTime? updatedAt,
     String? user,
+    CryptoHistory? history,
   }) {
     return CryptoModel(
       id: id ?? this.id,
       name: name ?? this.name,
+      image: image ?? this.image,
       crypto: crypto ?? this.crypto,
       amount: amount ?? this.amount,
       averagePrice: averagePrice ?? this.averagePrice,
@@ -49,6 +58,7 @@ class CryptoModel {
       price: price ?? this.price,
       updatedAt: updatedAt ?? this.updatedAt,
       user: user ?? this.user,
+      history: history ?? this.history,
     );
   }
 
