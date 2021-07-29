@@ -23,28 +23,29 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     final auth = FirebaseAuth.instance;
     bloc = context.read<HomeBloc>();
-    if (bloc.cryptos.isEmpty) bloc.getCryptos(auth.currentUser!.uid);
+    if (bloc.cryptos.isEmpty) bloc.onInit(auth.currentUser!.uid);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-        // actions: [
-        //   IconButton(onPressed: () {}, icon: Icon(Icons.remove_red_eye_sharp))
-        // ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 25, right: 25, top: 25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _totalCard(),
-            _chart(),
-            _variations(),
-          ],
+      appBar: AppBar(title: Text('Dashboard')),
+      body: RefreshIndicator(
+        onRefresh: () => bloc.onRefresh(),
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.only(left: 25, right: 25, top: 25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _totalCard(),
+                _chart(),
+                _variations(),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -103,91 +104,113 @@ class _HomePageState extends State<HomePage> {
 
   Widget _chart() {
     return ValueListenableBuilder<HomeStatus>(
-        valueListenable: bloc.statusNotifier,
-        builder: (context, status, widget) {
-          if (status.statusPage == StatusPage.success) {
-            return Row(
-              children: [
-                DonutChart(
-                  data: bloc.dashboardData.cryptosSummary
-                      .asMap()
-                      .entries
-                      .map((e) => DonutChartModel(
-                          percent: e.value.percent,
-                          color: bloc.chartColors[e.key]))
-                      .toList(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children:
-                          bloc.dashboardData.cryptosSummary.asMap().entries.map(
-                        (e) {
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: Indicator(
-                              color: bloc.chartColors[e.key],
-                              text: '${e.value.crypto} (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(e.value.percent / 100)})',
-                              subtext: e.value.amount.toStringAsFixed(8),
-                            ),
-                          );
-                        },
-                      ).toList()),
-                ),
-              ],
-            );
-          } else {
-            return Container();
-          }
-        });
+      valueListenable: bloc.statusNotifier,
+      builder: (context, status, widget) {
+        if (status.statusPage == StatusPage.success) {
+          return Row(
+            children: [
+              DonutChart(
+                data: bloc.dashboardData.cryptosSummary
+                    .asMap()
+                    .entries
+                    .map((e) => DonutChartModel(
+                        percent: e.value.percent,
+                        color: bloc.chartColors[e.key]))
+                    .toList(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:
+                        bloc.dashboardData.cryptosSummary.asMap().entries.map(
+                      (e) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Indicator(
+                            color: bloc.chartColors[e.key],
+                            text:
+                                '${e.value.crypto} (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(e.value.percent / 100)})',
+                            subtext: e.value.amount.toStringAsFixed(8),
+                          ),
+                        );
+                      },
+                    ).toList()),
+              ),
+            ],
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 
   Widget _variations() {
-    return Expanded(
+    return Container(
+      height: SizeConfig.height * 0.3,
       child: DefaultTabController(
-        length: 4,
-        initialIndex: 0,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            toolbarHeight: 50,
-            bottom: TabBar(
-              indicatorColor: AppColors.primary,
-              labelColor: AppColors.primary,
-              unselectedLabelColor: AppColors.stroke,
-              tabs: [
-                Tab(text: 'Day'),
-                Tab(text: 'Week'),
-                Tab(text: 'Month'),
-                Tab(text: 'Year'),
-              ],
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: WatchList(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: WatchList(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: WatchList(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: WatchList(),
-              ),
+      length: 4,
+      initialIndex: 0,
+      child: Column(
+        children: [
+          TabBar(
+            indicatorColor: AppColors.primary,
+            labelColor: AppColors.primary,
+            unselectedLabelColor: AppColors.stroke,
+            tabs: [
+              Tab(text: '24h'),
+              Tab(text: '7d'),
+              Tab(text: '30d'),
+              Tab(text: '1y'),
             ],
           ),
-        ),
+          Expanded(
+            child: ValueListenableBuilder<HomeStatus>(
+              valueListenable: bloc.statusNotifier,
+              builder: (context, status, widget) {
+                if (status.statusPage == StatusPage.loading) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                return TabBarView(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: WatchList(
+                        cryptos: bloc.cryptos,
+                        time: WatchListTime.priceChangePercentage24hInCurrency,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: WatchList(
+                        cryptos: bloc.cryptos,
+                        time: WatchListTime.priceChangePercentage7dInCurrency,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: WatchList(
+                        cryptos: bloc.cryptos,
+                        time: WatchListTime.priceChangePercentage30dInCurrency,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: WatchList(
+                        cryptos: bloc.cryptos,
+                        time: WatchListTime.priceChangePercentage1yInCurrency,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
       ),
     );
   }

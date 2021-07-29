@@ -1,6 +1,6 @@
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
-import 'package:crypto_wallet/repositories/wallet_repository.dart';
+import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/models/trade_type.dart';

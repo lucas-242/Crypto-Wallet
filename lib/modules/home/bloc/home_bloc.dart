@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:crypto_wallet/modules/home/home.dart';
-import 'package:crypto_wallet/repositories/coin_repository.dart';
-import 'package:crypto_wallet/repositories/wallet_repository.dart';
+import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
+import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
+import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';
@@ -27,11 +28,11 @@ class HomeBloc extends ChangeNotifier {
   })  : _walletRepository = walletRepository,
         _coinRepository = coinRepository;
 
-  Future<void> getCryptos(String uid) async {
+  Future<void> onInit(String uid) async {
     status = HomeStatus.loading();
 
     await _walletRepository.getAllCryptos(uid).then((value) async {
-      cryptos = await getCryptosPrice(value);
+      cryptos = await getCryptosMarketData(value);
       setDashboardData();
     }).catchError((error) {
       status = HomeStatus.error(error.toString());
@@ -47,14 +48,64 @@ class HomeBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
+  Future<void> onRefresh() async {
+    status = HomeStatus.loading();
+
+    await getCryptosMarketData(cryptos).then((value) {
+      cryptos = value;
+      for (var i = 0; i < 2; i++) {
+        cryptos.add(value[0]);
+      }
+      setDashboardData();
+    }).catchError((error) {
+      status = HomeStatus.error(error.toString());
+      print(error);
+    });
+
+    if (cryptos.isEmpty) {
+      status = HomeStatus.noData();
+    } else {
+      status = HomeStatus();
+    }
+
+    notifyListeners();
+  }
+
+  Future<List<CryptoModel>> getCryptosMarketData(
+      List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
+
     return await _coinRepository
-        .getPrices(coins: coins.map((e) => e.name).toList())
+        .getMarketData(coins: coins.map((e) => e.name).toList())
         .then((response) {
       coins.forEach((coin) {
-        var price = double.parse(response[coin.name]['usd'].toString());
-        result.add(coin.copyWith(price: price));
+        response.any((element) {
+          if (element.id == coin.name) {
+            var price = element.currentPrice;
+
+            var history = new CryptoHistory(
+              high24h: element.high24h,
+              low24h: element.low24h,
+              priceChangePercentage1yInCurrency:
+                  element.priceChangePercentage1yInCurrency,
+              priceChangePercentage24hInCurrency:
+                  element.priceChangePercentage24hInCurrency,
+              priceChangePercentage30dInCurrency:
+                  element.priceChangePercentage30dInCurrency,
+              priceChangePercentage7dInCurrency:
+                  element.priceChangePercentage7dInCurrency,
+            );
+
+            result.add(coin.copyWith(
+              price: price,
+              image: coin.image,
+              history: history,
+            ));
+            return true;
+          }
+
+          return false;
+        });
       });
 
       return result;
