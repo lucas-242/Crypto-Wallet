@@ -1,78 +1,106 @@
+import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+enum WatchListTime {
+  priceChangePercentage1yInCurrency,
+  priceChangePercentage24hInCurrency,
+  priceChangePercentage30dInCurrency,
+  priceChangePercentage7dInCurrency,
+}
+
 class WatchList extends StatelessWidget {
-  const WatchList({Key? key}) : super(key: key);
+  final List<CryptoModel> cryptos;
+  final WatchListTime time;
+  const WatchList({
+    Key? key,
+    required this.cryptos,
+    this.time = WatchListTime.priceChangePercentage24hInCurrency,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
-
     return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Container(
-            child: Padding(
-              padding: EdgeInsets.only(top: 5, left: 10, right: 10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _name(),
-                      _canvas(),
-                      _price(),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Divider(),
-                ],
-              ),
+      itemCount: cryptos.length,
+      itemBuilder: (context, index) {
+        double cryptoPercentage;
+        switch (time) {
+          case WatchListTime.priceChangePercentage1yInCurrency:
+            cryptoPercentage =
+                cryptos[index].history!.priceChangePercentage1yInCurrency!;
+            break;
+          case WatchListTime.priceChangePercentage24hInCurrency:
+            cryptoPercentage =
+                cryptos[index].history!.priceChangePercentage24hInCurrency!;
+            break;
+          case WatchListTime.priceChangePercentage7dInCurrency:
+            cryptoPercentage =
+                cryptos[index].history!.priceChangePercentage7dInCurrency!;
+            break;
+          case WatchListTime.priceChangePercentage30dInCurrency:
+            cryptoPercentage =
+                cryptos[index].history!.priceChangePercentage30dInCurrency!;
+            break;
+          default:
+            throw Exception();
+        }
+
+        return Container(
+          child: Padding(
+            padding: EdgeInsets.only(top: 5, left: 10, right: 10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          cryptos[index].name,
+                          style: AppTextStyles.captionBody,
+                        ),
+                        Text(
+                          cryptos[index].crypto,
+                          style: AppTextStyles.captionBody,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${NumberFormat.currency(symbol: '\$').format(cryptos[index].price)}',
+                          style: AppTextStyles.captionBody,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                '${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(cryptoPercentage / 100)}',
+                                style: AppTextStyles.captionBody),
+                            Icon(
+                              cryptoPercentage.isNegative
+                                  ? Icons.arrow_downward
+                                  : Icons.arrow_upward,
+                              color: cryptoPercentage.isNegative
+                                  ? AppColors.red
+                                  : AppColors.secondary,
+                              size: 15,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Divider(),
+              ],
             ),
-          );
-        });
-  }
-
-  Widget _name() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Bitcoin',
-          style: AppTextStyles.captionBody,
-        ),
-        Text(
-          'BTC',
-          style: AppTextStyles.captionBody,
-        ),
-      ],
-    );
-  }
-
-  Widget _canvas() {
-    return Container();
-  }
-
-  Widget _price() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${NumberFormat.currency(symbol: '\$').format(32575.45)}',
-          style: AppTextStyles.captionBody,
-        ),
-        Row(
-          children: [
-            Text('10,5%', style: AppTextStyles.captionBody),
-            Icon(
-              Icons.arrow_upward,
-              color: AppColors.secondary,
-              size: 15,
-            ),
-          ],
-        )
-      ],
+          ),
+        );
+      },
     );
   }
 }

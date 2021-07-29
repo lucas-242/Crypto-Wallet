@@ -28,7 +28,7 @@ class HomeBloc extends ChangeNotifier {
   })  : _walletRepository = walletRepository,
         _coinRepository = coinRepository;
 
-  Future<void> getCryptos(String uid) async {
+  Future<void> onInit(String uid) async {
     status = HomeStatus.loading();
 
     await _walletRepository.getAllCryptos(uid).then((value) async {
@@ -48,18 +48,27 @@ class HomeBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
-    var result = <CryptoModel>[];
-    return await _coinRepository
-        .getPrices(coins: coins.map((e) => e.name).toList())
-        .then((response) {
-      coins.forEach((coin) {
-        var price = double.parse(response[coin.name]['usd'].toString());
-        result.add(coin.copyWith(price: price));
-      });
+  Future<void> onRefresh() async {
+    status = HomeStatus.loading();
 
-      return result;
+    await getCryptosMarketData(cryptos).then((value) {
+      cryptos = value;
+      for (var i = 0; i < 2; i++) {
+        cryptos.add(value[0]);
+      }
+      setDashboardData();
+    }).catchError((error) {
+      status = HomeStatus.error(error.toString());
+      print(error);
     });
+
+    if (cryptos.isEmpty) {
+      status = HomeStatus.noData();
+    } else {
+      status = HomeStatus();
+    }
+
+    notifyListeners();
   }
 
   Future<List<CryptoModel>> getCryptosMarketData(
