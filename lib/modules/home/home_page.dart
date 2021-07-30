@@ -1,6 +1,6 @@
 import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/modules/home/widgets/indicator_widget.dart';
-import 'package:crypto_wallet/shared/models/status_page.dart';
+import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/donut_chart/donut_chart.dart';
 import 'package:crypto_wallet/shared/widgets/watch_list/watch_list_widget.dart';

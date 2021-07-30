@@ -7,14 +7,14 @@ class MarketDataApiResponse {
   String image;
   double currentPrice;
   double marketCap;
-  int marketCapRank;
+  double marketCapRank;
   double fullyDilutedValuation;
   double totalVolume;
   double high24h;
   double low24h;
   double priceChange24h;
   double priceChangePercentage24h;
-  int marketCapChange24h;
+  double marketCapChange24h;
   double marketCapChangePercentage24h;
   double circulatingSupply;
   double totalSupply;
@@ -70,14 +70,14 @@ class MarketDataApiResponse {
     String? image,
     double? currentPrice,
     double? marketCap,
-    int? marketCapRank,
+    double? marketCapRank,
     double? fullyDilutedValuation,
     double? totalVolume,
     double? high24h,
     double? low24h,
     double? priceChange24h,
     double? priceChangePercentage24h,
-    int? marketCapChange24h,
+    double? marketCapChange24h,
     double? marketCapChangePercentage24h,
     double? circulatingSupply,
     double? totalSupply,
@@ -176,14 +176,14 @@ class MarketDataApiResponse {
       image: map['image'],
       currentPrice: map['current_price'].toDouble(),
       marketCap: map['market_cap'].toDouble(),
-      marketCapRank: map['market_cap_rank'],
+      marketCapRank: map['market_cap_rank'].toDouble(),
       fullyDilutedValuation: map['fully_diluted_valuation'].toDouble(),
       totalVolume: map['total_volume'].toDouble(),
       high24h: map['high_24h'].toDouble(),
       low24h: map['low_24h'].toDouble(),
       priceChange24h: map['price_change_24h'].toDouble(),
       priceChangePercentage24h: map['price_change_percentage_24h'].toDouble(),
-      marketCapChange24h: map['market_cap_change_24h'],
+      marketCapChange24h: map['market_cap_change_24h'].toDouble(),
       marketCapChangePercentage24h:
           map['market_cap_change_percentage_24h'].toDouble(),
       circulatingSupply: map['circulating_supply'].toDouble(),

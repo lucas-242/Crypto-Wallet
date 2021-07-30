@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/models/cryptos.dart';
+import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
-import 'package:crypto_wallet/shared/models/trade_type.dart';
+import 'package:crypto_wallet/shared/constants/trade_type.dart';
 
 class WalletRepository {
   ///Fetch for all user's cryptos
@@ -88,7 +88,7 @@ class WalletRepository {
           .runTransaction((transaction) async {
         crypto = _calculateCryptoMetrics(
           crypto,
-          trade.copyWith(operationType: TradeType.SELL),
+          trade.copyWith(operationType: TradeType.sell),
         );
         if (crypto.totalInvested == 0) {
           _deleteCryptoInTransaction(transaction, crypto);
@@ -108,7 +108,7 @@ class WalletRepository {
         FirebaseFirestore.instance.collection('cryptos').doc();
 
     var crypto = CryptoModel(
-      name: Cryptos.API_NAME[trade.crypto]!,
+      name: Cryptos.apiNames[trade.crypto]!,
       crypto: trade.crypto,
       amount: trade.amount,
       averagePrice: trade.price,
@@ -140,7 +140,7 @@ class WalletRepository {
 
   CryptoModel _calculateCryptoMetrics(CryptoModel crypto, TradeModel trade) {
     var updatedDate = DateTime.now();
-    if (trade.operationType == TradeType.BUY) {
+    if (trade.operationType == TradeType.buy) {
       var amount = crypto.amount + trade.amount;
       var totalInvested = crypto.totalInvested + trade.amountInvested;
 

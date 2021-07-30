@@ -24,7 +24,7 @@ class _AppState extends State<App> {
         body: [
           HomePage(),
           WalletPage(),
-          TradesPage(),
+          TradesListPage(),
         ][appBloc.currentPageIndex],
         bottomNavigationBar: AppBottomNavigationBar(
           key: appBloc.bottomNavigationKey,

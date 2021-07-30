@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -49,12 +50,13 @@ class MainApp extends StatelessWidget {
             primarySwatch:
                 MaterialColor(0xFF264653, AppColors.primaryMaterial)),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/splash',
+        initialRoute: AppRoutes.splash,
         routes: {
-          '/splash': (context) => SplashPage(),
-          '/app': (context) => App(),
-          '/login': (context) => LoginPage(),
-          '/insert_trade': (context) => InsertTradePage(
+          AppRoutes.splash: (context) => SplashPage(),
+          AppRoutes.app: (context) => App(),
+          AppRoutes.login: (context) => LoginPage(),
+          AppRoutes.tradesDetails: (context) => TradesDetails(),
+          AppRoutes.tradesInsert: (context) => InsertTradePage(
                 walletRepository: walletRepository,
               )
         },

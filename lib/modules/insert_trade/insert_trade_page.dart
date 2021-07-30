@@ -1,9 +1,9 @@
 import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/models/cryptos.dart';
-import 'package:crypto_wallet/shared/models/status_page.dart';
-import 'package:crypto_wallet/shared/models/trade_type.dart';
+import 'package:crypto_wallet/shared/constants/cryptos.dart';
+import 'package:crypto_wallet/shared/models/enums/status_page.dart';
+import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
 import 'package:crypto_wallet/shared/widgets/custom_dropdown_button/custom_dropdown_button.dart';
@@ -119,7 +119,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                   Expanded(
                     child: CustomDropdownButton(
                       value: bloc.trade.operationType,
-                      items: TradeType.LIST,
+                      items: TradeType.list,
                       onChanged: (value) {
                         bloc.onChange(operationType: value);
                         setState(() {});
@@ -135,7 +135,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                   Expanded(
                     child: CustomDropdownButton(
                       value: bloc.trade.crypto,
-                      items: Cryptos.LIST,
+                      items: Cryptos.list,
                       onChanged: (value) {
                         bloc.onChange(crypto: value);
                         setState(() {});
