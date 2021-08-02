@@ -49,7 +49,8 @@ class WalletRepository {
       return result;
     } catch (error) {
       print('Error while getting data on trades: ${error.toString()}');
-      throw new Exception('Error while getting data on trades: ${error.toString()}');
+      throw new Exception(
+          'Error while getting data on trades: ${error.toString()}');
     }
   }
 
@@ -79,6 +80,7 @@ class WalletRepository {
     }
   }
 
+  //TODO: Fix average price calc when delete trade
   Future<void> deleteTrade(CryptoModel crypto, TradeModel trade) async {
     try {
       DocumentReference tradesReference =

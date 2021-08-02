@@ -29,12 +29,16 @@ class _TradesListPageState extends State<TradesListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('My Trades'), actions: [
-        TextButton(
-          onPressed: () => Navigator.pushNamed(context, AppRoutes.tradesInsert),
-          child: Icon(Icons.add, color: Colors.white),
-        ),
-      ]),
+      appBar: AppBar(
+        title: Text('Trades'),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                Navigator.pushNamed(context, AppRoutes.tradesInsert),
+            child: Icon(Icons.add, color: Colors.white),
+          ),
+        ],
+      ),
       backgroundColor: AppColors.background,
       body: Padding(
         padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 5),
@@ -68,7 +72,7 @@ class _TradesListPageState extends State<TradesListPage> {
                         onTap: (trade) => Navigator.pushNamed(
                           context,
                           AppRoutes.tradesDetails,
-                          arguments: trade,
+                          arguments: {'trade': trade, 'uid': uid},
                         ),
                         onRefresh: () => bloc.getTrades(uid),
                         onDelete: (trade) {
