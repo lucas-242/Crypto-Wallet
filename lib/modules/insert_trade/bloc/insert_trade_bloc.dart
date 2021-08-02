@@ -1,9 +1,9 @@
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/models/cryptos.dart';
+import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
-import 'package:crypto_wallet/shared/models/trade_type.dart';
+import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:flutter/widgets.dart';
 
 import 'insert_trade_status.dart';
@@ -13,8 +13,8 @@ class InsertTradeBloc extends ChangeNotifier {
 
   final formKey = GlobalKey<FormState>();
   TradeModel trade = TradeModel(
-    operationType: TradeType.BUY,
-    crypto: Cryptos.BTC,
+    operationType: TradeType.buy,
+    crypto: Cryptos.btc,
   );
 
   final statusNotifier = ValueNotifier<InsertTradeStatus>(InsertTradeStatus());
@@ -113,8 +113,8 @@ class InsertTradeBloc extends ChangeNotifier {
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
       trade = TradeModel(
-        operationType: TradeType.BUY,
-        crypto: Cryptos.BTC,
+        operationType: TradeType.buy,
+        crypto: Cryptos.btc,
         user: uid,
       );
       status = InsertTradeStatus();

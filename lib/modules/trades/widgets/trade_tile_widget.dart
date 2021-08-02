@@ -1,14 +1,16 @@
 import 'package:crypto_wallet/shared/models/trade_model.dart';
-import 'package:crypto_wallet/shared/models/trade_type.dart';
+import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import '../widgets/trade_details_row_widget.dart';
 
 class TradeTile extends StatelessWidget {
   final TradeModel trade;
-  final VoidCallback? onDelete;
-  const TradeTile({Key? key, required this.trade, this.onDelete})
+  final void Function(TradeModel trade)? onDelete;
+  final void Function(TradeModel trade)? onTap;
+  const TradeTile({Key? key, required this.trade, this.onDelete, this.onTap})
       : super(key: key);
 
   @override
@@ -16,38 +18,36 @@ class TradeTile extends StatelessWidget {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-              left: BorderSide(
-            color: trade.operationType == TradeType.BUY ? AppColors.secondary : AppColors.red,
-            width: 3.0,
-          )),
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(left: 15),
-          child: ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(
-              trade.crypto,
-              style: AppTextStyles.captionBoldBody,
-            ),
-            subtitle: Text(
-              '${trade.amount.toStringAsFixed(8)}',
-              style: AppTextStyles.captionBody,
-            ),
-            trailing: Text.rich(
-              TextSpan(
-                text:
-                    '${trade.operationType == TradeType.BUY ? "Buy" : "Sell"} price',
-                style: AppTextStyles.captionBoldBody,
-                children: [
-                  TextSpan(
-                      text:
-                          "\n${NumberFormat.currency(symbol: '\$').format(trade.price)}",
-                      style: AppTextStyles.captionBody),
-                ],
-              ),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => onTap!(trade),
+        child: Container(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: Column(
+              children: [
+                TradeDetailsRow(
+                  leftText: trade.crypto,
+                  leftTextStyle: AppTextStyles.captionBoldBody,
+                  rightText: toBeginningOfSentenceCase(trade.operationType)!,
+                  rightTextStyle: trade.operationType == TradeType.buy
+                      ? AppTextStyles.captionBoldBody
+                          .copyWith(color: AppColors.secondary)
+                      : AppTextStyles.captionBoldBody
+                          .copyWith(color: AppColors.red),
+                ),
+                SizedBox(height: 5),
+                TradeDetailsRow(
+                  leftText: 'Amount',
+                  rightText: trade.amount.toStringAsFixed(8),
+                ),
+                SizedBox(height: 5),
+                TradeDetailsRow(
+                  leftText: 'Price',
+                  rightText:
+                      NumberFormat.currency(symbol: '\$').format(trade.price),
+                ),
+              ],
             ),
           ),
         ),
@@ -58,7 +58,7 @@ class TradeTile extends StatelessWidget {
           child: IconSlideAction(
             caption: 'Delete',
             icon: Icons.close,
-            onTap: onDelete,
+            onTap: () => onDelete!(trade),
             foregroundColor: AppColors.body,
           ),
         ),

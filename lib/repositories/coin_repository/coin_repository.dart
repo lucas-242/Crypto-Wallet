@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto_wallet/repositories/coin_repository/models/market_data_api_response_model.dart';
-import 'package:crypto_wallet/shared/environment/environment.dart';
+import 'package:crypto_wallet/shared/constants/environment.dart';
 import 'package:http/http.dart' as http;
 
 class CoinRepository {

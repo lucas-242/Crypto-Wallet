@@ -1,4 +1,4 @@
-import 'package:crypto_wallet/shared/models/status_page.dart';
+import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 
 class TradesStatus {
   final StatusPage statusPage;
