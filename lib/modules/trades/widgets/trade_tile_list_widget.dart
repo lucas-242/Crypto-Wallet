@@ -49,10 +49,16 @@ class TradeTileList extends StatelessWidget {
                   itemCount: bloc.getTradesByDate(date).length,
                   itemBuilder: (context, index) {
                     final trades = bloc.getTradesByDate(date);
-                    return TradeTile(
-                      trade: trades[index],
-                      onTap: (trade) => onTap(trade),
-                      onDelete: () => onDelete(TradeModel(operationType: 'buy')),
+                    return Column(
+                      children: [
+                        TradeTile(
+                          trade: trades[index],
+                          onTap: (trade) => onTap(trade),
+                          onDelete: (trade) => onDelete(trade),
+                        ),
+                        if (trades.length > 1 && index != trades.length - 1)
+                          Divider(),
+                      ],
                     );
                   },
                 ),
