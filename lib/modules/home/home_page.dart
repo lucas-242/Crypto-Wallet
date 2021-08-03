@@ -39,6 +39,8 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(left: 25, right: 25, top: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              //TODO: Remove these widgets from functions
+              //TODO: Show feedback to user when doesn't have data
               children: [
                 _totalCard(),
                 _chart(),

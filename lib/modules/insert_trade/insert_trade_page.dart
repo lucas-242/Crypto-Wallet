@@ -70,6 +70,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
         elevation: 0,
         leading: BackButton(color: AppColors.input),
       ),
+      //TODO: Show Loading and hide buttons when insert trade
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
