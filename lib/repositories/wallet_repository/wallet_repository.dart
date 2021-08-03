@@ -118,7 +118,10 @@ class WalletRepository {
     DocumentReference cryptosReference =
         FirebaseFirestore.instance.collection('cryptos').doc();
 
-    var averagePrice = (trade.price * trade.amount + trade.fee) / trade.amount;
+    var trades = <TradeModel>[];
+    trades.add(trade);
+    var averagePrice = _calculateAveragePrice(trades, trade.amount);
+
     var crypto = CryptoModel(
       name: Cryptos.apiNames[trade.crypto]!,
       crypto: trade.crypto,
@@ -170,12 +173,10 @@ class WalletRepository {
       var amount = crypto.amount - trade.amount;
       var totalInvested = crypto.totalInvested - trade.amountInvested;
 
-      var averagePrice = _calculateAveragePrice(trades, amount);
-
+      // When selling the average price doesn't change
       crypto = crypto.copyWith(
         amount: amount,
         totalInvested: totalInvested,
-        averagePrice: averagePrice,
         updatedAt: updatedDate,
         user: crypto.user,
       );
@@ -187,8 +188,8 @@ class WalletRepository {
   /// Calculate the average price considering all [trades] and the [totalAmount] on wallet
   double _calculateAveragePrice(List<TradeModel> trades, double totalAmount) {
     var sum = 0.0;
-    trades.forEach((element) =>
-        sum = sum + ((element.price * element.amount) + element.fee));
+    trades.forEach((element) => sum = sum +
+        ((element.price * element.amount) + (element.price * element.fee)));
     var averagePrice = sum / totalAmount;
     return averagePrice;
   }
