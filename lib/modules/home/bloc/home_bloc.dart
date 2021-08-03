@@ -28,34 +28,11 @@ class HomeBloc extends ChangeNotifier {
   })  : _walletRepository = walletRepository,
         _coinRepository = coinRepository;
 
-  Future<void> onInit(String uid) async {
+  Future<void> getDashboardData(String uid) async {
     status = HomeStatus.loading();
 
     await _walletRepository.getAllCryptos(uid).then((value) async {
       cryptos = await getCryptosMarketData(value);
-      setDashboardData();
-    }).catchError((error) {
-      status = HomeStatus.error(error.toString());
-      print(error);
-    });
-
-    if (cryptos.isEmpty) {
-      status = HomeStatus.noData();
-    } else {
-      status = HomeStatus();
-    }
-
-    notifyListeners();
-  }
-
-  Future<void> onRefresh() async {
-    status = HomeStatus.loading();
-
-    await getCryptosMarketData(cryptos).then((value) {
-      cryptos = value;
-      for (var i = 0; i < 2; i++) {
-        cryptos.add(value[0]);
-      }
       setDashboardData();
     }).catchError((error) {
       status = HomeStatus.error(error.toString());

@@ -18,12 +18,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final HomeBloc bloc;
+  late final String uid;
 
   @override
   void initState() {
     final auth = FirebaseAuth.instance;
+    uid = auth.currentUser!.uid;
     bloc = context.read<HomeBloc>();
-    if (bloc.cryptos.isEmpty) bloc.onInit(auth.currentUser!.uid);
+    if (bloc.cryptos.isEmpty) bloc.getDashboardData(uid);
     super.initState();
   }
 
@@ -32,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(title: Text('Dashboard')),
       body: RefreshIndicator(
-        onRefresh: () => bloc.onRefresh(),
+        onRefresh: () => bloc.getDashboardData(uid),
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
@@ -154,65 +156,67 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: SizeConfig.height * 0.3,
       child: DefaultTabController(
-      length: 4,
-      initialIndex: 0,
-      child: Column(
-        children: [
-          TabBar(
-            indicatorColor: AppColors.primary,
-            labelColor: AppColors.primary,
-            unselectedLabelColor: AppColors.stroke,
-            tabs: [
-              Tab(text: '24h'),
-              Tab(text: '7d'),
-              Tab(text: '30d'),
-              Tab(text: '1y'),
-            ],
-          ),
-          Expanded(
-            child: ValueListenableBuilder<HomeStatus>(
-              valueListenable: bloc.statusNotifier,
-              builder: (context, status, widget) {
-                if (status.statusPage == StatusPage.loading) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                return TabBarView(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: WatchList(
-                        cryptos: bloc.cryptos,
-                        time: WatchListTime.priceChangePercentage24hInCurrency,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: WatchList(
-                        cryptos: bloc.cryptos,
-                        time: WatchListTime.priceChangePercentage7dInCurrency,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: WatchList(
-                        cryptos: bloc.cryptos,
-                        time: WatchListTime.priceChangePercentage30dInCurrency,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: WatchList(
-                        cryptos: bloc.cryptos,
-                        time: WatchListTime.priceChangePercentage1yInCurrency,
-                      ),
-                    ),
-                  ],
-                );
-              },
+        length: 4,
+        initialIndex: 0,
+        child: Column(
+          children: [
+            TabBar(
+              indicatorColor: AppColors.primary,
+              labelColor: AppColors.primary,
+              unselectedLabelColor: AppColors.stroke,
+              tabs: [
+                Tab(text: '24h'),
+                Tab(text: '7d'),
+                Tab(text: '30d'),
+                Tab(text: '1y'),
+              ],
             ),
-          ),
-        ],
-      ),
+            Expanded(
+              child: ValueListenableBuilder<HomeStatus>(
+                valueListenable: bloc.statusNotifier,
+                builder: (context, status, widget) {
+                  if (status.statusPage == StatusPage.loading) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return TabBarView(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: WatchList(
+                          cryptos: bloc.cryptos,
+                          time:
+                              WatchListTime.priceChangePercentage24hInCurrency,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: WatchList(
+                          cryptos: bloc.cryptos,
+                          time: WatchListTime.priceChangePercentage7dInCurrency,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: WatchList(
+                          cryptos: bloc.cryptos,
+                          time:
+                              WatchListTime.priceChangePercentage30dInCurrency,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: WatchList(
+                          cryptos: bloc.cryptos,
+                          time: WatchListTime.priceChangePercentage1yInCurrency,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
