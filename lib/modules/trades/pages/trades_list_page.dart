@@ -31,6 +31,7 @@ class _TradesListPageState extends State<TradesListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Trades'),
+        brightness: Brightness.dark,
         actions: [
           TextButton(
             onPressed: () =>

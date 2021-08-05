@@ -32,6 +32,7 @@ class _WalletPageState extends State<WalletPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Wallet'),
+        brightness: Brightness.dark,
       ),
       backgroundColor: AppColors.background,
       body: Padding(
@@ -60,13 +61,11 @@ class _WalletPageState extends State<WalletPage> {
                 } else {
                   return Expanded(
                     child: RefreshIndicator(
-                      onRefresh: () =>
-                          bloc.getCryptos(auth.currentUser!.uid),
+                      onRefresh: () => bloc.getCryptos(auth.currentUser!.uid),
                       child: ListView.builder(
                           itemCount: bloc.cryptos.length,
                           itemBuilder: (context, index) {
-                            return CryptoSummary(
-                                crypto: bloc.cryptos[index]);
+                            return CryptoSummary(crypto: bloc.cryptos[index]);
                           }),
                     ),
                   );
