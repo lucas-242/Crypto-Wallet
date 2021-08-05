@@ -29,62 +29,51 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: Scaffold(
-        body: RefreshIndicator(
-          onRefresh: () => bloc.getCryptos(auth.currentUser!.uid),
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('My Cryptos', style: AppTextStyles.titleBoldGrey),
-                  SizedBox(height: 25),
-                  ValueListenableBuilder<WalletStatus>(
-                    valueListenable: bloc.statusNotifier,
-                    builder: (context, status, child) {
-                      if (status.statusPage == StatusPage.loading) {
-                        return Container(
-                          height: size.height * 0.7,
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      } else if (status.statusPage == StatusPage.error) {
-                        return Container(
-                          height: size.height * 0.7,
-                          child: Center(child: Text(status.error)),
-                        );
-                      } else if (status.statusPage == StatusPage.noData) {
-                        return Container(
-                          height: size.height * 0.7,
-                          child:
-                              Center(child: Text('No cryptos in the wallet')),
-                        );
-                      } else {
-                        return Container(
-                          height: size.height,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: bloc.cryptos.length,
-                                    itemBuilder: (context, index) {
-                                      return CryptoSummary(
-                                          crypto: bloc.cryptos[index]);
-                                    }),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Wallet'),
+      ),
+      backgroundColor: AppColors.background,
+      body: Padding(
+        padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ValueListenableBuilder<WalletStatus>(
+              valueListenable: bloc.statusNotifier,
+              builder: (context, status, child) {
+                if (status.statusPage == StatusPage.loading) {
+                  return Container(
+                    height: size.height * 0.7,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                } else if (status.statusPage == StatusPage.error) {
+                  return Container(
+                    height: size.height * 0.7,
+                    child: Center(child: Text(status.error)),
+                  );
+                } else if (status.statusPage == StatusPage.noData) {
+                  return Container(
+                    height: size.height * 0.7,
+                    child: Center(child: Text('No cryptos in the wallet')),
+                  );
+                } else {
+                  return Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () =>
+                          bloc.getCryptos(auth.currentUser!.uid),
+                      child: ListView.builder(
+                          itemCount: bloc.cryptos.length,
+                          itemBuilder: (context, index) {
+                            return CryptoSummary(
+                                crypto: bloc.cryptos[index]);
+                          }),
+                    ),
+                  );
+                }
+              },
             ),
-          ),
+          ],
         ),
       ),
     );
