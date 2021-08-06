@@ -27,7 +27,6 @@ class _WalletPageState extends State<WalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,17 +44,17 @@ class _WalletPageState extends State<WalletPage> {
               builder: (context, status, child) {
                 if (status.statusPage == StatusPage.loading) {
                   return Container(
-                    height: size.height * 0.7,
+                    height: SizeConfig.height * 0.7,
                     child: Center(child: CircularProgressIndicator()),
                   );
                 } else if (status.statusPage == StatusPage.error) {
                   return Container(
-                    height: size.height * 0.7,
+                    height: SizeConfig.height * 0.7,
                     child: Center(child: Text(status.error)),
                   );
                 } else if (status.statusPage == StatusPage.noData) {
                   return Container(
-                    height: size.height * 0.7,
+                    height: SizeConfig.height * 0.7,
                     child: Center(child: Text('No cryptos in the wallet')),
                   );
                 } else {

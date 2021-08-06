@@ -3,29 +3,28 @@ import 'package:crypto_wallet/shared/widgets/label_button/label_button_widget.da
 import 'package:flutter/material.dart';
 
 class BottomButtons extends StatelessWidget {
-  final String primaryLabel;
-  final VoidCallback? onPressedPrimary;
-  final String secondaryLabel;
-  final VoidCallback? onPressedSecondary;
-  final TextStyle? firstButtonColor;
-  final TextStyle? secondButtonColor;
+  final String fisrtLabel;
+  final VoidCallback? onPressedFirst;
+  final String secondLabel;
+  final VoidCallback? onPressedSecond;
+  final TextStyle? firstButtonStyle;
+  final TextStyle? secondButtonStyle;
 
   const BottomButtons({
     Key? key,
-    required this.primaryLabel,
-    this.onPressedPrimary,
-    required this.secondaryLabel,
-    this.onPressedSecondary,
-    this.firstButtonColor,
-    this.secondButtonColor,
+    required this.fisrtLabel,
+    this.onPressedFirst,
+    required this.secondLabel,
+    this.onPressedSecond,
+    this.firstButtonStyle,
+    this.secondButtonStyle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
 
     return Container(
-      height: size.height * 0.085,
+      height: SizeConfig.height * 0.085,
       color: AppColors.background,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -36,24 +35,24 @@ class BottomButtons extends StatelessWidget {
             color: AppColors.stroke,
           ),
           Container(
-            height: size.height * 0.08,
+            height: SizeConfig.height * 0.08,
             child: Row(
               children: [
                 Expanded(
                   child: LabelButton(
-                    label: primaryLabel,
-                    onPressed: onPressedPrimary,
+                    label: fisrtLabel,
+                    onPressed: onPressedFirst,
                     style:
-                        firstButtonColor ?? AppTextStyles.buttonPrimary,
+                        firstButtonStyle ?? AppTextStyles.buttonPrimary,
                   ),
                 ),
                 VerticalDivider(),
                 Expanded(
                   child: LabelButton(
-                    label: secondaryLabel,
-                    onPressed: onPressedSecondary,
+                    label: secondLabel,
+                    onPressed: onPressedSecond,
                     style:
-                        secondButtonColor ?? AppTextStyles.buttonPrimary,
+                        secondButtonStyle ?? AppTextStyles.buttonPrimary,
                   ),
                 ),
               ],

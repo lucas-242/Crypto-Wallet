@@ -64,136 +64,128 @@ class _InsertTradePageState extends State<InsertTradePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
+        title: Text('Insert Trade'),
+        brightness: Brightness.dark,
         leading: BackButton(color: AppColors.input),
       ),
-      //TODO: Show Loading and hide buttons when insert trade
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: ValueListenableBuilder<InsertTradeStatus>(
-                valueListenable: bloc.statusNotifier,
-                builder: (context, status, child) {
-                  if (status.statusPage == StatusPage.loading) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 70,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
+      backgroundColor: AppColors.background,
+      body: Padding(
+        padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 5),
+        child: ValueListenableBuilder<InsertTradeStatus>(
+            valueListenable: bloc.statusNotifier,
+            builder: (context, status, child) {
+              if (status.statusPage == StatusPage.loading) {
+                return Container(
+                  height: SizeConfig.height * 0.8,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
 
-                  return form();
-                }),
-          ),
-        ),
+              return Form(
+                key: bloc.formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text('Operation Type:'),
+                        SizedBox(width: 30),
+                        Expanded(
+                          child: CustomDropdownButton(
+                            value: bloc.trade.operationType,
+                            items: TradeType.list,
+                            onChanged: (value) {
+                              bloc.onChange(operationType: value);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Crypto:'),
+                        SizedBox(width: 30),
+                        Expanded(
+                          child: CustomDropdownButton(
+                            value: bloc.trade.crypto,
+                            items: Cryptos.list,
+                            onChanged: (value) {
+                              bloc.onChange(crypto: value);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    CustomTextFormField(
+                      labelText: 'Crypto amount',
+                      icon: Icons.account_balance_wallet_outlined,
+                      keyboardType: TextInputType.number,
+                      controller: cryptoAmountController,
+                      validator: bloc.validateCryptoAmount,
+                      onChanged: (value) => bloc.onChange(
+                          amount: cryptoAmountController.numberValue),
+                    ),
+                    CustomTextFormField(
+                      labelText: 'Invested amount',
+                      icon: Icons.savings_outlined,
+                      keyboardType: TextInputType.number,
+                      controller: tradedAmoutController,
+                      validator: bloc.validateTradedAmount,
+                      onChanged: (value) => bloc.onChange(
+                          ammountInvested:
+                              tradedAmoutController.numberValue),
+                    ),
+                    CustomTextFormField(
+                      labelText: 'Trade Price',
+                      icon: Icons.attach_money_outlined,
+                      keyboardType: TextInputType.number,
+                      controller: priceController,
+                      validator: bloc.validatePrice,
+                      onChanged: (value) => bloc.onChange(
+                          price: priceController.numberValue),
+                    ),
+                    CustomTextFormField(
+                      labelText: 'Date',
+                      icon: Icons.calendar_today,
+                      keyboardType: TextInputType.datetime,
+                      controller: dateController,
+                      validator: bloc.validateDate,
+                      onChanged: (value) => bloc.onChange(date: value),
+                    ),
+                    CustomTextFormField(
+                      labelText: 'Fee',
+                      icon: Icons.money_off_sharp,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      controller: feeController,
+                      onChanged: (value) =>
+                          bloc.onChange(fee: feeController.numberValue),
+                    ),
+                    SizedBox(height: 25),
+                  ],
+                ),
+              );
+            }),
       ),
-      bottomNavigationBar: BottomButtons(
-          primaryLabel: 'Cancel',
-          secondaryLabel: 'Save',
-          secondButtonColor: AppTextStyles.buttonSecondary,
-          onPressedPrimary: () => Navigator.of(context).pop(),
-          onPressedSecondary: () => onPressedSecondary()),
-    );
-  }
+      bottomNavigationBar: ValueListenableBuilder<InsertTradeStatus>(
+        valueListenable: bloc.statusNotifier,
+        builder: (context, status, child) {
+          if (status.statusPage != StatusPage.loading) {
+            return BottomButtons(
+                fisrtLabel: 'Cancel',
+                secondLabel: 'Save',
+                firstButtonStyle: AppTextStyles.buttonGrey,
+                secondButtonStyle: AppTextStyles.buttonPrimary,
+                onPressedFirst: () => Navigator.of(context).pop(),
+                onPressedSecond: () => onPressedSecondary());
+          }
 
-  Widget form() {
-    return Column(
-      children: [
-        Text(
-          'Fill all the fields of the trade',
-          style: AppTextStyles.titleBoldGrey,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 25),
-        Form(
-          key: bloc.formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text('Operation Type:'),
-                  SizedBox(width: 30),
-                  Expanded(
-                    child: CustomDropdownButton(
-                      value: bloc.trade.operationType,
-                      items: TradeType.list,
-                      onChanged: (value) {
-                        bloc.onChange(operationType: value);
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text('Crypto:'),
-                  SizedBox(width: 30),
-                  Expanded(
-                    child: CustomDropdownButton(
-                      value: bloc.trade.crypto,
-                      items: Cryptos.list,
-                      onChanged: (value) {
-                        bloc.onChange(crypto: value);
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              CustomTextFormField(
-                labelText: 'Crypto amount',
-                icon: Icons.plus_one,
-                keyboardType: TextInputType.number,
-                controller: cryptoAmountController,
-                validator: bloc.validateCryptoAmount,
-                onChanged: (value) =>
-                    bloc.onChange(amount: cryptoAmountController.numberValue),
-              ),
-              CustomTextFormField(
-                labelText: 'Invested amount',
-                icon: Icons.attach_money,
-                keyboardType: TextInputType.number,
-                controller: tradedAmoutController,
-                validator: bloc.validateTradedAmount,
-                onChanged: (value) => bloc.onChange(
-                    ammountInvested: tradedAmoutController.numberValue),
-              ),
-              CustomTextFormField(
-                labelText: 'Trade Price',
-                icon: Icons.attach_money,
-                keyboardType: TextInputType.number,
-                controller: priceController,
-                validator: bloc.validatePrice,
-                onChanged: (value) =>
-                    bloc.onChange(price: priceController.numberValue),
-              ),
-              CustomTextFormField(
-                labelText: 'Date',
-                icon: Icons.calendar_today,
-                keyboardType: TextInputType.datetime,
-                controller: dateController,
-                validator: bloc.validateDate,
-                onChanged: (value) => bloc.onChange(date: value),
-              ),
-              CustomTextFormField(
-                labelText: 'Fee',
-                icon: Icons.attach_money,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.done,
-                controller: feeController,
-                onChanged: (value) =>
-                    bloc.onChange(fee: feeController.numberValue),
-              ),
-              SizedBox(height: 25),
-            ],
-          ),
-        ),
-      ],
+          return SizedBox();
+        },
+      ),
     );
   }
 }

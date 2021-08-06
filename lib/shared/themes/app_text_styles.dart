@@ -42,7 +42,7 @@ class AppTextStyles {
   static final buttonSecondary = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,
-    color: AppColors.primary
+    color: AppColors.secondary
   );
   static final buttonGrey = GoogleFonts.inter(
     fontSize: 15,
