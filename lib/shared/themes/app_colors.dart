@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
+abstract class AppColors {
   static final primary = Color(0xFF264653);
   static final secondary = Color(0xFF2A9D8F);
   static final yellow = Color(0xFFE9C46A);

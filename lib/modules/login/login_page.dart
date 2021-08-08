@@ -82,10 +82,13 @@ class _LoginPageState extends State<LoginPage> {
                 loginBloc.signInWithGoogle().then((value) {
                   if (value) Navigator.of(context).pushReplacementNamed('/app');
                 }).catchError((error) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: AppColors.red,
-                    content: Text('Error trying to login'),
-                  ));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    getAppSnackBar(
+                        message: 'Error trying to login',
+                        type: SnackBarType.error,
+                        onClose: () => ScaffoldMessenger.of(context)
+                            .hideCurrentSnackBar()),
+                  );
                 });
               },
             ),

@@ -12,7 +12,7 @@ class SizeConfig {
   static late double safeBlockHorizontal;
   static late double safeBlockVertical;
 
-  void init(BuildContext context, double bottomNavigationBarHeight) {
+  SizeConfig(BuildContext context, double bottomNavigationBarHeight) {
     _mediaQueryData = MediaQuery.of(context);
     width = _mediaQueryData.size.width;
     height = _mediaQueryData.size.height;
