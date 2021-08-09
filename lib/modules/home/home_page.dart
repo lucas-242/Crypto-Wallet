@@ -1,7 +1,10 @@
 import 'package:crypto_wallet/modules/home/home.dart';
+import 'package:crypto_wallet/modules/trades/trades.dart';
+import 'package:crypto_wallet/modules/wallet/wallet.dart';
+import 'package:crypto_wallet/shared/auth/auth.dart';
+import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,15 +17,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final HomeBloc bloc;
-  late String uid;
+  late final Auth auth;
 
   @override
   void initState() {
-    final auth = FirebaseAuth.instance;
-    uid = auth.currentUser!.uid;
+    auth = context.read<Auth>();
     bloc = context.read<HomeBloc>();
-    if (bloc.cryptos.isEmpty) bloc.getDashboardData(uid);
+    bloc.getDashboardData(auth.user!.uid);
     super.initState();
+  }
+
+  void _logout() {
+    auth.signOut().then((value) {
+      if (value) {
+        bloc.eraseData();
+        context.read<TradesBloc>().eraseData();
+        context.read<WalletBloc>().eraseData();
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      }
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        getAppSnackBar(
+            message: 'Error trying to logout',
+            type: SnackBarType.error,
+            onClose: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
+      );
+    });
   }
 
   @override
@@ -33,17 +53,13 @@ class _HomePageState extends State<HomePage> {
         brightness: Brightness.dark,
         actions: [
           IconButton(
-            onPressed: () {
-              //TODO: Fix signOut - Erase all data from the app
-              bloc.signOut();
-              Navigator.pushReplacementNamed(context, '/login');
-            },
+            onPressed: () => _logout(),
             icon: Icon(Icons.logout),
           )
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => bloc.getDashboardData(uid),
+        onRefresh: () => bloc.getDashboardData(auth.user!.uid),
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(

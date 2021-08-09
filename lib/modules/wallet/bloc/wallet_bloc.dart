@@ -79,4 +79,9 @@ class WalletBloc extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void eraseData() {
+    cryptos = [];
+    notifyListeners();
+  }
 }

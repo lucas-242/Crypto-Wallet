@@ -94,4 +94,10 @@ class TradesBloc extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void eraseData() {
+    trades = [];
+    dates = [];
+    notifyListeners();
+  }
 }

@@ -1,8 +1,9 @@
+import 'package:crypto_wallet/shared/auth/auth.dart';
+import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/social_login_button/social_login_button_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'login_bloc.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,7 +13,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final loginBloc = LoginBloc();
+  void _login() {
+    context.read<Auth>().signInWithGoogle().then((value) {
+      if (value) Navigator.of(context).pushReplacementNamed(AppRoutes.app);
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        getAppSnackBar(
+            message: 'Error trying to login',
+            type: SnackBarType.error,
+            onClose: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,20 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: EdgeInsets.only(left: 40, right: 40, top: 40),
                     child: SocialLoginButton(
-                      onTap: () {
-                        loginBloc.signInWithGoogle().then((value) {
-                          if (value)
-                            Navigator.of(context).pushReplacementNamed('/app');
-                        }).catchError((error) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            getAppSnackBar(
-                                message: 'Error trying to login',
-                                type: SnackBarType.error,
-                                onClose: () => ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar()),
-                          );
-                        });
-                      },
+                      onTap: () => _login(),
                     ),
                   ),
                 ],

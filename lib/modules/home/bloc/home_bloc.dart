@@ -8,7 +8,6 @@ import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:flutter/foundation.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
@@ -92,8 +91,10 @@ class HomeBloc extends ChangeNotifier {
     });
   }
 
-  Future<void> signOut() async {
-    await GoogleSignIn().signOut();
+  void eraseData() {
+    cryptos = [];
+    dashboardData = new DashboardModel();
+    notifyListeners();
   }
 
   void setDashboardData() {

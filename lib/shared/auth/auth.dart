@@ -1,34 +1,45 @@
-import 'package:crypto_wallet/shared/models/user_model.dart';
-import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Auth extends ChangeNotifier {
-  UserModel? _user;
+  User? user;
 
-  UserModel? get user => _user!;
+  Future<bool> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  Future<UserModel?> currentUser() async {
-    final preferences = await SharedPreferences.getInstance();
-    await Future.delayed(Duration(seconds: 2));
-    if (preferences.containsKey('user')) {
-      final user = preferences.get('user') as String;
-      setUser(UserModel.fromJson(user));
-      return _user;
+    if (googleUser == null) {
+      return false;
     }
 
-    setUser(null);
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    return await FirebaseAuth.instance
+        .signInWithCredential(credential)
+        .then((response) {
+      user = response.user;
+      return true;
+    }).catchError((error) {
+      user = null;
+      print('Error trying to login: ${error.toString()}');
+      return false;
+    });
   }
 
-  void setUser(UserModel? user) {
-    if (user != null) {
-      saveUser(user);
-      _user = user;
-    }
-  }
-
-  void saveUser(UserModel user) async {
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.setString('user', user.toJson());
-    return;
+  Future<bool> signOut() async {
+    return await GoogleSignIn().signOut().then((value) async {
+      return await FirebaseAuth.instance.signOut().then((value) {
+        user = null;
+        return true;
+      }).catchError((error) => false);
+    }).catchError((error) => false);
   }
 }
