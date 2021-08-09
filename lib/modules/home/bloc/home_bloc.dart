@@ -8,6 +8,7 @@ import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
@@ -31,9 +32,11 @@ class HomeBloc extends ChangeNotifier {
   Future<void> getDashboardData(String uid) async {
     status = HomeStatus.loading();
 
-    await _walletRepository.getAllCryptos(uid).then((value) async {
-      cryptos = await getCryptosMarketData(value);
-      setDashboardData();
+    await _walletRepository.getAllCryptos(uid).then((result) async {
+      if (result.isNotEmpty) {
+        cryptos = await getCryptosMarketData(result);
+        setDashboardData();
+      }
     }).catchError((error) {
       status = HomeStatus.error(error.toString());
       print(error);
@@ -87,6 +90,10 @@ class HomeBloc extends ChangeNotifier {
 
       return result;
     });
+  }
+
+  Future<void> signOut() async {
+    await GoogleSignIn().signOut();
   }
 
   void setDashboardData() {

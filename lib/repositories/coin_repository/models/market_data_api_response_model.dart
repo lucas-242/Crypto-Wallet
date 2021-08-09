@@ -168,7 +168,6 @@ class MarketDataApiResponse {
     };
   }
 
-  //TODO: Can't use convertToDouble from extension method
   factory MarketDataApiResponse.fromMap(Map<String, dynamic> map) {
     return MarketDataApiResponse(
       id: map['id'],

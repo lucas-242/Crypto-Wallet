@@ -12,22 +12,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late Size size;
   final loginBloc = LoginBloc();
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
+    SizeConfig(context, kBottomNavigationBarHeight);
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Container(
-        width: size.width,
-        height: size.height,
+        width: SizeConfig.width,
+        height: SizeConfig.height,
         child: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: size.height * 0.3),
+              padding: EdgeInsets.only(top: SizeConfig.height * 0.3),
               child: Column(
                 children: [
                   Center(
@@ -56,44 +55,36 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            // Container(
-            //   width: size.width,
-            //   height: size.height * 0.36,
-            //   color: AppColors.primary,
-            // ),
-            _googleButton(),
+            Positioned(
+              bottom: 50,
+              left: 0,
+              right: 0,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 40, right: 40, top: 40),
+                    child: SocialLoginButton(
+                      onTap: () {
+                        loginBloc.signInWithGoogle().then((value) {
+                          if (value)
+                            Navigator.of(context).pushReplacementNamed('/app');
+                        }).catchError((error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            getAppSnackBar(
+                                message: 'Error trying to login',
+                                type: SnackBarType.error,
+                                onClose: () => ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar()),
+                          );
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _googleButton() {
-    return Positioned(
-      bottom: 50,
-      left: 0,
-      right: 0,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 40, right: 40, top: 40),
-            child: SocialLoginButton(
-              onTap: () {
-                loginBloc.signInWithGoogle().then((value) {
-                  if (value) Navigator.of(context).pushReplacementNamed('/app');
-                }).catchError((error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    getAppSnackBar(
-                        message: 'Error trying to login',
-                        type: SnackBarType.error,
-                        onClose: () => ScaffoldMessenger.of(context)
-                            .hideCurrentSnackBar()),
-                  );
-                });
-              },
-            ),
-          ),
-        ],
       ),
     );
   }
