@@ -174,37 +174,44 @@ class MarketDataApiResponse {
       symbol: map['symbol'],
       name: map['name'],
       image: map['image'],
-      currentPrice: map['current_price'].toDouble(),
-      marketCap: map['market_cap'].toDouble(),
-      marketCapRank: map['market_cap_rank'].toDouble(),
-      fullyDilutedValuation: map['fully_diluted_valuation'].toDouble(),
-      totalVolume: map['total_volume'].toDouble(),
-      high24h: map['high_24h'].toDouble(),
-      low24h: map['low_24h'].toDouble(),
-      priceChange24h: map['price_change_24h'].toDouble(),
-      priceChangePercentage24h: map['price_change_percentage_24h'].toDouble(),
-      marketCapChange24h: map['market_cap_change_24h'].toDouble(),
+      currentPrice: _convertToDouble(map['current_price']),
+      marketCap: _convertToDouble(map['market_cap']),
+      marketCapRank: _convertToDouble(map['market_cap_rank']),
+      fullyDilutedValuation: _convertToDouble(map['fully_diluted_valuation']),
+      totalVolume: _convertToDouble(map['total_volume']),
+      high24h: _convertToDouble(map['high_24h']),
+      low24h: _convertToDouble(map['low_24h']),
+      priceChange24h: _convertToDouble(map['price_change_24h']),
+      priceChangePercentage24h:
+          _convertToDouble(map['price_change_percentage_24h']),
+      marketCapChange24h: _convertToDouble(map['market_cap_change_24h']),
       marketCapChangePercentage24h:
-          map['market_cap_change_percentage_24h'].toDouble(),
-      circulatingSupply: map['circulating_supply'].toDouble(),
-      totalSupply: map['total_supply'].toDouble(),
-      maxSupply: map['max_supply'].toDouble(),
-      ath: map['ath'].toDouble(),
-      athChangePercentage: map['ath_change_percentage'].toDouble(),
+          _convertToDouble(map['market_cap_change_percentage_24h']),
+      circulatingSupply: _convertToDouble(map['circulating_supply']),
+      totalSupply: _convertToDouble(map['total_supply']),
+      maxSupply: _convertToDouble(map['max_supply']),
+      ath: _convertToDouble(map['ath']),
+      athChangePercentage: _convertToDouble(map['ath_change_percentage']),
       athDate: map['ath_date'],
-      atl: map['atl'].toDouble(),
-      atlChangePercentage: map['atl_change_percentage'].toDouble(),
+      atl: _convertToDouble(map['atl']),
+      atlChangePercentage: _convertToDouble(map['atl_change_percentage']),
       atlDate: map['atl_date'],
       lastUpdated: map['last_updated'],
       priceChangePercentage1yInCurrency:
-          map['price_change_percentage_1y_in_currency'].toDouble(),
+          _convertToDouble(map['price_change_percentage_1y_in_currency']),
       priceChangePercentage24hInCurrency:
-          map['price_change_percentage_24h_in_currency'].toDouble(),
+          _convertToDouble(map['price_change_percentage_24h_in_currency']),
       priceChangePercentage30dInCurrency:
-          map['price_change_percentage_30d_in_currency'].toDouble(),
+          _convertToDouble(map['price_change_percentage_30d_in_currency']),
       priceChangePercentage7dInCurrency:
-          map['price_change_percentage_7d_in_currency'].toDouble(),
+          _convertToDouble(map['price_change_percentage_7d_in_currency']),
     );
+  }
+
+  static double _convertToDouble(dynamic param) {
+    if (param != null && param is num) return param.toDouble();
+
+    return 0;
   }
 
   String toJson() => json.encode(toMap());

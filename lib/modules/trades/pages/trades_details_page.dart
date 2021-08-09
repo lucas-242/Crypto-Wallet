@@ -39,10 +39,11 @@ class _TradesDetailsState extends State<TradesDetails> {
                 walletBloc: walletBloc,
               )
                   .then((value) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Trade deleted"),
-                  backgroundColor: AppColors.secondary,
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
+                    message: 'Trade deleted successfully',
+                    type: SnackBarType.success,
+                    onClose: () =>
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar()));
                 Navigator.of(context).pop();
               });
             },

@@ -1,12 +1,11 @@
 import 'package:crypto_wallet/modules/home/home.dart';
-import 'package:crypto_wallet/modules/home/widgets/indicator_widget.dart';
+import 'package:crypto_wallet/modules/trades/trades.dart';
+import 'package:crypto_wallet/modules/wallet/wallet.dart';
+import 'package:crypto_wallet/shared/auth/auth.dart';
+import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
-import 'package:crypto_wallet/shared/widgets/donut_chart/donut_chart.dart';
-import 'package:crypto_wallet/shared/widgets/watch_list/watch_list_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,199 +17,77 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final HomeBloc bloc;
+  late final Auth auth;
 
   @override
   void initState() {
-    final auth = FirebaseAuth.instance;
+    auth = context.read<Auth>();
     bloc = context.read<HomeBloc>();
-    if (bloc.cryptos.isEmpty) bloc.onInit(auth.currentUser!.uid);
+    bloc.getDashboardData(auth.user!.uid);
     super.initState();
+  }
+
+  void _logout() {
+    auth.signOut().then((value) {
+      if (value) {
+        bloc.eraseData();
+        context.read<TradesBloc>().eraseData();
+        context.read<WalletBloc>().eraseData();
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      }
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        getAppSnackBar(
+            message: 'Error trying to logout',
+            type: SnackBarType.error,
+            onClose: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Dashboard')),
+      appBar: AppBar(
+        title: Text('Dashboard'),
+        brightness: Brightness.dark,
+        actions: [
+          IconButton(
+            onPressed: () => _logout(),
+            icon: Icon(Icons.logout),
+          )
+        ],
+      ),
       body: RefreshIndicator(
-        onRefresh: () => bloc.onRefresh(),
+        onRefresh: () => bloc.getDashboardData(auth.user!.uid),
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.only(left: 25, right: 25, top: 25),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _totalCard(),
-                _chart(),
-                _variations(),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _totalCard() {
-    return Card(
-      color: AppColors.shape,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      elevation: 3,
-      child: Padding(
-        padding: EdgeInsets.all(30),
-        child: ValueListenableBuilder<HomeStatus>(
-            valueListenable: bloc.statusNotifier,
-            builder: (context, status, widget) {
-              if (status.statusPage == StatusPage.loading) {
-                return Center(child: CircularProgressIndicator());
-              }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Today',
-                    style: AppTextStyles.titleRegular,
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    NumberFormat.currency(symbol: '\$')
-                        .format(bloc.dashboardData.total),
-                    style: AppTextStyles.titleHome,
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Text(
-                        '${bloc.dashboardData.variation.isNegative ? '' : '+'} ${NumberFormat.currency(symbol: '\$').format(bloc.dashboardData.variation)} (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(bloc.dashboardData.percentVariation / 100)})',
-                        style: AppTextStyles.titleRegular,
-                      ),
-                      Icon(
-                          bloc.dashboardData.variation.isNegative
-                              ? Icons.arrow_downward
-                              : Icons.arrow_upward,
-                          color: bloc.dashboardData.variation.isNegative
-                              ? AppColors.red
-                              : AppColors.secondary),
-                    ],
-                  )
-                ],
-              );
-            }),
-      ),
-    );
-  }
-
-  Widget _chart() {
-    return ValueListenableBuilder<HomeStatus>(
-      valueListenable: bloc.statusNotifier,
-      builder: (context, status, widget) {
-        if (status.statusPage == StatusPage.success) {
-          return Row(
-            children: [
-              DonutChart(
-                data: bloc.dashboardData.cryptosSummary
-                    .asMap()
-                    .entries
-                    .map((e) => DonutChartModel(
-                        percent: e.value.percent,
-                        color: bloc.chartColors[e.key]))
-                    .toList(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:
-                        bloc.dashboardData.cryptosSummary.asMap().entries.map(
-                      (e) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Indicator(
-                            color: bloc.chartColors[e.key],
-                            text:
-                                '${e.value.crypto} (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(e.value.percent / 100)})',
-                            subtext: e.value.amount.toStringAsFixed(8),
-                          ),
-                        );
-                      },
-                    ).toList()),
-              ),
-            ],
-          );
-        } else {
-          return Container();
-        }
-      },
-    );
-  }
-
-  Widget _variations() {
-    return Container(
-      height: SizeConfig.height * 0.3,
-      child: DefaultTabController(
-      length: 4,
-      initialIndex: 0,
-      child: Column(
-        children: [
-          TabBar(
-            indicatorColor: AppColors.primary,
-            labelColor: AppColors.primary,
-            unselectedLabelColor: AppColors.stroke,
-            tabs: [
-              Tab(text: '24h'),
-              Tab(text: '7d'),
-              Tab(text: '30d'),
-              Tab(text: '1y'),
-            ],
-          ),
-          Expanded(
             child: ValueListenableBuilder<HomeStatus>(
               valueListenable: bloc.statusNotifier,
-              builder: (context, status, widget) {
-                if (status.statusPage == StatusPage.loading) {
-                  return Center(child: CircularProgressIndicator());
+              builder: (context, status, child) {
+                if (status.statusPage == StatusPage.noData) {
+                  return Container(
+                    height: SizeConfig.height * 0.7,
+                    child: Center(
+                      child: Text('There is no data on your wallet yet'),
+                    ),
+                  );
                 }
-                return TabBarView(
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: WatchList(
-                        cryptos: bloc.cryptos,
-                        time: WatchListTime.priceChangePercentage24hInCurrency,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: WatchList(
-                        cryptos: bloc.cryptos,
-                        time: WatchListTime.priceChangePercentage7dInCurrency,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: WatchList(
-                        cryptos: bloc.cryptos,
-                        time: WatchListTime.priceChangePercentage30dInCurrency,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: WatchList(
-                        cryptos: bloc.cryptos,
-                        time: WatchListTime.priceChangePercentage1yInCurrency,
-                      ),
-                    ),
+                    TotalWalletCard(bloc: bloc),
+                    Chart(bloc: bloc),
+                    DashboardWatchList(bloc: bloc),
                   ],
                 );
               },
             ),
           ),
-        ],
-      ),
+        ),
       ),
     );
   }

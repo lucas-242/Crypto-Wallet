@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
-class AppTextStyles {
+abstract class AppTextStyles {
   static final titleHome = GoogleFonts.lexendDeca(
     fontSize: 32,
     fontWeight: FontWeight.w600,
@@ -42,7 +42,7 @@ class AppTextStyles {
   static final buttonSecondary = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,
-    color: AppColors.primary
+    color: AppColors.secondary
   );
   static final buttonGrey = GoogleFonts.inter(
     fontSize: 15,

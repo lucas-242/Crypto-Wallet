@@ -30,13 +30,15 @@ class WalletRepository {
   }
 
   ///Fetch for all user's trades
-  Future<List<TradeModel>> getAllTrades(String uid) async {
+  Future<List<TradeModel>> getAllTrades(
+      {required String uid, String? crypto}) async {
     try {
       List<TradeModel> result = [];
 
       await FirebaseFirestore.instance
           .collection('trades')
           .where('user', isEqualTo: uid)
+          .where('crypto', isEqualTo: crypto)
           .get()
           .then((QuerySnapshot querySnapshot) {
         result = querySnapshot.docs
@@ -54,10 +56,15 @@ class WalletRepository {
     }
   }
 
+  /// Add a [trade] considering [cryptos] to verify if need update or create a new Crypto on database
   Future<void> addTrade(List<CryptoModel> cryptos, TradeModel trade) async {
     try {
       DocumentReference tradesReference =
           FirebaseFirestore.instance.collection('trades').doc();
+
+      //Get all trades of the same crypto
+      var trades = await getAllTrades(uid: trade.user!, crypto: trade.crypto);
+      trades.add(trade);
 
       late CryptoModel crypto;
 
@@ -70,7 +77,7 @@ class WalletRepository {
         if (cryptos.isEmpty) {
           _createCryptoInTransaction(transaction, trade);
         } else {
-          crypto = _calculateCryptoMetrics(cryptos.single, trade);
+          crypto = _calculateCryptoProperties(cryptos.single, trades, trade);
           _updateCryptoInTransaction(transaction, crypto);
         }
       });
@@ -80,19 +87,21 @@ class WalletRepository {
     }
   }
 
-  //TODO: Fix average price calc when delete trade
-  Future<void> deleteTrade(CryptoModel crypto, TradeModel trade) async {
+  /// Delete a [trade] of a [crypto] considering [trades] to recalculate the Average Price
+  Future<void> deleteTrade(
+      CryptoModel crypto, List<TradeModel> trades, TradeModel trade) async {
     try {
       DocumentReference tradesReference =
           FirebaseFirestore.instance.collection('trades').doc(trade.id);
 
       return await FirebaseFirestore.instance
           .runTransaction((transaction) async {
-        crypto = _calculateCryptoMetrics(
+        crypto = _calculateCryptoProperties(
           crypto,
+          trades,
           trade.copyWith(operationType: TradeType.sell),
         );
-        if (crypto.totalInvested == 0) {
+        if (crypto.totalInvested <= 0) {
           _deleteCryptoInTransaction(transaction, crypto);
         } else {
           _updateCryptoInTransaction(transaction, crypto);
@@ -109,11 +118,15 @@ class WalletRepository {
     DocumentReference cryptosReference =
         FirebaseFirestore.instance.collection('cryptos').doc();
 
+    var trades = <TradeModel>[];
+    trades.add(trade);
+    var averagePrice = _calculateAveragePrice(trades, trade.amount);
+
     var crypto = CryptoModel(
       name: Cryptos.apiNames[trade.crypto]!,
       crypto: trade.crypto,
       amount: trade.amount,
-      averagePrice: trade.price,
+      averagePrice: averagePrice,
       totalInvested: trade.amountInvested,
       user: trade.user!,
       updatedAt: DateTime.now(),
@@ -140,16 +153,19 @@ class WalletRepository {
     print('transaction deleted:  $crypto');
   }
 
-  CryptoModel _calculateCryptoMetrics(CryptoModel crypto, TradeModel trade) {
+  /// Calculate all [crypto] properties considering [trade] and all the [trades] to calculate the Average Price
+  CryptoModel _calculateCryptoProperties(
+      CryptoModel crypto, List<TradeModel> trades, TradeModel trade) {
     var updatedDate = DateTime.now();
     if (trade.operationType == TradeType.buy) {
       var amount = crypto.amount + trade.amount;
       var totalInvested = crypto.totalInvested + trade.amountInvested;
+      var averagePrice = _calculateAveragePrice(trades, amount);
 
       crypto = crypto.copyWith(
         amount: amount,
         totalInvested: totalInvested,
-        averagePrice: totalInvested / amount,
+        averagePrice: averagePrice,
         updatedAt: updatedDate,
         user: crypto.user,
       );
@@ -157,15 +173,24 @@ class WalletRepository {
       var amount = crypto.amount - trade.amount;
       var totalInvested = crypto.totalInvested - trade.amountInvested;
 
+      // When selling the average price doesn't change
       crypto = crypto.copyWith(
         amount: amount,
         totalInvested: totalInvested,
-        averagePrice: totalInvested / amount,
         updatedAt: updatedDate,
         user: crypto.user,
       );
     }
 
     return crypto;
+  }
+
+  /// Calculate the average price considering all [trades] and the [totalAmount] on wallet
+  double _calculateAveragePrice(List<TradeModel> trades, double totalAmount) {
+    var sum = 0.0;
+    trades.forEach((element) => sum = sum +
+        ((element.price * element.amount) + (element.price * element.fee)));
+    var averagePrice = sum / totalAmount;
+    return averagePrice;
   }
 }

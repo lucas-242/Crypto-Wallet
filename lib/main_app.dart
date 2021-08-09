@@ -13,6 +13,7 @@ import 'modules/trades/trades.dart';
 import 'modules/wallet/wallet.dart';
 import 'repositories/coin_repository/coin_repository.dart';
 import 'repositories/wallet_repository/wallet_repository.dart';
+import 'shared/auth/auth.dart';
 
 class MainApp extends StatelessWidget {
   MainApp() {
@@ -29,6 +30,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProvider(create: (_) => AppBloc()),
         ChangeNotifierProvider(
             create: (_) => HomeBloc(
@@ -58,7 +60,7 @@ class MainApp extends StatelessWidget {
           AppRoutes.tradesDetails: (context) => TradesDetails(),
           AppRoutes.tradesInsert: (context) => InsertTradePage(
                 walletRepository: walletRepository,
-              )
+              ),
         },
       ),
     );

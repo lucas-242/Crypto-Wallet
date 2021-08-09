@@ -19,7 +19,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     var appBloc = context.watch<AppBloc>();
-    SizeConfig().init(context, kBottomNavigationBarHeight);
+    SizeConfig(context, kBottomNavigationBarHeight);
     return Scaffold(
         body: [
           HomePage(),
