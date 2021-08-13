@@ -1,6 +1,7 @@
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/extensions/string_extension.dart';
+import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -45,20 +46,7 @@ class CoinsSlide extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: Container(
-                                    height: SizeConfig.height * 0.065,
-                                    width: SizeConfig.width * 0.13,
-                                    color: Colors.white54,
-                                    child: Padding(
-                                        padding: EdgeInsets.all(5),
-                                        child: cryptoSummary.image != null
-                                            ? Image.network(
-                                                cryptoSummary.image!)
-                                            : Container()),
-                                  ),
-                                ),
+                                ImageFade(image: cryptoSummary.image),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
