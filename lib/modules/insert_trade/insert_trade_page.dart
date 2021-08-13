@@ -5,6 +5,7 @@ import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
+import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:crypto_wallet/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
 import 'package:crypto_wallet/shared/widgets/custom_dropdown_button/custom_dropdown_button.dart';
 import 'package:crypto_wallet/shared/widgets/custom_text_form_field/custom_text_form_field_widget.dart';
@@ -64,10 +65,9 @@ class _InsertTradePageState extends State<InsertTradePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Insert Trade'),
-        brightness: Brightness.dark,
-        leading: BackButton(color: AppColors.input),
+      appBar: CustomAppBar(
+        title: 'Register Trade',
+        leading: BackButton(color: AppColors.primary),
       ),
       backgroundColor: AppColors.background,
       body: Padding(
@@ -82,90 +82,97 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 );
               }
 
-              return Form(
-                key: bloc.formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text('Operation Type:'),
-                        SizedBox(width: 30),
-                        Expanded(
-                          child: CustomDropdownButton(
-                            value: bloc.trade.operationType,
-                            items: TradeType.list,
-                            onChanged: (value) {
-                              bloc.onChange(operationType: value);
-                              setState(() {});
-                            },
+              return SingleChildScrollView(
+                child: Form(
+                  key: bloc.formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text('Operation Type:'),
+                          SizedBox(width: 30),
+                          Expanded(
+                            child: CustomDropdownButton(
+                              value: bloc.trade.operationType,
+                              items: TradeType.list,
+                              onChanged: (value) {
+                                bloc.onChange(operationType: value);
+                                setState(() {});
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text('Crypto:'),
-                        SizedBox(width: 30),
-                        Expanded(
-                          child: CustomDropdownButton(
-                            value: bloc.trade.crypto,
-                            items: Cryptos.list,
-                            onChanged: (value) {
-                              bloc.onChange(crypto: value);
-                              setState(() {});
-                            },
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text('Crypto:'),
+                          SizedBox(width: 30),
+                          Expanded(
+                            child: CustomDropdownButton(
+                              value: bloc.trade.crypto,
+                              items: Cryptos.list,
+                              onChanged: (value) {
+                                bloc.onChange(crypto: value);
+                                setState(() {});
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    CustomTextFormField(
-                      labelText: 'Crypto amount',
-                      icon: Icons.account_balance_wallet_outlined,
-                      keyboardType: TextInputType.number,
-                      controller: cryptoAmountController,
-                      validator: bloc.validateCryptoAmount,
-                      onChanged: (value) => bloc.onChange(
-                          amount: cryptoAmountController.numberValue),
-                    ),
-                    CustomTextFormField(
-                      labelText: 'Invested amount',
-                      icon: Icons.savings_outlined,
-                      keyboardType: TextInputType.number,
-                      controller: tradedAmoutController,
-                      validator: bloc.validateTradedAmount,
-                      onChanged: (value) => bloc.onChange(
-                          ammountInvested:
-                              tradedAmoutController.numberValue),
-                    ),
-                    CustomTextFormField(
-                      labelText: 'Trade Price',
-                      icon: Icons.attach_money_outlined,
-                      keyboardType: TextInputType.number,
-                      controller: priceController,
-                      validator: bloc.validatePrice,
-                      onChanged: (value) => bloc.onChange(
-                          price: priceController.numberValue),
-                    ),
-                    CustomTextFormField(
-                      labelText: 'Date',
-                      icon: Icons.calendar_today,
-                      keyboardType: TextInputType.datetime,
-                      controller: dateController,
-                      validator: bloc.validateDate,
-                      onChanged: (value) => bloc.onChange(date: value),
-                    ),
-                    CustomTextFormField(
-                      labelText: 'Fee',
-                      icon: Icons.money_off_sharp,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      controller: feeController,
-                      onChanged: (value) =>
-                          bloc.onChange(fee: feeController.numberValue),
-                    ),
-                    SizedBox(height: 25),
-                  ],
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      CustomTextFormField(
+                        labelText: 'Crypto amount',
+                        icon: Icons.account_balance_wallet_outlined,
+                        keyboardType: TextInputType.number,
+                        controller: cryptoAmountController,
+                        validator: bloc.validateCryptoAmount,
+                        onChanged: (value) => bloc.onChange(
+                            amount: cryptoAmountController.numberValue),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextFormField(
+                        labelText: 'Invested amount',
+                        icon: Icons.savings_outlined,
+                        keyboardType: TextInputType.number,
+                        controller: tradedAmoutController,
+                        validator: bloc.validateTradedAmount,
+                        onChanged: (value) => bloc.onChange(
+                            ammountInvested: tradedAmoutController.numberValue),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextFormField(
+                        labelText: 'Trade Price',
+                        icon: Icons.attach_money_outlined,
+                        keyboardType: TextInputType.number,
+                        controller: priceController,
+                        validator: bloc.validatePrice,
+                        onChanged: (value) =>
+                            bloc.onChange(price: priceController.numberValue),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextFormField(
+                        labelText: 'Date',
+                        icon: Icons.calendar_today,
+                        keyboardType: TextInputType.datetime,
+                        controller: dateController,
+                        validator: bloc.validateDate,
+                        onChanged: (value) => bloc.onChange(date: value),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextFormField(
+                        labelText: 'Fee',
+                        icon: Icons.money_off_sharp,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
+                        controller: feeController,
+                        onChanged: (value) =>
+                            bloc.onChange(fee: feeController.numberValue),
+                      ),
+                      SizedBox(height: 25),
+                    ],
+                  ),
                 ),
               );
             }),

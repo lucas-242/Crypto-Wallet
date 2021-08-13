@@ -45,7 +45,7 @@ class MainApp extends StatelessWidget {
         theme: ThemeData(
             primaryColor: AppColors.primary,
             primarySwatch:
-                MaterialColor(0xFF264653, AppColors.primaryMaterial)),
+                MaterialColor(0xFF3D30BB, AppColors.primaryMaterial)),
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.splash,
         routes: {
