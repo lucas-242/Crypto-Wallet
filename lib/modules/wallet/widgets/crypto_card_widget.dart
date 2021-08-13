@@ -70,66 +70,67 @@ class _CryptoCardState extends State<CryptoCard> {
                     )
                   ],
                 ),
-                //TODO: Fix render flex problem while collapsing
                 AnimatedContainer(
                   duration: Duration(milliseconds: 250),
                   height: _animatedHeight,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 20),
-                      Divider(thickness: 1),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Price',
-                            style: AppTextStyles.cryptoTitle
-                                .copyWith(fontSize: 15),
-                          ),
-                          Text(
-                            NumberFormat.currency(symbol: '\$')
-                                .format(widget.crypto.price),
-                            style: AppTextStyles.cryptoTitle
-                                .copyWith(fontSize: 15),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Average price',
-                            style: AppTextStyles.cryptoTitle
-                                .copyWith(fontSize: 15),
-                          ),
-                          Text(
-                            NumberFormat.currency(symbol: '\$')
-                                .format(widget.crypto.averagePrice),
-                            style: AppTextStyles.cryptoTitle
-                                .copyWith(fontSize: 15),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Gain / Loss',
-                            style: AppTextStyles.cryptoTitle
-                                .copyWith(fontSize: 15),
-                          ),
-                          Text(
-                            NumberFormat.currency(symbol: '\$')
-                                .format(widget.crypto.gainLoss),
-                            style: AppTextStyles.cryptoTitle
-                                .copyWith(fontSize: 15),
-                          ),
-                        ],
-                      ),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20),
+                        Divider(thickness: 1),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Price',
+                              style: AppTextStyles.cryptoTitle
+                                  .copyWith(fontSize: 15),
+                            ),
+                            Text(
+                              NumberFormat.currency(symbol: '\$')
+                                  .format(widget.crypto.price),
+                              style: AppTextStyles.cryptoTitle
+                                  .copyWith(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Average price',
+                              style: AppTextStyles.cryptoTitle
+                                  .copyWith(fontSize: 15),
+                            ),
+                            Text(
+                              NumberFormat.currency(symbol: '\$')
+                                  .format(widget.crypto.averagePrice),
+                              style: AppTextStyles.cryptoTitle
+                                  .copyWith(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Gain / Loss',
+                              style: AppTextStyles.cryptoTitle
+                                  .copyWith(fontSize: 15),
+                            ),
+                            Text(
+                              NumberFormat.currency(symbol: '\$')
+                                  .format(widget.crypto.gainLoss),
+                              style: AppTextStyles.cryptoTitle
+                                  .copyWith(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

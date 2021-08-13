@@ -4,13 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';
 
+import 'blocs/wallet/wallet.dart';
 import 'modules/app/app.dart';
-import 'modules/home/home.dart';
 import 'modules/login/login.dart';
 import 'modules/splash/splash_page.dart';
 import 'modules/insert_trade/insert_trade.dart';
 import 'modules/trades/trades.dart';
-import 'modules/wallet/wallet.dart';
 import 'repositories/coin_repository/coin_repository.dart';
 import 'repositories/wallet_repository/wallet_repository.dart';
 import 'shared/auth/auth.dart';
@@ -32,10 +31,6 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProvider(create: (_) => AppBloc()),
-        ChangeNotifierProvider(
-            create: (_) => HomeBloc(
-                walletRepository: walletRepository,
-                coinRepository: coinRepository)),
         ChangeNotifierProvider(
             create: (_) => TradesBloc(walletRepository: walletRepository)),
         ChangeNotifierProvider(

@@ -1,35 +1,36 @@
+import 'dart:async';
 import 'dart:ui';
 
-import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
-import 'package:crypto_wallet/shared/themes/app_colors.dart';
+import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/foundation.dart';
 
-class HomeBloc extends ChangeNotifier {
+import 'wallet_status.dart';
+
+class WalletBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
   CoinRepository _coinRepository;
 
   List<CryptoModel> cryptos = [];
 
-  final statusNotifier = ValueNotifier<HomeStatus>(HomeStatus());
-
-  HomeStatus get status => statusNotifier.value;
-  set status(HomeStatus status) => statusNotifier.value = status;
-
   DashboardModel dashboardData = new DashboardModel();
 
-  HomeBloc({
+  final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
+  WalletStatus get status => statusNotifier.value;
+  set status(WalletStatus status) => statusNotifier.value = status;
+
+  WalletBloc({
     required WalletRepository walletRepository,
     required CoinRepository coinRepository,
   })  : _walletRepository = walletRepository,
         _coinRepository = coinRepository;
 
-  Future<void> getDashboardData(String uid) async {
-    status = HomeStatus.loading();
+  Future<void> getCryptos(String uid) async {
+    status = WalletStatus.loading();
 
     await _walletRepository.getAllCryptos(uid).then((result) async {
       if (result.isNotEmpty) {
@@ -37,20 +38,20 @@ class HomeBloc extends ChangeNotifier {
         setDashboardData();
       }
     }).catchError((error) {
-      status = HomeStatus.error(error.toString());
+      status = WalletStatus.error(error.toString());
       print(error);
     });
 
     if (cryptos.isEmpty) {
-      status = HomeStatus.noData();
+      status = WalletStatus.noData();
     } else {
-      status = HomeStatus();
+      status = WalletStatus();
     }
 
     notifyListeners();
   }
 
-  Future<List<CryptoModel>> getCryptosMarketData(
+   Future<List<CryptoModel>> getCryptosMarketData(
       List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
 
@@ -91,9 +92,39 @@ class HomeBloc extends ChangeNotifier {
     });
   }
 
-  void eraseData() {
-    cryptos = [];
-    dashboardData = new DashboardModel();
+  Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
+    var result = <CryptoModel>[];
+    return await _coinRepository
+        .getPrices(coins: coins.map((e) => e.name).toList())
+        .then((response) {
+      coins.forEach((coin) {
+        var price = double.parse(response[coin.name]['usd'].toString());
+        result.add(coin.copyWith(price: price));
+      });
+
+      return result;
+    });
+  }
+
+  /// Init a timer to refresh crypto prices
+  void setTimerToGetPrices() {
+    Timer.periodic(Duration(seconds: 60), (timer) async {
+      var result = await getCryptosPrice(cryptos);
+      if (result.isNotEmpty) cryptos = result;
+      print('refreshed');
+      notifyListeners();
+    });
+  }
+
+  void updateCrypto(CryptoModel model) {
+    var index = cryptos.indexWhere((element) => element.crypto == model.crypto);
+
+    if (index == -1) {
+      cryptos.add(model);
+    } else {
+      cryptos[index] = model;
+    }
+
     notifyListeners();
   }
 
@@ -147,5 +178,11 @@ class HomeBloc extends ChangeNotifier {
       AppColors.secondary,
       AppColors.grey,
     ];
+  }
+
+  void eraseData() {
+    cryptos = [];
+    dashboardData = new DashboardModel();
+    notifyListeners();
   }
 }

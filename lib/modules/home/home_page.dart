@@ -1,7 +1,7 @@
+import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/modules/home/widgets/coins_slide_widget.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
@@ -18,14 +18,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final HomeBloc bloc;
+  late final WalletBloc bloc;
   late final Auth auth;
 
   @override
   void initState() {
     auth = context.read<Auth>();
-    bloc = context.read<HomeBloc>();
-    bloc.getDashboardData(auth.user!.uid);
+    bloc = context.read<WalletBloc>();
+    bloc.getCryptos(auth.user!.uid);
     super.initState();
   }
 
@@ -62,12 +62,12 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => bloc.getDashboardData(auth.user!.uid),
+        onRefresh: () => bloc.getCryptos(auth.user!.uid),
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.only(left: 25, right: 25, top: 25),
-            child: ValueListenableBuilder<HomeStatus>(
+            child: ValueListenableBuilder<WalletStatus>(
               valueListenable: bloc.statusNotifier,
               builder: (context, status, child) {
                 if (status.statusPage == StatusPage.noData) {
