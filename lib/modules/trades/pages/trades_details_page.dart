@@ -1,9 +1,10 @@
+import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
+import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -25,29 +26,32 @@ class _TradesDetailsState extends State<TradesDetails> {
     final trade = arguments['trade'] as TradeModel;
     final bloc = context.watch<TradesBloc>();
 
+    void _deleteTrade() {
+      final walletBloc = context.read<WalletBloc>();
+      bloc
+          .deleteTrade(
+        trade: trade,
+        uid: arguments['uid'],
+        walletBloc: walletBloc,
+      )
+          .then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
+            message: 'Trade deleted successfully',
+            type: SnackBarType.success,
+            onClose: () =>
+                ScaffoldMessenger.of(context).hideCurrentSnackBar()));
+        Navigator.of(context).pop();
+      });
+    }
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Trade Details'),
+      appBar: CustomAppBar(
+        title: 'Trade Details',
+        leading: BackButton(color: AppColors.primary),
         actions: [
           TextButton(
-            onPressed: () {
-              final walletBloc = context.read<WalletBloc>();
-              bloc
-                  .deleteTrade(
-                trade: trade,
-                uid: arguments['uid'],
-                walletBloc: walletBloc,
-              )
-                  .then((value) {
-                ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
-                    message: 'Trade deleted successfully',
-                    type: SnackBarType.success,
-                    onClose: () =>
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar()));
-                Navigator.of(context).pop();
-              });
-            },
-            child: Icon(Icons.delete, color: Colors.white),
+            onPressed: () => _deleteTrade(),
+            child: Icon(Icons.delete, color: AppColors.primary, size: 20),
           ),
         ],
       ),

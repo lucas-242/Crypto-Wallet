@@ -7,101 +7,58 @@ abstract class AppTextStyles {
   static final titleHome = GoogleFonts.lexendDeca(
     fontSize: 32,
     fontWeight: FontWeight.w600,
-    color: AppColors.grey,
+    color: AppColors.text,
   );
   static final titleRegular = GoogleFonts.lexendDeca(
-    fontSize: 20,
-    fontWeight: FontWeight.w400,
-    color: AppColors.grey
-  );
+      fontSize: 20, fontWeight: FontWeight.w400, color: AppColors.text);
   static final titleBoldGrey = GoogleFonts.lexendDeca(
     fontSize: 20,
     fontWeight: FontWeight.w600,
-    color: AppColors.grey,
-  );
-  static final titleBoldBackground = GoogleFonts.lexendDeca(
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    color: AppColors.background,
+    color: AppColors.text,
   );
   static final cryptoTitle = GoogleFonts.lexendDeca(
     fontSize: 18,
     fontWeight: FontWeight.w400,
-    color: AppColors.grey,
+    color: AppColors.text,
   );
   static final cryptoTitleBold = GoogleFonts.lexendDeca(
     fontSize: 18,
     fontWeight: FontWeight.w600,
-    color: AppColors.grey,
+    color: AppColors.text,
   );
   static final buttonPrimary = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,
     color: AppColors.primary,
   );
-  static final buttonSecondary = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w400,
-    color: AppColors.secondary
-  );
   static final buttonGrey = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,
-    color: AppColors.grey,
-  );
-  static final buttonBackground = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w400,
-    color: AppColors.background,
-  );
-  static final buttonBoldPrimary = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w700,
-    color: AppColors.primary,
-  );
-  static final buttonBoldGrey = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w700,
-    color: AppColors.grey,
-  );
-  static final buttonBoldBackground = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w700,
-    color: AppColors.background,
+    color: AppColors.text,
   );
   static final input = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,
     color: AppColors.input,
   );
-  static final captionBackground = GoogleFonts.inter(
-    fontSize: 13,
-    fontWeight: FontWeight.w400,
-    color: AppColors.background,
-  );
-  static final captionShape = GoogleFonts.inter(
-    fontSize: 13,
-    fontWeight: FontWeight.w400,
-    color: AppColors.shape,
-  );
   static final captionBody = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w400,
-    color: AppColors.body,
-  );
-  static final captionBoldBackground = GoogleFonts.inter(
-    fontSize: 13,
-    fontWeight: FontWeight.w600,
-    color: AppColors.background,
-  );
-  static final captionBoldShape = GoogleFonts.inter(
-    fontSize: 13,
-    fontWeight: FontWeight.w600,
-    color: AppColors.shape,
+    color: AppColors.text,
   );
   static final captionBoldBody = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w600,
-    color: AppColors.body,
+    color: AppColors.text,
+  );
+  static final captionBodyBackground = GoogleFonts.inter(
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: AppColors.background,
+  );
+  static final captionBoldBodyBackground = GoogleFonts.inter(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: AppColors.background,
   );
 }

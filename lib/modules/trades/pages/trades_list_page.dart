@@ -1,9 +1,10 @@
+import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/trades/widgets/trade_tile_list_widget.dart';
-import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
+import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,14 +30,13 @@ class _TradesListPageState extends State<TradesListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Trades'),
-        brightness: Brightness.dark,
+      appBar: CustomAppBar(
+        title: 'Trades',
         actions: [
           TextButton(
             onPressed: () =>
                 Navigator.pushNamed(context, AppRoutes.tradesInsert),
-            child: Icon(Icons.add, color: Colors.white),
+            child: Icon(Icons.add, color: AppColors.primary),
           ),
         ],
       ),

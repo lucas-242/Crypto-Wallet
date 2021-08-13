@@ -1,5 +1,6 @@
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
+import 'package:crypto_wallet/shared/extensions/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -58,7 +59,7 @@ class WatchList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          cryptos[index].name,
+                          cryptos[index].name.capitalize(),
                           style: AppTextStyles.captionBody,
                         ),
                         Text(

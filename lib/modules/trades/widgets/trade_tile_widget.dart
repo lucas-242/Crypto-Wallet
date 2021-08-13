@@ -28,13 +28,13 @@ class TradeTile extends StatelessWidget {
               children: [
                 TradeDetailsRow(
                   leftText: trade.crypto,
-                  leftTextStyle: AppTextStyles.captionBoldBody,
+                  leftTextStyle: AppTextStyles.captionBoldBody.copyWith(color: AppColors.primary),
                   rightText: toBeginningOfSentenceCase(trade.operationType)!,
                   rightTextStyle: trade.operationType == TradeType.buy
                       ? AppTextStyles.captionBoldBody
                           .copyWith(color: AppColors.secondary)
                       : AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.red),
+                          .copyWith(color: AppColors.grey),
                 ),
                 SizedBox(height: 5),
                 TradeDetailsRow(
@@ -59,7 +59,7 @@ class TradeTile extends StatelessWidget {
             caption: 'Delete',
             icon: Icons.close,
             onTap: () => onDelete!(trade),
-            foregroundColor: AppColors.body,
+            foregroundColor: AppColors.text,
           ),
         ),
       ],

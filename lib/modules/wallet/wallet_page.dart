@@ -1,9 +1,9 @@
-import 'package:crypto_wallet/modules/wallet/bloc/wallet_status.dart';
+import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
-import 'package:crypto_wallet/modules/wallet/bloc/wallet_bloc.dart';
+import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,24 +15,21 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
-  final auth = FirebaseAuth.instance;
+  late final Auth auth;
   late final WalletBloc bloc;
 
   @override
   void initState() {
     bloc = context.read<WalletBloc>();
-    if (bloc.cryptos.isEmpty) bloc.getCryptos(auth.currentUser!.uid);
+    auth = context.read<Auth>();
+    if (bloc.cryptos.isEmpty) bloc.getCryptos(auth.user!.uid);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Wallet'),
-        brightness: Brightness.dark,
-      ),
+      appBar: CustomAppBar(title: 'Wallet'),
       backgroundColor: AppColors.background,
       body: Padding(
         padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 5),
@@ -60,11 +57,12 @@ class _WalletPageState extends State<WalletPage> {
                 } else {
                   return Expanded(
                     child: RefreshIndicator(
-                      onRefresh: () => bloc.getCryptos(auth.currentUser!.uid),
+                      onRefresh: () =>
+                          bloc.getCryptos(auth.user!.uid),
                       child: ListView.builder(
                           itemCount: bloc.cryptos.length,
                           itemBuilder: (context, index) {
-                            return CryptoSummary(crypto: bloc.cryptos[index]);
+                            return CryptoCard(crypto: bloc.cryptos[index]);
                           }),
                     ),
                   );

@@ -1,10 +1,12 @@
+import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/home/home.dart';
+import 'package:crypto_wallet/modules/home/widgets/coins_slide_widget.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
+import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,14 +18,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final HomeBloc bloc;
+  late final WalletBloc bloc;
   late final Auth auth;
 
   @override
   void initState() {
     auth = context.read<Auth>();
-    bloc = context.read<HomeBloc>();
-    bloc.getDashboardData(auth.user!.uid);
+    bloc = context.read<WalletBloc>();
+    bloc.getCryptos(auth.user!.uid);
     super.initState();
   }
 
@@ -48,23 +50,24 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-        brightness: Brightness.dark,
+      appBar: CustomAppBar(
+        title: 'Dashboard',
         actions: [
           IconButton(
             onPressed: () => _logout(),
             icon: Icon(Icons.logout),
+            iconSize: 20,
+            color: AppColors.primary,
           )
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => bloc.getDashboardData(auth.user!.uid),
+        onRefresh: () => bloc.getCryptos(auth.user!.uid),
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.only(left: 25, right: 25, top: 25),
-            child: ValueListenableBuilder<HomeStatus>(
+            child: ValueListenableBuilder<WalletStatus>(
               valueListenable: bloc.statusNotifier,
               builder: (context, status, child) {
                 if (status.statusPage == StatusPage.noData) {
@@ -76,12 +79,31 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
 
+                if (status.statusPage == StatusPage.loading) {
+                  return Container(
+                    height: SizeConfig.height * 0.7,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TotalWalletCard(bloc: bloc),
-                    Chart(bloc: bloc),
-                    DashboardWatchList(bloc: bloc),
+                    TotalWalletCard(dashboardData: bloc.dashboardData),
+                    CoinsSlide(dashboardData: bloc.dashboardData),
+                    // DonutChart(
+                    //   data: bloc.dashboardData.cryptosSummary
+                    //       .asMap()
+                    //       .entries
+                    //       .map((e) => DonutChartModel(
+                    //           percent: e.value.percent,
+                    //           color: bloc.chartColors[e.key]))
+                    //       .toList(),
+                    // ),
+                    // Chart(bloc: bloc),
+                    DashboardWatchList(cryptos: bloc.cryptos),
                   ],
                 );
               },
