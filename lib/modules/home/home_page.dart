@@ -49,16 +49,31 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-        brightness: Brightness.dark,
-        actions: [
-          IconButton(
-            onPressed: () => _logout(),
-            icon: Icon(Icons.logout),
-          )
-        ],
+      appBar: PreferredSize(
+        preferredSize: Size(SizeConfig.width, SizeConfig.height * 0.07),
+        child: Container(
+          child: Padding(
+            padding: EdgeInsets.only(top: 35),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(width: 50),
+                Text('Dashboard',
+                    style: AppTextStyles.titleRegular
+                        .copyWith(color: AppColors.primary)),
+                IconButton(
+                  onPressed: () => _logout(),
+                  icon: Icon(Icons.logout),
+                  iconSize: 20,
+                  color: AppColors.primary,
+                )
+              ],
+            ),
+          ),
+        ),
       ),
+
       body: RefreshIndicator(
         onRefresh: () => bloc.getDashboardData(auth.user!.uid),
         child: SingleChildScrollView(
@@ -77,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
 
-                 if (status.statusPage == StatusPage.loading) {
+                if (status.statusPage == StatusPage.loading) {
                   return Container(
                     height: SizeConfig.height * 0.7,
                     child: Center(

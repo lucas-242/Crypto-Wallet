@@ -29,29 +29,36 @@ class CoinsSlide extends StatelessWidget {
                 var cryptoSummary = dashboardData.cryptosSummary[index];
                 return Padding(
                   padding: EdgeInsets.only(
-                      right: dashboardData.cryptosSummary.length == index - 1
+                      right: dashboardData.cryptosSummary.length == index + 1
                           ? 0
-                          : 8),
+                          : 7),
                   child: Row(
                     children: [
                       Container(
                         width: SizeConfig.width * 0.36,
                         child: Card(
                           color: cryptoSummary.color,
-                          elevation: 3,
+                          elevation: 2,
                           child: Padding(
                             padding: EdgeInsets.all(15),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                cryptoSummary.image != null
-                                    ? Container(
-                                        height: SizeConfig.height * 0.065,
-                                        child:
-                                            Image.network(cryptoSummary.image!),
-                                      )
-                                    : Container(),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Container(
+                                    height: SizeConfig.height * 0.065,
+                                    width: SizeConfig.width * 0.13,
+                                    color: Colors.white54,
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: cryptoSummary.image != null
+                                            ? Image.network(
+                                                cryptoSummary.image!)
+                                            : Container()),
+                                  ),
+                                ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

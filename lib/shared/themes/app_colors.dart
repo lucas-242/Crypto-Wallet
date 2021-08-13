@@ -8,9 +8,9 @@ abstract class AppColors {
   static final textLight = Color(0xFFB3B9C5);
   static final background = Color(0xFFFFFFFF);
 
-  static final yellow = Color(0xFFE9C46A);
-  static final orange = Color(0xFFF4A261);
-  static final red = Color(0xFFE76F51);
+  static final yellow = Color(0xFFF2D83F);
+  static final orange = Color(0xFFBF6932);
+  static final red = Color(0xFFF27D6F);
   static final input = Color(0xFFB1B0B8);
   static final stroke = Color(0xFFE3E3E6);
   static final shape = Color(0xFFFAFAFC);

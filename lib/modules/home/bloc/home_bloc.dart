@@ -136,16 +136,16 @@ class HomeBloc extends ChangeNotifier {
     return [
       AppColors.primary,
       AppColors.secondary,
-      AppColors.orange,
-      AppColors.yellow,
       AppColors.grey,
-      AppColors.red,
       AppColors.primary,
       AppColors.secondary,
-      AppColors.orange,
-      AppColors.yellow,
       AppColors.grey,
-      AppColors.red,
+      AppColors.primary,
+      AppColors.secondary,
+      AppColors.grey,
+      AppColors.primary,
+      AppColors.secondary,
+      AppColors.grey,
     ];
   }
 }
