@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 
 class DashboardModel {
@@ -50,12 +52,18 @@ class DashboardModel {
 
 class CryptoSummary {
   String crypto;
+  String name;
+  Color? color;
+  String? image;
   double value;
   double amount;
   double percent;
 
   CryptoSummary({
     required this.crypto,
+    required this.name,
+    this.image,
+    this.color,
     this.value = 0,
     this.amount = 0,
     this.percent = 0,

@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/modules/home/home.dart';
+import 'package:crypto_wallet/modules/home/widgets/coins_slide_widget.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
@@ -76,12 +77,31 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
 
+                 if (status.statusPage == StatusPage.loading) {
+                  return Container(
+                    height: SizeConfig.height * 0.7,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TotalWalletCard(bloc: bloc),
-                    Chart(bloc: bloc),
-                    DashboardWatchList(bloc: bloc),
+                    TotalWalletCard(dashboardData: bloc.dashboardData),
+                    CoinsSlide(dashboardData: bloc.dashboardData),
+                    // DonutChart(
+                    //   data: bloc.dashboardData.cryptosSummary
+                    //       .asMap()
+                    //       .entries
+                    //       .map((e) => DonutChartModel(
+                    //           percent: e.value.percent,
+                    //           color: bloc.chartColors[e.key]))
+                    //       .toList(),
+                    // ),
+                    // Chart(bloc: bloc),
+                    DashboardWatchList(cryptos: bloc.cryptos),
                   ],
                 );
               },

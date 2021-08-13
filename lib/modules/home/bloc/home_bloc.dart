@@ -77,7 +77,7 @@ class HomeBloc extends ChangeNotifier {
 
             result.add(coin.copyWith(
               price: price,
-              image: coin.image,
+              image: element.image,
               history: history,
             ));
             return true;
@@ -109,14 +109,19 @@ class HomeBloc extends ChangeNotifier {
 
     List<CryptoSummary> cryptosSummary = [];
     var sortedCryptos = cryptos;
+    var colorIndex = 0;
     sortedCryptos.sort((a, b) => b.totalNow.compareTo(a.totalNow));
     sortedCryptos.forEach((crypto) {
       cryptosSummary.add(CryptoSummary(
+        name: crypto.name,
         crypto: crypto.crypto,
         value: crypto.totalNow,
         amount: crypto.amount,
         percent: (crypto.totalNow * 100) / total,
+        color: chartColors[colorIndex],
+        image: crypto.image,
       ));
+      colorIndex++;
     });
 
     dashboardData = dashboardData.copyWith(

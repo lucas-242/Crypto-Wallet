@@ -1,3 +1,5 @@
+import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
+import 'package:crypto_wallet/shared/themes/size_config.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -18,10 +20,10 @@ class DonutChartState extends State<DonutChart> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.25,
-      width: size.width * 0.37,
+      height: SizeConfig.height * 0.25,
+      // width: SizeConfig.width * 0.37,
+      width: SizeConfig.width * 5,
       child: PieChart(
         PieChartData(
           pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
@@ -51,16 +53,15 @@ class DonutChartState extends State<DonutChart> {
       final data = widget.data[i];
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 30.0 : 20.0;
+      final radius = isTouched ? 40.0 : 30.0;
       return PieChartSectionData(
         color: data.color,
-        value: data.percent,
-        showTitle: false,
+        value: double.parse(data.percent.toStringAsFixed(2)),
+        showTitle: true,
         radius: radius,
-        titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: Color(0xffffffff)),
+        titleStyle: AppTextStyles.captionBoldBody.copyWith(
+          fontSize: fontSize,
+        ),
       );
     });
   }
