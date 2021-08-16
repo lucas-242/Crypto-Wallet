@@ -1,12 +1,15 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
+import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crypto_wallet/shared/extensions/date_time_extension.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class TradesBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
+  late InterstitialAd _interstitialAd;
 
   List<TradeModel> trades = [];
   List<DateTime> dates = [];
@@ -71,6 +74,8 @@ class TradesBloc extends ChangeNotifier {
       return;
     }
 
+    _interstitialAd.show();
+
     var crypto = finded.first;
     var tradesFiltered = trades
         .where((element) => element.crypto == trade.crypto && element != trade)
@@ -93,6 +98,25 @@ class TradesBloc extends ChangeNotifier {
     });
 
     notifyListeners();
+  }
+
+  ///Load the InterstitialAd
+  loadAd() {
+    InterstitialAd.load(
+        adUnitId: AdHelper.interstitialAdUnitId,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            _interstitialAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error');
+          },
+        ));
+  }
+
+  void disposeInterstitialAd() {
+    _interstitialAd.dispose();
   }
 
   void eraseData() {

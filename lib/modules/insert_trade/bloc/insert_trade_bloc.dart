@@ -2,14 +2,17 @@ import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/constants/cryptos.dart';
+import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'insert_trade_status.dart';
 
 class InsertTradeBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
+  late InterstitialAd _interstitialAd;
 
   final formKey = GlobalKey<FormState>();
   TradeModel trade = TradeModel(
@@ -107,6 +110,8 @@ class InsertTradeBloc extends ChangeNotifier {
 
     status = InsertTradeStatus.loading();
 
+    _interstitialAd.show();
+
     var cryptos = await _walletRepository.getAllCryptos(uid);
 
     return await _walletRepository.addTrade(cryptos, trade).then((value) {
@@ -122,5 +127,39 @@ class InsertTradeBloc extends ChangeNotifier {
       print(error);
       status = InsertTradeStatus.error(error.toString());
     });
+  }
+
+  ///Load the InterstitialAd
+  loadAd() {
+    InterstitialAd.load(
+        adUnitId: AdHelper.interstitialAdUnitId,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            _interstitialAd = ad;
+            _interstitialAd.fullScreenContentCallback =
+                FullScreenContentCallback(
+              onAdDismissedFullScreenContent: (InterstitialAd ad) {
+                print('$ad onAdDismissedFullScreenContent.');
+                ad.dispose();
+              },
+              onAdFailedToShowFullScreenContent:
+                  (InterstitialAd ad, AdError error) {
+                print('$ad onAdFailedToShowFullScreenContent: $error');
+                ad.dispose();
+              },
+            );
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error');
+          },
+        ));
+  }
+
+  @override
+  void dispose() {
+    statusNotifier.dispose();
+    _interstitialAd.dispose();
+    super.dispose();
   }
 }

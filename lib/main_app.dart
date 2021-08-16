@@ -1,8 +1,8 @@
 import 'package:crypto_wallet/shared/constants/routes.dart';
+import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:crypto_wallet/shared/themes/app_colors.dart';
 
 import 'blocs/wallet/wallet.dart';
 import 'modules/app/app.dart';
@@ -24,7 +24,6 @@ class MainApp extends StatelessWidget {
 
   final walletRepository = WalletRepository();
   final coinRepository = CoinRepository();
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
