@@ -19,30 +19,47 @@ class TradesDetails extends StatefulWidget {
 }
 
 class _TradesDetailsState extends State<TradesDetails> {
+  late Map<String, dynamic> arguments;
+  late TradeModel trade;
+  late final TradesBloc bloc;
+
+  @override
+  void initState() {
+    bloc = context.read<TradesBloc>();
+    bloc.loadAd();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    bloc.disposeInterstitialAd();
+    super.dispose();
+  }
+
+  void _deleteTrade() {
+    final walletBloc = context.read<WalletBloc>();
+    bloc
+        .deleteTrade(
+      trade: trade,
+      uid: arguments['uid'],
+      walletBloc: walletBloc,
+    )
+        .then((value) {
+      // ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
+      //     message: 'Trade deleted successfully',
+      //     type: SnackBarType.success,
+      //     onClose: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()));
+      bloc.disposeInterstitialAd();
+      Navigator.of(context).pop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final arguments =
+    arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final trade = arguments['trade'] as TradeModel;
-    final bloc = context.watch<TradesBloc>();
-
-    void _deleteTrade() {
-      final walletBloc = context.read<WalletBloc>();
-      bloc
-          .deleteTrade(
-        trade: trade,
-        uid: arguments['uid'],
-        walletBloc: walletBloc,
-      )
-          .then((value) {
-        ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
-            message: 'Trade deleted successfully',
-            type: SnackBarType.success,
-            onClose: () =>
-                ScaffoldMessenger.of(context).hideCurrentSnackBar()));
-        Navigator.of(context).pop();
-      });
-    }
+    trade = arguments['trade'] as TradeModel;
 
     return Scaffold(
       appBar: CustomAppBar(

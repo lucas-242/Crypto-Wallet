@@ -44,6 +44,8 @@ doc/api/
 /build/
 ios/.generated/
 android/app/google-services.json
+apikey.properties
+lib/shared/constants/keys.dart
 
 # Web related
 lib/generated_plugin_registrant.dart

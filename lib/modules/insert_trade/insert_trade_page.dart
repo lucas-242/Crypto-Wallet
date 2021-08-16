@@ -44,13 +44,14 @@ class _InsertTradePageState extends State<InsertTradePage> {
     uid = FirebaseAuth.instance.currentUser!.uid;
     bloc = InsertTradeBloc(walletRepository: widget.walletRepository);
 
+    bloc.loadAd();
     bloc.onChange(user: uid);
     super.initState();
   }
 
   @override
   void dispose() {
-    bloc.statusNotifier.dispose();
+    bloc.dispose();
     super.dispose();
   }
 
