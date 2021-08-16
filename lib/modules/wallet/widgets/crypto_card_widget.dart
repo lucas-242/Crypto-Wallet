@@ -15,16 +15,13 @@ class CryptoCard extends StatefulWidget {
 }
 
 class _CryptoCardState extends State<CryptoCard> {
-  double _animatedHeight = 0.0;
+  bool isOpen = false;
+  double height = SizeConfig.height * 0.22;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => setState(() {
-        _animatedHeight != 0.0
-            ? _animatedHeight = 0.0
-            : _animatedHeight = SizeConfig.height * 0.18;
-      }),
+      onTap: () => setState(() => isOpen = !isOpen),
       child: Card(
         elevation: 3,
         child: Padding(
@@ -72,7 +69,7 @@ class _CryptoCardState extends State<CryptoCard> {
                 ),
                 AnimatedContainer(
                   duration: Duration(milliseconds: 250),
-                  height: _animatedHeight,
+                  height: isOpen ? height : 0,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -107,6 +104,23 @@ class _CryptoCardState extends State<CryptoCard> {
                             Text(
                               NumberFormat.currency(symbol: '\$')
                                   .format(widget.crypto.averagePrice),
+                              style: AppTextStyles.cryptoTitle
+                                  .copyWith(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Total Invested',
+                              style: AppTextStyles.cryptoTitle
+                                  .copyWith(fontSize: 15),
+                            ),
+                            Text(
+                              NumberFormat.currency(symbol: '\$')
+                                  .format(widget.crypto.totalInvested),
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
