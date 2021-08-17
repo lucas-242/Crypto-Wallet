@@ -8,6 +8,7 @@ import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart'
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widgets/trade_details_row_widget.dart';
 
@@ -22,6 +23,7 @@ class _TradesDetailsState extends State<TradesDetails> {
   late Map<String, dynamic> arguments;
   late TradeModel trade;
   late final TradesBloc bloc;
+  late AppLocalizations appLocalizations;
 
   @override
   void initState() {
@@ -29,6 +31,12 @@ class _TradesDetailsState extends State<TradesDetails> {
     bloc.loadAd();
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appLocalizations = AppLocalizations.of(context)!;
   }
 
   @override
@@ -63,7 +71,7 @@ class _TradesDetailsState extends State<TradesDetails> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Trade Details',
+        title: appLocalizations.tradeDetails,
         leading: BackButton(color: AppColors.primary),
         actions: [
           TextButton(
@@ -96,8 +104,11 @@ class _TradesDetailsState extends State<TradesDetails> {
                         Text(trade.crypto, style: AppTextStyles.titleRegular)),
                 SizedBox(height: 25),
                 TradeDetailsRow(
-                  leftText: 'Type',
-                  rightText: toBeginningOfSentenceCase(trade.operationType)!,
+                  leftText: appLocalizations.operationType,
+                  rightText: toBeginningOfSentenceCase(
+                      trade.operationType == TradeType.buy
+                          ? appLocalizations.buy
+                          : appLocalizations.sell)!,
                   rightTextStyle: trade.operationType == TradeType.buy
                       ? AppTextStyles.captionBoldBody
                           .copyWith(color: AppColors.secondary)
@@ -106,30 +117,30 @@ class _TradesDetailsState extends State<TradesDetails> {
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(
-                  leftText: 'Amount',
+                  leftText: appLocalizations.cryptoAmount,
                   rightText: trade.amount.toStringAsFixed(8),
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(
-                  leftText: 'Price',
+                  leftText: appLocalizations.tradePrice,
                   rightText:
                       NumberFormat.currency(symbol: '\$').format(trade.price),
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(
-                  leftText: 'Date',
+                  leftText: appLocalizations.date,
                   rightText: DateFormat.yMd().format(trade.date),
                 ),
                 SizedBox(height: 10),
                 Divider(),
                 SizedBox(height: 10),
                 TradeDetailsRow(
-                  leftText: 'Fee',
+                  leftText: appLocalizations.fee,
                   rightText: trade.fee.toStringAsFixed(8),
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(
-                  leftText: 'Total',
+                  leftText: appLocalizations.total,
                   rightText: NumberFormat.currency(symbol: '\$')
                       .format(trade.amountInvested),
                 ),

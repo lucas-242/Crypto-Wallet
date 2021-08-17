@@ -1,74 +1,90 @@
 {
-  "amount": "amount",
+  "amount": "Amount",
   "@amount": {
-    "description": "Test"
+    "description": ""
   },
   "buy": "buy",
   "@buy": {
-    "description": "Test"
+    "description": ""
   },
   "cancel": "Cancel",
   "@cancel": {
-      "description": "Test"
+      "description": ""
   },
   "crypto": "Crypto",
   "@crypto": {
-      "description": "Test"
+      "description": ""
   },
   "cryptoAmount": "Crypto amount",
   "@cryptoAmount": {
-      "description": "Test"
+      "description": ""
   },
   "date": "Date",
   "@date": {
-    "description": "Test"
+    "description": ""
   },
-  "fee": "fee",
+  "delete": "Delete",
+  "@date": {
+    "description": ""
+  },
+  "fee": "Fee",
   "@fee": {
-    "description": "Test"
+    "description": ""
   },
   "invested": "invested",
   "@invested": {
-    "description": "Test"
+    "description": ""
   },
   "investedAmount": "Invested amount",
   "@investedAmount": {
-      "description": "Test"
+      "description": ""
+  },
+  "noTrades": "No trades in the wallet",
+  "@noTrades": {
+      "description": ""
   },
   "operationType": "Operation Type",
   "@operationType": {
-      "description": "Test"
+      "description": ""
   },
-  "price": "price",
+  "price": "Price",
   "@price": {
-    "description": "Test"
+    "description": ""
   },
   "register": "register",
   "@register": {
-    "description": "Test"
+    "description": ""
   },
   "registerTrade": "Register Trade",
   "@registerTrade": {
-      "description": "Test"
+      "description": ""
   },
   "save": "Save",
   "@save": {
-      "description": "Test"
+      "description": ""
   },
   "sell": "sell",
   "@sell": {
-    "description": "Test"
+    "description": ""
   },
-  "total": "total",
+  "total": "Total",
   "@total": {
-    "description": "Test"
+    "description": ""
+  },
+  "tradeDetails": "Trade Details",
+  "@tradeDetails": {
+      "description": ""
   },
   "tradePrice": "Trade price",
   "@tradePrice": {
-      "description": "Test"
+      "description": ""
+  },
+  "trades": "Trades",
+  "@trades": {
+      "description": ""
   },
   "wallet": "Wallet",
   "@wallet": {
-    "description": "Test"
+    "description": ""
   }
 }

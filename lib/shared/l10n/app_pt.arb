@@ -1,20 +1,24 @@
 {
-  "amount": "total",
+  "amount": "Montante",
   "buy": "compra",
   "cancel": "Cancelar",
   "crypto": "Cripto",
   "cryptoAmount": "Montante em cripto", 
   "date": "Data",
+  "delete": "Deletar",
   "fee": "Taxa",
   "invested": "investido",
   "investedAmount": "Montante investido",
   "operationType": "Tipo de Operação",
-  "price": "preço",
+  "noTrades": "Não há trades na carteira",
+  "price": "Cotação",
   "register": "registrar",
   "registerTrade": "Registrar Trade",
   "save": "Salvar",
   "sell": "venda",
-  "total": "total",
+  "total": "Total",
+  "tradeDetails": "Detalhes do Trade",
   "tradePrice": "Cotação",
-  "wallet": "carteira"
+  "trades": "Trades",
+  "wallet": "Carteira"
 }

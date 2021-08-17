@@ -1,6 +1,5 @@
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
-import 'package:crypto_wallet/shared/extensions/string_extension.dart';
 import 'package:crypto_wallet/shared/themes/size_config.dart';
 import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +39,7 @@ class _CryptoCardState extends State<CryptoCard> {
                         SizedBox(width: 15),
                         Text.rich(
                           TextSpan(
-                              text: widget.crypto.name.capitalize(),
+                              text: toBeginningOfSentenceCase(widget.crypto.name),
                               children: [
                                 TextSpan(text: ' . ${widget.crypto.crypto}')
                               ]),
