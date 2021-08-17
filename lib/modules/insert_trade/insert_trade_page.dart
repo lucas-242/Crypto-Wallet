@@ -29,17 +29,17 @@ class InsertTradePage extends StatefulWidget {
 class _InsertTradePageState extends State<InsertTradePage> {
   late final InsertTradeBloc bloc;
   late final String uid;
-  late final AppLocalizations appLocalizations;
+  late AppLocalizations appLocalizations;
 
   final priceController =
-      MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.');
+      MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: ',');
   final tradedAmoutController =
-      MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.');
+      MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: ',');
   final cryptoAmountController =
       MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
   final feeController =
       MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
-  final dateController = MaskedTextController(mask: '00/00/0000');
+  final dateController = MaskedTextController(text: 'dd/MM/yyyy', mask: '00/00/0000');
 
   @override
   void initState() {
@@ -56,7 +56,6 @@ class _InsertTradePageState extends State<InsertTradePage> {
     super.didChangeDependencies();
     appLocalizations = AppLocalizations.of(context)!;
   }
-
 
   @override
   void dispose() {
@@ -100,12 +99,18 @@ class _InsertTradePageState extends State<InsertTradePage> {
                     children: [
                       Row(
                         children: [
-                          Text('Operation Type:'),
+                          Text('${appLocalizations.operationType}:'),
                           SizedBox(width: 30),
                           Expanded(
                             child: CustomDropdownButton(
                               value: bloc.trade.operationType,
-                              items: TradeType.list,
+                              items: TradeType.list
+                                  .map((e) => DropdownItem(
+                                      value: e,
+                                      text: e == TradeType.buy
+                                          ? appLocalizations.buy
+                                          : appLocalizations.sell))
+                                  .toList(),
                               onChanged: (value) {
                                 bloc.onChange(operationType: value);
                                 setState(() {});
@@ -122,7 +127,9 @@ class _InsertTradePageState extends State<InsertTradePage> {
                           Expanded(
                             child: CustomDropdownButton(
                               value: bloc.trade.crypto,
-                              items: Cryptos.list,
+                              items: Cryptos.list
+                                  .map((e) => DropdownItem(value: e))
+                                  .toList(),
                               onChanged: (value) {
                                 bloc.onChange(crypto: value);
                                 setState(() {});
@@ -133,7 +140,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       ),
                       SizedBox(height: 15),
                       CustomTextFormField(
-                        labelText: 'Crypto amount',
+                        labelText: appLocalizations.cryptoAmount,
                         icon: Icons.account_balance_wallet_outlined,
                         keyboardType: TextInputType.number,
                         controller: cryptoAmountController,
@@ -143,7 +150,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       ),
                       SizedBox(height: 10),
                       CustomTextFormField(
-                        labelText: 'Invested amount',
+                        labelText: appLocalizations.investedAmount,
                         icon: Icons.savings_outlined,
                         keyboardType: TextInputType.number,
                         controller: tradedAmoutController,
@@ -153,7 +160,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       ),
                       SizedBox(height: 10),
                       CustomTextFormField(
-                        labelText: 'Trade Price',
+                        labelText: appLocalizations.tradePrice,
                         icon: Icons.attach_money_outlined,
                         keyboardType: TextInputType.number,
                         controller: priceController,
@@ -163,7 +170,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       ),
                       SizedBox(height: 10),
                       CustomTextFormField(
-                        labelText: 'Date',
+                        labelText: appLocalizations.date,
                         icon: Icons.calendar_today,
                         keyboardType: TextInputType.datetime,
                         controller: dateController,
@@ -172,7 +179,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       ),
                       SizedBox(height: 10),
                       CustomTextFormField(
-                        labelText: 'Fee',
+                        labelText: appLocalizations.fee,
                         icon: Icons.money_off_sharp,
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.done,
@@ -192,8 +199,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
         builder: (context, status, child) {
           if (status.statusPage != StatusPage.loading) {
             return BottomButtons(
-                fisrtLabel: 'Cancel',
-                secondLabel: 'Save',
+                fisrtLabel: appLocalizations.cancel,
+                secondLabel: appLocalizations.save,
                 firstButtonStyle: AppTextStyles.buttonGrey,
                 secondButtonStyle: AppTextStyles.buttonPrimary,
                 onPressedFirst: () => Navigator.of(context).pop(),

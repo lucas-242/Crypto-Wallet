@@ -7,11 +7,19 @@
   "@buy": {
     "description": "Test"
   },
-  "crypto": "crypto",
-  "@crypto": {
-    "description": "Test"
+  "cancel": "Cancel",
+  "@cancel": {
+      "description": "Test"
   },
-  "date": "date",
+  "crypto": "Crypto",
+  "@crypto": {
+      "description": "Test"
+  },
+  "cryptoAmount": "Crypto amount",
+  "@cryptoAmount": {
+      "description": "Test"
+  },
+  "date": "Date",
   "@date": {
     "description": "Test"
   },
@@ -23,9 +31,13 @@
   "@invested": {
     "description": "Test"
   },
+  "investedAmount": "Invested amount",
+  "@investedAmount": {
+      "description": "Test"
+  },
   "operationType": "Operation Type",
-  "@operation": {
-    "description": "Test"
+  "@operationType": {
+      "description": "Test"
   },
   "price": "price",
   "@price": {
@@ -37,7 +49,11 @@
   },
   "registerTrade": "Register Trade",
   "@registerTrade": {
-    "description": "Test"
+      "description": "Test"
+  },
+  "save": "Save",
+  "@save": {
+      "description": "Test"
   },
   "sell": "sell",
   "@sell": {
@@ -46,6 +62,10 @@
   "total": "total",
   "@total": {
     "description": "Test"
+  },
+  "tradePrice": "Trade price",
+  "@tradePrice": {
+      "description": "Test"
   },
   "wallet": "Wallet",
   "@wallet": {
