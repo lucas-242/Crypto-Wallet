@@ -1,0 +1,54 @@
+{
+  "amount": "amount",
+  "@amount": {
+    "description": "Test"
+  },
+  "buy": "buy",
+  "@buy": {
+    "description": "Test"
+  },
+  "crypto": "crypto",
+  "@crypto": {
+    "description": "Test"
+  },
+  "date": "date",
+  "@date": {
+    "description": "Test"
+  },
+  "fee": "fee",
+  "@fee": {
+    "description": "Test"
+  },
+  "invested": "invested",
+  "@invested": {
+    "description": "Test"
+  },
+  "operationType": "Operation Type",
+  "@operation": {
+    "description": "Test"
+  },
+  "price": "price",
+  "@price": {
+    "description": "Test"
+  },
+  "register": "register",
+  "@register": {
+    "description": "Test"
+  },
+  "registerTrade": "Register Trade",
+  "@registerTrade": {
+    "description": "Test"
+  },
+  "sell": "sell",
+  "@sell": {
+    "description": "Test"
+  },
+  "total": "total",
+  "@total": {
+    "description": "Test"
+  },
+  "wallet": "Wallet",
+  "@wallet": {
+    "description": "Test"
+  }
+}

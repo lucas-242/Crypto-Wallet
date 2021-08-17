@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '/modules/trades/trades.dart';
 
@@ -28,6 +29,7 @@ class InsertTradePage extends StatefulWidget {
 class _InsertTradePageState extends State<InsertTradePage> {
   late final InsertTradeBloc bloc;
   late final String uid;
+  late final AppLocalizations appLocalizations;
 
   final priceController =
       MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: '.');
@@ -50,6 +52,13 @@ class _InsertTradePageState extends State<InsertTradePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appLocalizations = AppLocalizations.of(context)!;
+  }
+
+
+  @override
   void dispose() {
     bloc.dispose();
     super.dispose();
@@ -67,7 +76,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Register Trade',
+        title: appLocalizations.registerTrade,
         leading: BackButton(color: AppColors.primary),
       ),
       backgroundColor: AppColors.background,
@@ -108,7 +117,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       SizedBox(height: 10),
                       Row(
                         children: [
-                          Text('Crypto:'),
+                          Text('${appLocalizations.crypto}:'),
                           SizedBox(width: 30),
                           Expanded(
                             child: CustomDropdownButton(

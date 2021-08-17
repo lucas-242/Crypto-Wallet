@@ -1,0 +1,15 @@
+{
+  "amount": "total",
+  "buy": "compra",
+  "crypto": "crypto",
+  "date": "date",
+  "fee": "fee",
+  "invested": "investido",
+  "operationType": "Tipo de Operação",
+  "price": "preço",
+  "register": "registrar",
+  "registerTrade": "Registrar Trade",
+  "sell": "venda",
+  "total": "total",
+  "wallet": "carteira"
+}

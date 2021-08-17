@@ -6,6 +6,7 @@ import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class WalletPage extends StatefulWidget {
 class _WalletPageState extends State<WalletPage> {
   late final Auth auth;
   late final WalletBloc bloc;
+  late final AppLocalizations appLocalizations;
 
   @override
   void initState() {
@@ -27,9 +29,15 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appLocalizations = AppLocalizations.of(context)!;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Wallet'),
+      appBar: CustomAppBar(title: appLocalizations.wallet),
       backgroundColor: AppColors.background,
       body: Padding(
         padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 5),
@@ -57,8 +65,7 @@ class _WalletPageState extends State<WalletPage> {
                 } else {
                   return Expanded(
                     child: RefreshIndicator(
-                      onRefresh: () =>
-                          bloc.getCryptos(auth.user!.uid),
+                      onRefresh: () => bloc.getCryptos(auth.user!.uid),
                       child: ListView.builder(
                           itemCount: bloc.cryptos.length,
                           itemBuilder: (context, index) {
