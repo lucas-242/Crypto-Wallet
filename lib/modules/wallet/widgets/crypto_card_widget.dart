@@ -25,6 +25,7 @@ class _CryptoCardState extends State<CryptoCard> {
     appLocalizations = AppLocalizations.of(context)!;
   }
 
+  //TODO: Remove the card to keep the constance in the layout
   @override
   Widget build(BuildContext context) {
     return InkWell(

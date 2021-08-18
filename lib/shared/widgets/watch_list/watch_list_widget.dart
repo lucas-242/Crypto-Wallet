@@ -84,8 +84,8 @@ class WatchList extends StatelessWidget {
                                   ? Icons.arrow_downward
                                   : Icons.arrow_upward,
                               color: cryptoPercentage.isNegative
-                                  ? AppColors.red
-                                  : AppColors.secondary,
+                                  ? AppColors.grey
+                                  : AppColors.primary,
                               size: 15,
                             ),
                           ],

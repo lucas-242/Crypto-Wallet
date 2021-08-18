@@ -39,7 +39,6 @@ dependencies:
   shared_preferences: ^2.0.6
   google_mobile_ads: ^0.13.3
   cupertino_icons: ^1.0.2
-  flutter_launcher_icons: ^0.9.1
 
 dev_dependencies:
   flutter_test:

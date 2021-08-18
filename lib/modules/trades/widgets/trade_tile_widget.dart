@@ -38,7 +38,7 @@ class TradeTile extends StatelessWidget {
                           : appLocalizations.sell)!,
                   rightTextStyle: trade.operationType == TradeType.buy
                       ? AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.secondary)
+                          .copyWith(color: AppColors.primary)
                       : AppTextStyles.captionBoldBody
                           .copyWith(color: AppColors.grey),
                 ),

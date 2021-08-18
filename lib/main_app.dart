@@ -43,9 +43,9 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Crypto Wallet',
         theme: ThemeData(
-            primaryColor: AppColors.primary,
-            primarySwatch:
-                MaterialColor(0xFF3D30BB, AppColors.primaryMaterial)),
+          primaryColor: AppColors.primary,
+          primarySwatch: AppColors.primarySwatch,
+        ),
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.splash,
         routes: {

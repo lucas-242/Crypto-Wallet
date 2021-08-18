@@ -32,8 +32,8 @@ class TotalWalletCard extends StatelessWidget {
                       ? Icons.arrow_downward
                       : Icons.arrow_upward,
                   color: dashboardData.variation.isNegative
-                      ? AppColors.red
-                      : AppColors.secondary),
+                      ? AppColors.grey
+                      : AppColors.primary),
             ],
           )
         ],
