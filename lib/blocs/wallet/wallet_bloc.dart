@@ -51,7 +51,7 @@ class WalletBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-   Future<List<CryptoModel>> getCryptosMarketData(
+  Future<List<CryptoModel>> getCryptosMarketData(
       List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
 
@@ -163,26 +163,20 @@ class WalletBloc extends ChangeNotifier {
     );
   }
 
-  //TODO: Fix chart colors to generate the list with the correct length
   List<Color> get chartColors {
-    return [
-      AppColors.primary,
-      AppColors.secondary,
-      AppColors.tertiary,
-      AppColors.grey,
-      AppColors.primary,
-      AppColors.secondary,
-      AppColors.tertiary,
-      AppColors.grey,
-      AppColors.primary,
-      AppColors.secondary,
-      AppColors.tertiary,
-      AppColors.grey,
-      AppColors.primary,
-      AppColors.secondary,
-      AppColors.tertiary,
-      AppColors.grey,
-    ];
+    Color? lastColor;
+    return List.generate(cryptos.length, (index) {
+      if (lastColor == AppColors.primary)
+        lastColor = AppColors.secondary;
+      else if (lastColor == AppColors.secondary)
+        lastColor = AppColors.tertiary;
+      else if (lastColor == AppColors.tertiary)
+        lastColor = AppColors.grey;
+      else
+        lastColor = AppColors.primary;
+
+      return lastColor!;
+    });
   }
 
   void eraseData() {
