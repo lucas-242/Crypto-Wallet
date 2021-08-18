@@ -4,6 +4,7 @@ import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/social_login_button/social_login_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,13 +14,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late AppLocalizations appLocalizations;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appLocalizations = AppLocalizations.of(context)!;
+  }
+
   void _login() {
     context.read<Auth>().signInWithGoogle().then((value) {
       if (value) Navigator.of(context).pushReplacementNamed(AppRoutes.app);
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         getAppSnackBar(
-            message: 'Error trying to login',
+            message: appLocalizations.errorLogin,
             type: SnackBarType.error,
             onClose: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
       );
@@ -59,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: EdgeInsets.only(top: 100, left: 70, right: 70),
                     child: Text(
-                      'See all your cryptos in an unique place',
+                      appLocalizations.logo,
                       textAlign: TextAlign.center,
                       style: AppTextStyles.titleBoldGrey,
                     ),

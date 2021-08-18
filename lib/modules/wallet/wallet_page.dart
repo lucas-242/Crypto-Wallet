@@ -18,7 +18,7 @@ class WalletPage extends StatefulWidget {
 class _WalletPageState extends State<WalletPage> {
   late final Auth auth;
   late final WalletBloc bloc;
-  late final AppLocalizations appLocalizations;
+  late AppLocalizations appLocalizations;
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _WalletPageState extends State<WalletPage> {
                 } else if (status.statusPage == StatusPage.noData) {
                   return Container(
                     height: SizeConfig.height * 0.7,
-                    child: Center(child: Text('No cryptos in the wallet')),
+                    child: Center(child: Text(appLocalizations.noCryptos)),
                   );
                 } else {
                   return Expanded(

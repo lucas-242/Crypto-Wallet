@@ -1,5 +1,6 @@
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SocialLoginButton extends StatelessWidget {
   final VoidCallback? onTap;
@@ -7,6 +8,7 @@ class SocialLoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -39,7 +41,7 @@ class SocialLoginButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Entrar com Google',
+                    appLocalizations.googleButton,
                     style: AppTextStyles.buttonGrey,
                   ),
                 ],

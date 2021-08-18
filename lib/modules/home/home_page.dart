@@ -9,6 +9,7 @@ import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final WalletBloc bloc;
   late final Auth auth;
+  late AppLocalizations appLocalizations;
 
   @override
   void initState() {
@@ -27,6 +29,12 @@ class _HomePageState extends State<HomePage> {
     bloc = context.read<WalletBloc>();
     bloc.getCryptos(auth.user!.uid);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appLocalizations = AppLocalizations.of(context)!;
   }
 
   void _logout() {
@@ -51,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Dashboard',
+        title: appLocalizations.dashboard,
         actions: [
           IconButton(
             onPressed: () => _logout(),
@@ -74,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                   return Container(
                     height: SizeConfig.height * 0.7,
                     child: Center(
-                      child: Text('There is no data on your wallet yet'),
+                      child: Text(appLocalizations.noData),
                     ),
                   );
                 }

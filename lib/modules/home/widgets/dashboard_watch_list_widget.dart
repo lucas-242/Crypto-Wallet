@@ -2,6 +2,7 @@ import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/watch_list/watch_list_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardWatchList extends StatelessWidget {
   final List<CryptoModel> cryptos;
@@ -9,6 +10,8 @@ class DashboardWatchList extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return Padding(
       padding: EdgeInsets.only(top: 25),
       child: Container(
@@ -26,7 +29,7 @@ class DashboardWatchList extends StatelessWidget {
                   Tab(text: '24h'),
                   Tab(text: '7d'),
                   Tab(text: '30d'),
-                  Tab(text: '1y'),
+                  Tab(text: appLocalizations.oneYear),
                 ],
               ),
               Expanded(
