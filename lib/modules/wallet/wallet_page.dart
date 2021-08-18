@@ -19,6 +19,7 @@ class _WalletPageState extends State<WalletPage> {
   late final Auth auth;
   late final WalletBloc bloc;
   late AppLocalizations appLocalizations;
+  int? openedIndex;
 
   @override
   void initState() {
@@ -67,10 +68,17 @@ class _WalletPageState extends State<WalletPage> {
                     child: RefreshIndicator(
                       onRefresh: () => bloc.getCryptos(auth.user!.uid),
                       child: ListView.builder(
-                          itemCount: bloc.cryptos.length,
-                          itemBuilder: (context, index) {
-                            return CryptoCard(crypto: bloc.cryptos[index]);
-                          }),
+                        itemCount: bloc.cryptos.length,
+                        itemBuilder: (context, index) {
+                          return CryptoCard(
+                            crypto: bloc.cryptos[index],
+                            openedIndex: openedIndex,
+                            index: index,
+                            onTap: (int? tappedIndex) =>
+                                setState(() => openedIndex = tappedIndex),
+                          );
+                        },
+                      ),
                     ),
                   );
                 }

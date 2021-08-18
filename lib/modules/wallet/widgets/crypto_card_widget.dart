@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
+import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
 import 'package:crypto_wallet/shared/themes/size_config.dart';
 import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
@@ -8,14 +9,22 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CryptoCard extends StatefulWidget {
   final CryptoModel crypto;
-  const CryptoCard({Key? key, required this.crypto}) : super(key: key);
+  final int index;
+  final int? openedIndex;
+  final Function(int?) onTap;
+  const CryptoCard({
+    Key? key,
+    required this.crypto,
+    required this.index,
+    this.openedIndex,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _CryptoCardState createState() => _CryptoCardState();
 }
 
 class _CryptoCardState extends State<CryptoCard> {
-  bool isOpen = false;
   double height = SizeConfig.height * 0.22;
   late AppLocalizations appLocalizations;
 
@@ -25,17 +34,27 @@ class _CryptoCardState extends State<CryptoCard> {
     appLocalizations = AppLocalizations.of(context)!;
   }
 
-  //TODO: Remove the card to keep the constance in the layout
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => setState(() => isOpen = !isOpen),
-      child: Card(
-        elevation: 3,
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Container(
-            width: double.infinity,
+      onTap: () => widget
+          .onTap(widget.openedIndex == widget.index ? null : widget.index),
+      child: AnimatedContainer(
+        duration: Duration(seconds: 0),
+        width: double.infinity,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: widget.openedIndex == widget.index
+                ? Colors.grey[100]
+                : AppColors.background,
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                bottom: widget.openedIndex == widget.index ? 20 : 0,
+                left: 20,
+                right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -51,7 +70,7 @@ class _CryptoCardState extends State<CryptoCard> {
                               text:
                                   toBeginningOfSentenceCase(widget.crypto.name),
                               children: [
-                                TextSpan(text: ' . ${widget.crypto.crypto}')
+                                TextSpan(text: ' (${widget.crypto.crypto})')
                               ]),
                           style: AppTextStyles.cryptoTitleBold
                               .copyWith(fontSize: 15),
@@ -78,13 +97,13 @@ class _CryptoCardState extends State<CryptoCard> {
                 ),
                 AnimatedContainer(
                   duration: Duration(milliseconds: 250),
-                  height: isOpen ? height : 0,
+                  height: widget.openedIndex == widget.index ? height : 0,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(height: 20),
+                        SizedBox(height: 15),
                         Divider(thickness: 1),
-                        SizedBox(height: 10),
+                        SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -156,6 +175,13 @@ class _CryptoCardState extends State<CryptoCard> {
                     ),
                   ),
                 ),
+                widget.openedIndex == widget.index
+                    ? Container()
+                    : SizedBox(height: 20),
+                widget.openedIndex == widget.index ||
+                        widget.openedIndex == widget.index + 1
+                    ? Container()
+                    : Divider(thickness: 1),
               ],
             ),
           ),

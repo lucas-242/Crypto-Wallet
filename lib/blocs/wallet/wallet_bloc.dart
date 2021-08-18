@@ -163,7 +163,7 @@ class WalletBloc extends ChangeNotifier {
     );
   }
 
-  //TODO: Correct chart colors to generate the list with the correct length
+  //TODO: Fix chart colors to generate the list with the correct length
   List<Color> get chartColors {
     return [
       AppColors.primary,
