@@ -1,10 +1,10 @@
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
-import 'package:crypto_wallet/shared/extensions/string_extension.dart';
 import 'package:crypto_wallet/shared/themes/size_config.dart';
 import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CryptoCard extends StatefulWidget {
   final CryptoModel crypto;
@@ -17,6 +17,13 @@ class CryptoCard extends StatefulWidget {
 class _CryptoCardState extends State<CryptoCard> {
   bool isOpen = false;
   double height = SizeConfig.height * 0.22;
+  late AppLocalizations appLocalizations;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appLocalizations = AppLocalizations.of(context)!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +47,8 @@ class _CryptoCardState extends State<CryptoCard> {
                         SizedBox(width: 15),
                         Text.rich(
                           TextSpan(
-                              text: widget.crypto.name.capitalize(),
+                              text:
+                                  toBeginningOfSentenceCase(widget.crypto.name),
                               children: [
                                 TextSpan(text: ' . ${widget.crypto.crypto}')
                               ]),
@@ -80,7 +88,7 @@ class _CryptoCardState extends State<CryptoCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Price',
+                              appLocalizations.price,
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -97,7 +105,7 @@ class _CryptoCardState extends State<CryptoCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Average price',
+                              appLocalizations.averagePrice,
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -114,7 +122,7 @@ class _CryptoCardState extends State<CryptoCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Total Invested',
+                              appLocalizations.totalInvested,
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -131,7 +139,7 @@ class _CryptoCardState extends State<CryptoCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Gain / Loss',
+                              appLocalizations.gainLoss,
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),

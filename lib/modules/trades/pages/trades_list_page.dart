@@ -8,6 +8,7 @@ import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TradesListPage extends StatefulWidget {
   const TradesListPage({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class TradesListPage extends StatefulWidget {
 class _TradesListPageState extends State<TradesListPage> {
   final uid = FirebaseAuth.instance.currentUser!.uid;
   late final TradesBloc bloc;
+  late AppLocalizations appLocalizations;
 
   @override
   void initState() {
@@ -28,10 +30,16 @@ class _TradesListPageState extends State<TradesListPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appLocalizations = AppLocalizations.of(context)!;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Trades',
+        title: appLocalizations.trades,
         actions: [
           TextButton(
             onPressed: () =>
@@ -62,7 +70,7 @@ class _TradesListPageState extends State<TradesListPage> {
                 } else if (status.statusPage == StatusPage.noData) {
                   return Container(
                     height: SizeConfig.height * 0.7,
-                    child: Center(child: Text('No trades in the wallet')),
+                    child: Center(child: Text(appLocalizations.noTrades)),
                   );
                 } else {
                   return Expanded(

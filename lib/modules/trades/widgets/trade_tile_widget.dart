@@ -4,6 +4,7 @@ import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/trade_details_row_widget.dart';
 
 class TradeTile extends StatelessWidget {
@@ -15,6 +16,8 @@ class TradeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
@@ -28,8 +31,11 @@ class TradeTile extends StatelessWidget {
               children: [
                 TradeDetailsRow(
                   leftText: trade.crypto,
-                  leftTextStyle: AppTextStyles.captionBoldBody.copyWith(color: AppColors.primary),
-                  rightText: toBeginningOfSentenceCase(trade.operationType)!,
+                  leftTextStyle: AppTextStyles.captionBoldBody
+                      .copyWith(color: AppColors.primary),
+                  rightText: toBeginningOfSentenceCase(trade.operationType == TradeType.buy
+                          ? appLocalizations.buy
+                          : appLocalizations.sell)!,
                   rightTextStyle: trade.operationType == TradeType.buy
                       ? AppTextStyles.captionBoldBody
                           .copyWith(color: AppColors.secondary)
@@ -38,12 +44,12 @@ class TradeTile extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 TradeDetailsRow(
-                  leftText: 'Amount',
+                  leftText: appLocalizations.amount,
                   rightText: trade.amount.toStringAsFixed(8),
                 ),
                 SizedBox(height: 5),
                 TradeDetailsRow(
-                  leftText: 'Price',
+                  leftText: appLocalizations.price,
                   rightText:
                       NumberFormat.currency(symbol: '\$').format(trade.price),
                 ),
@@ -56,7 +62,7 @@ class TradeTile extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: 15),
           child: IconSlideAction(
-            caption: 'Delete',
+            caption: appLocalizations.delete,
             icon: Icons.close,
             onTap: () => onDelete!(trade),
             foregroundColor: AppColors.text,

@@ -3,6 +3,7 @@ import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'blocs/wallet/wallet.dart';
 import 'modules/app/app.dart';
@@ -56,6 +57,8 @@ class MainApp extends StatelessWidget {
                 walletRepository: walletRepository,
               ),
         },
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
   }

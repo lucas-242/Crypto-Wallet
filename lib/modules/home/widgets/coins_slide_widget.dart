@@ -1,10 +1,10 @@
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
-import 'package:crypto_wallet/shared/extensions/string_extension.dart';
 import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CoinsSlide extends StatelessWidget {
   final DashboardModel dashboardData;
@@ -12,12 +12,14 @@ class CoinsSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 20),
         Text(
-          'In your wallet',
+          appLocalizations.inYourWallet,
           style: AppTextStyles.titleRegular,
         ),
         SizedBox(height: 15),
@@ -51,7 +53,7 @@ class CoinsSlide extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        '${cryptoSummary.crypto} - ${cryptoSummary.name.capitalize()}',
+                                        '${cryptoSummary.crypto} - ${toBeginningOfSentenceCase(cryptoSummary.name)}',
                                         style: AppTextStyles
                                             .captionBodyBackground),
                                     SizedBox(height: 5),
