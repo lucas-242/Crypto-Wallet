@@ -29,6 +29,7 @@ dependencies:
   flutter_masked_text2: ^0.9.1
   flutter_slidable: ^0.6.0
   fl_chart: ^0.36.2
+  dropdown_search: ^0.6.3
   intl: ^0.17.0
   provider: ^5.0.0
   http: ^0.13.3

@@ -5,8 +5,10 @@ import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
+import 'package:crypto_wallet/shared/widgets/custom_dropdown_button/custom_dropdown_button_widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'insert_trade_status.dart';
 
@@ -22,16 +24,24 @@ class InsertTradeBloc extends ChangeNotifier {
 
   final statusNotifier = ValueNotifier<InsertTradeStatus>(InsertTradeStatus());
 
+  late AppLocalizations appLocalizations;
+
   InsertTradeStatus get status => statusNotifier.value;
   set status(InsertTradeStatus status) => statusNotifier.value = status;
 
   InsertTradeBloc({required WalletRepository walletRepository})
       : _walletRepository = walletRepository;
 
+  String? validateCrypto(DropdownItem? value) {
+    return value == null
+        ? appLocalizations.errorFieldNull
+        : null;
+  }
+
   String? validateCryptoAmount(String? value) {
     return value == null ||
             double.parse(value.replaceAll(RegExp(','), '.')) == 0
-        ? "The amount can't be null"
+        ? appLocalizations.errorFieldNull
         : null;
   }
 
@@ -43,17 +53,17 @@ class InsertTradeBloc extends ChangeNotifier {
           .replaceAll(RegExp(r'\.'), '')
           .replaceAll(RegExp(','), '.');
 
-      return double.parse(value) < 0 ? "The amount can't be null" : null;
+      return double.parse(value) < 0 ? appLocalizations.errorFieldNull : null;
     }
 
     return null;
   }
 
   String? validateDate(String? value) {
-    return value == null || value.length != 10 ? "Insert a valid date" : null;
+    return value == null || value.length != 10 ? appLocalizations.errorFieldWrongDate : null;
   }
 
-  String? validatePrice(String? value) {
+  String? validateTradePrice(String? value) {
     if (value != null) {
       //Remove $, . from the middle of the number and change , to .
       value = value
@@ -62,7 +72,7 @@ class InsertTradeBloc extends ChangeNotifier {
           .replaceAll(RegExp(','), '.');
 
       return double.parse(value) < 0
-          ? "The trade must be equals or greater than \$0,00"
+          ? appLocalizations.errorFieldTradePrice
           : null;
     }
 
@@ -106,7 +116,7 @@ class InsertTradeBloc extends ChangeNotifier {
   }) async {
     final form = formKey.currentState;
 
-    if (!form!.validate()) return;
+    if (!form!.validate()) throw Exception('Invalid form');
 
     status = InsertTradeStatus.loading();
 

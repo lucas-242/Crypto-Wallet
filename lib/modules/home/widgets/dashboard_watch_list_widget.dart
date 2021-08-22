@@ -15,7 +15,7 @@ class DashboardWatchList extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: 25),
       child: Container(
-        height: SizeConfig.height * 0.3,
+        height: SizeConfig.height * 0.33,
         child: DefaultTabController(
           length: 4,
           initialIndex: 0,

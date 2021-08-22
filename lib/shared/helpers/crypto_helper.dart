@@ -57,7 +57,8 @@ import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 
 abstract class CryptoHelper {
-  static List<String> getCoinApiNamesFromList(List<CryptoModel> coins) {
+  ///Get a list of api ids from the [coins] list o CryptoModel
+  static List<String> getCoinApiIdsFromList(List<CryptoModel> coins) {
     var apiCoins = Cryptos.list
         .where((element) => Cryptos.list.contains(coins.map((e) => e.crypto)))
         .toList();

@@ -39,6 +39,9 @@
   "@date": {
     "description": ""
   },
+  "errorFieldNull": "This field can't be null",
+  "errorFieldWrongDate": "Insert a valid date",
+  "errorFieldTradePrice": "The trade must be equals or greater than $0,00",
   "errorLogin": "Error trying to login",
   "@errorLogin": {
     "description": ""
@@ -55,6 +58,10 @@
   "@googleButton": {
     "description": ""
   },
+  "hintFieldCrypto": "Select a crypto", 
+  "hintFieldDate": "dd/MM/yyyy", 
+  "hintFieldOperationType": "Select the operation type", 
+  "hintTrade": "Note: For now we only use dollars for operations. Pay attention to filling in the fields.", 
   "logo": "See all your cryptos in one place",
   "@logo": {
     "description": ""

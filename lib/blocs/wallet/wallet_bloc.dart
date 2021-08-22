@@ -37,7 +37,7 @@ class WalletBloc extends ChangeNotifier {
     await _walletRepository.getAllCryptos(uid).then((result) async {
       if (result.isNotEmpty) {
         cryptos = await getCryptosMarketData(result);
-        setDashboardData();
+        setWalletData();
       }
     }).catchError((error) {
       status = WalletStatus.error(error.toString());
@@ -58,11 +58,11 @@ class WalletBloc extends ChangeNotifier {
     var result = <CryptoModel>[];
 
     return await _coinRepository
-        .getMarketData(coins: CryptoHelper.getCoinApiNamesFromList(coins))
+        .getMarketData(coins: CryptoHelper.getCoinApiIdsFromList(coins))
         .then((response) {
       coins.forEach((coin) {
         response.any((element) {
-          if (element.id == coin.name) {
+          if (Cryptos.apiIds[coin.crypto] == element.id) {
             var price = element.currentPrice;
 
             var history = new CryptoHistory(
@@ -94,29 +94,29 @@ class WalletBloc extends ChangeNotifier {
     });
   }
 
-  Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
-    var result = <CryptoModel>[];
-    return await _coinRepository
-        .getPrices(coins: CryptoHelper.getCoinApiNamesFromList(coins))
-        .then((response) {
-      coins.forEach((coin) {
-        var price = double.parse(response[coin.name]['usd'].toString());
-        result.add(coin.copyWith(price: price));
-      });
+  // Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
+  //   var result = <CryptoModel>[];
+  //   return await _coinRepository
+  //       .getPrices(coins: CryptoHelper.getCoinApiNamesFromList(coins))
+  //       .then((response) {
+  //     coins.forEach((coin) {
+  //       var price = double.parse(response[coin.name]['usd'].toString());
+  //       result.add(coin.copyWith(price: price));
+  //     });
 
-      return result;
-    });
-  }
+  //     return result;
+  //   });
+  // }
 
-  /// Init a timer to refresh crypto prices
-  void setTimerToGetPrices() {
-    Timer.periodic(Duration(seconds: 60), (timer) async {
-      var result = await getCryptosPrice(cryptos);
-      if (result.isNotEmpty) cryptos = result;
-      print('refreshed');
-      notifyListeners();
-    });
-  }
+  // /// Init a timer to refresh crypto prices
+  // void setTimerToGetPrices() {
+  //   Timer.periodic(Duration(seconds: 60), (timer) async {
+  //     var result = await getCryptosPrice(cryptos);
+  //     if (result.isNotEmpty) cryptos = result;
+  //     print('refreshed');
+  //     notifyListeners();
+  //   });
+  // }
 
   void updateCrypto(CryptoModel model) {
     var index = cryptos.indexWhere((element) => element.crypto == model.crypto);
@@ -130,7 +130,7 @@ class WalletBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setDashboardData() {
+  void setWalletData() {
     double totalNow = cryptos
         .map((e) => e.totalNow)
         .fold(0, (previousValue, element) => previousValue + element);
@@ -170,21 +170,21 @@ class WalletBloc extends ChangeNotifier {
     );
   }
 
-  List<Color> get chartColors {
-    Color? lastColor;
-    return List.generate(cryptos.length, (index) {
-      if (lastColor == AppColors.primary)
-        lastColor = AppColors.secondary;
-      else if (lastColor == AppColors.secondary)
-        lastColor = AppColors.tertiary;
-      else if (lastColor == AppColors.tertiary)
-        lastColor = AppColors.grey;
-      else
-        lastColor = AppColors.primary;
+  // List<Color> get chartColors {
+  //   Color? lastColor;
+  //   return List.generate(cryptos.length, (index) {
+  //     if (lastColor == AppColors.primary)
+  //       lastColor = AppColors.secondary;
+  //     else if (lastColor == AppColors.secondary)
+  //       lastColor = AppColors.tertiary;
+  //     else if (lastColor == AppColors.tertiary)
+  //       lastColor = AppColors.grey;
+  //     else
+  //       lastColor = AppColors.primary;
 
-      return lastColor!;
-    });
-  }
+  //     return lastColor!;
+  //   });
+  // }
 
   void eraseData() {
     cryptos = [];

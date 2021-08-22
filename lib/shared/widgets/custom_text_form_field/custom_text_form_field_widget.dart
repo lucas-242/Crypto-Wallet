@@ -5,6 +5,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final String labelText;
+  final String hintText;
   final IconData icon;
   final String? initialValue;
   final String? Function(String?)? validator;
@@ -17,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
     this.textInputAction = TextInputAction.next,
     required this.labelText,
     required this.icon,
+    this.hintText = '',
     this.initialValue,
     this.validator,
     this.controller,
@@ -38,29 +40,18 @@ class CustomTextFormField extends StatelessWidget {
             onChanged: onChanged,
             style: AppTextStyles.input,
             decoration: InputDecoration(
-                labelText: labelText,
-                labelStyle: AppTextStyles.input,
-                contentPadding: EdgeInsets.zero,
-                border: InputBorder.none,
-                icon: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 18),
-                      child: Icon(icon, color: AppColors.primary),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 48,
-                      color: AppColors.stroke,
-                    )
-                  ],
-                )),
-          ),
-          Divider(
-            color: AppColors.stroke,
-            height: 1,
-            thickness: 1,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              labelText: labelText,
+              // labelStyle: AppTextStyles.input,
+              hintText: hintText,
+              hintStyle: AppTextStyles.input,
+              contentPadding: EdgeInsets.zero,
+              border: OutlineInputBorder(),
+              prefixIcon: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18),
+                child: Icon(icon, color: AppColors.primary),
+              ),
+            ),
           ),
         ],
       ),
