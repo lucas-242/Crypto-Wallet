@@ -7,7 +7,7 @@ import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/models/dashboard_model.dart';
+import 'package:crypto_wallet/shared/models/wallet_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,7 +19,7 @@ class WalletBloc extends ChangeNotifier {
 
   List<CryptoModel> cryptos = [];
 
-  DashboardModel dashboardData = new DashboardModel();
+  WalletModel walletData = new WalletModel();
 
   final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
   WalletStatus get status => statusNotifier.value;
@@ -131,14 +131,17 @@ class WalletBloc extends ChangeNotifier {
   }
 
   void setDashboardData() {
-    double total = cryptos
+    double totalNow = cryptos
         .map((e) => e.totalNow)
+        .fold(0, (previousValue, element) => previousValue + element);
+    double totalInvested = cryptos
+        .map((e) => e.totalInvested)
         .fold(0, (previousValue, element) => previousValue + element);
     double variation = cryptos
         .map((e) => e.gainLoss)
         .fold(0, (previousValue, element) => previousValue + element);
 
-    double percentVariation = (variation.abs() * 100) / total;
+    double percentVariation = (variation.abs() * 100) / totalNow;
 
     List<CryptoSummary> cryptosSummary = [];
     var sortedCryptos = cryptos;
@@ -150,7 +153,7 @@ class WalletBloc extends ChangeNotifier {
         crypto: crypto.crypto,
         value: crypto.totalNow,
         amount: crypto.amount,
-        percent: (crypto.totalNow * 100) / total,
+        percent: (crypto.totalNow * 100) / totalNow,
         // color: chartColors[colorIndex],
         color: Color(Cryptos.colors[crypto.crypto] ?? AppColors.grey.value),
         image: crypto.image,
@@ -158,8 +161,9 @@ class WalletBloc extends ChangeNotifier {
       // colorIndex++;
     });
 
-    dashboardData = dashboardData.copyWith(
-      total: total,
+    walletData = walletData.copyWith(
+      totalNow: totalNow,
+      totalInvested: totalInvested,
       variation: variation,
       percentVariation: percentVariation,
       cryptosSummary: cryptosSummary,
@@ -184,7 +188,7 @@ class WalletBloc extends ChangeNotifier {
 
   void eraseData() {
     cryptos = [];
-    dashboardData = new DashboardModel();
+    walletData = new WalletModel();
     notifyListeners();
   }
 }

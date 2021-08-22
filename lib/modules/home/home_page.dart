@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.only(left: 25, right: 25, top: 25),
+            padding: EdgeInsets.only(left: 25, right: 25, bottom: 5),
             child: ValueListenableBuilder<WalletStatus>(
               valueListenable: bloc.statusNotifier,
               builder: (context, status, child) {
@@ -99,8 +99,8 @@ class _HomePageState extends State<HomePage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TotalWalletCard(dashboardData: bloc.dashboardData),
-                    CoinsSlide(dashboardData: bloc.dashboardData),
+                    TotalWalletCard(walletData: bloc.walletData),
+                    CoinsSlide(walletdData: bloc.walletData),
                     // DonutChart(
                     //   data: bloc.dashboardData.cryptosSummary
                     //       .asMap()

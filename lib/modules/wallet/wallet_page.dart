@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
+import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
@@ -41,30 +42,35 @@ class _WalletPageState extends State<WalletPage> {
       appBar: CustomAppBar(title: appLocalizations.wallet),
       backgroundColor: AppColors.background,
       body: Padding(
-        padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ValueListenableBuilder<WalletStatus>(
-              valueListenable: bloc.statusNotifier,
-              builder: (context, status, child) {
-                if (status.statusPage == StatusPage.loading) {
-                  return Container(
-                    height: SizeConfig.height * 0.7,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                } else if (status.statusPage == StatusPage.error) {
-                  return Container(
-                    height: SizeConfig.height * 0.7,
-                    child: Center(child: Text(status.error)),
-                  );
-                } else if (status.statusPage == StatusPage.noData) {
-                  return Container(
-                    height: SizeConfig.height * 0.7,
-                    child: Center(child: Text(appLocalizations.noCryptos)),
-                  );
-                } else {
-                  return Expanded(
+        padding: EdgeInsets.only(left: 25, right: 25, bottom: 5),
+        child: ValueListenableBuilder<WalletStatus>(
+          valueListenable: bloc.statusNotifier,
+          builder: (context, status, child) {
+            if (status.statusPage == StatusPage.loading) {
+              return Container(
+                height: SizeConfig.height * 0.7,
+                child: Center(child: CircularProgressIndicator()),
+              );
+            } else if (status.statusPage == StatusPage.error) {
+              return Container(
+                height: SizeConfig.height * 0.7,
+                child: Center(child: Text(status.error)),
+              );
+            } else if (status.statusPage == StatusPage.noData) {
+              return Container(
+                height: SizeConfig.height * 0.7,
+                child: Center(child: Text(appLocalizations.noCryptos)),
+              );
+            } else {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //TODO: If this widget will keep here, move it to the shared folder
+                  TotalWalletCard(
+                    walletData: bloc.walletData,
+                    showTotalInvested: true,
+                  ),
+                  Expanded(
                     child: RefreshIndicator(
                       onRefresh: () => bloc.getCryptos(auth.user!.uid),
                       child: ListView.builder(
@@ -80,11 +86,11 @@ class _WalletPageState extends State<WalletPage> {
                         },
                       ),
                     ),
-                  );
-                }
-              },
-            ),
-          ],
+                  ),
+                ],
+              );
+            }
+          },
         ),
       ),
     );

@@ -10,8 +10,11 @@ abstract class AppTextStyles {
     color: AppColors.text,
   );
   static final titleRegular = GoogleFonts.lexendDeca(
-      fontSize: 20, fontWeight: FontWeight.w400, color: AppColors.text);
-  static final titleBoldGrey = GoogleFonts.lexendDeca(
+    fontSize: 20,
+    fontWeight: FontWeight.w400,
+    color: AppColors.text,
+  );
+  static final titleBold = GoogleFonts.lexendDeca(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.text,
