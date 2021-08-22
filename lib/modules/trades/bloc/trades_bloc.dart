@@ -74,7 +74,7 @@ class TradesBloc extends ChangeNotifier {
       return;
     }
 
-    _interstitialAd.show();
+    if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
     var crypto = finded.first;
     var tradesFiltered = trades

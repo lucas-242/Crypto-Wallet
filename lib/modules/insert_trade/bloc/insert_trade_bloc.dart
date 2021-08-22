@@ -120,7 +120,7 @@ class InsertTradeBloc extends ChangeNotifier {
 
     status = InsertTradeStatus.loading();
 
-    _interstitialAd.show();
+    if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
     var cryptos = await _walletRepository.getAllCryptos(uid);
 

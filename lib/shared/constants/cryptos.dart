@@ -1,4 +1,3 @@
-
 abstract class Cryptos {
   static const btc = 'BTC';
   static const eth = 'ETH';

@@ -62,7 +62,8 @@ class WalletBloc extends ChangeNotifier {
         .then((response) {
       coins.forEach((coin) {
         response.any((element) {
-          if (Cryptos.apiIds[coin.crypto] == element.id) {
+          var apiId = Cryptos.apiIds[coin.crypto];
+          if (apiId == element.id) {
             var price = element.currentPrice;
 
             var history = new CryptoHistory(

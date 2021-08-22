@@ -28,8 +28,6 @@ class _TradesDetailsState extends State<TradesDetails> {
   @override
   void initState() {
     bloc = context.read<TradesBloc>();
-    bloc.loadAd();
-
     super.initState();
   }
 
@@ -37,12 +35,6 @@ class _TradesDetailsState extends State<TradesDetails> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     appLocalizations = AppLocalizations.of(context)!;
-  }
-
-  @override
-  void dispose() {
-    bloc.disposeInterstitialAd();
-    super.dispose();
   }
 
   void _deleteTrade() {
@@ -58,7 +50,7 @@ class _TradesDetailsState extends State<TradesDetails> {
       //     message: 'Trade deleted successfully',
       //     type: SnackBarType.success,
       //     onClose: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()));
-      bloc.disposeInterstitialAd();
+      bloc.loadAd();
       Navigator.of(context).pop();
     });
   }
