@@ -1,10 +1,10 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
-import 'package:crypto_wallet/modules/home/home.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
+import 'package:crypto_wallet/shared/widgets/total_wallet_card/total_wallet_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -65,7 +65,6 @@ class _WalletPageState extends State<WalletPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //TODO: If this widget will keep here, move it to the shared folder
                   TotalWalletCard(
                     walletData: bloc.walletData,
                     showTotalInvested: true,

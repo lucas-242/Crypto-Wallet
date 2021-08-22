@@ -1,2 +1,2 @@
 export 'widgets/app_widget.dart';
-export 'app_bloc.dart';
+export 'bloc/app_bloc.dart';

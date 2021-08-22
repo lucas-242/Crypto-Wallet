@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'blocs/wallet/wallet.dart';
 import 'modules/app/app.dart';
 import 'modules/login/login.dart';
-import 'modules/splash/splash_page.dart';
+import 'modules/splash/splash.dart';
 import 'modules/insert_trade/insert_trade.dart';
 import 'modules/trades/trades.dart';
 import 'repositories/coin_repository/coin_repository.dart';
