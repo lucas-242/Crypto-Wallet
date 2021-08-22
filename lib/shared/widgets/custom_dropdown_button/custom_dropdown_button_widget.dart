@@ -20,6 +20,7 @@ class CustomDropdownButton extends StatelessWidget {
             child: Text(item.text),
           );
         }).toList(),
+        isExpanded: true,
       ),
     );
   }

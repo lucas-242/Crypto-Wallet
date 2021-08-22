@@ -65,17 +65,27 @@ class _CryptoCardState extends State<CryptoCard> {
                       children: [
                         ImageFade(image: widget.crypto.image),
                         SizedBox(width: 15),
-                        Text.rich(
-                          TextSpan(
-                              text: '${widget.crypto.crypto} - ',
+                        Container(
+                          width: SizeConfig.width * 0.32,
+                          height: SizeConfig.height * 0.065,
+                          alignment: Alignment.centerLeft,
+                          child: Text.rich(
+                            TextSpan(
+                              text: '${widget.crypto.crypto}',
                               children: [
                                 TextSpan(
-                                  text: toBeginningOfSentenceCase(
-                                      widget.crypto.name),
+                                  text:
+                                      ' - ${toBeginningOfSentenceCase(widget.crypto.name)}',
+                                  style: AppTextStyles.cryptoTitle
+                                      .copyWith(fontSize: 15),
                                 )
-                              ]),
-                          style: AppTextStyles.cryptoTitleBold
-                              .copyWith(fontSize: 15),
+                              ],
+                            ),
+                            style: AppTextStyles.cryptoTitleBold
+                                .copyWith(fontSize: 15),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ],
                     ),

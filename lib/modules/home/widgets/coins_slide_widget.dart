@@ -66,11 +66,9 @@ class CoinsSlide extends StatelessWidget {
                                           ),
                                         ],
                                       ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    // Text(
-                                    //     '${cryptoSummary.crypto} - ${toBeginningOfSentenceCase(cryptoSummary.name)}',
-                                    //     style: AppTextStyles
-                                    //         .captionBodyBackground),
                                     SizedBox(height: 5),
                                     Text(
                                       '${cryptoSummary.amount.toStringAsFixed(8)} ',
