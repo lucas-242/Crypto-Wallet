@@ -67,10 +67,12 @@ class _CryptoCardState extends State<CryptoCard> {
                         SizedBox(width: 15),
                         Text.rich(
                           TextSpan(
-                              text:
-                                  toBeginningOfSentenceCase(widget.crypto.name),
+                              text: '${widget.crypto.crypto} - ',
                               children: [
-                                TextSpan(text: ' (${widget.crypto.crypto})')
+                                TextSpan(
+                                  text: toBeginningOfSentenceCase(
+                                      widget.crypto.name),
+                                )
                               ]),
                           style: AppTextStyles.cryptoTitleBold
                               .copyWith(fontSize: 15),

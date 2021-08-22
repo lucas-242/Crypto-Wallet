@@ -111,9 +111,9 @@ class _TradesDetailsState extends State<TradesDetails> {
                           : appLocalizations.sell)!,
                   rightTextStyle: trade.operationType == TradeType.buy
                       ? AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.primary)
+                          .copyWith(color: AppColors.green)
                       : AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.grey),
+                          .copyWith(color: AppColors.red),
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(

@@ -24,7 +24,7 @@ class DashboardWatchList extends StatelessWidget {
               TabBar(
                 indicatorColor: AppColors.primary,
                 labelColor: AppColors.primary,
-                unselectedLabelColor: AppColors.stroke,
+                unselectedLabelColor: AppColors.grey,
                 tabs: [
                   Tab(text: '24h'),
                   Tab(text: '7d'),

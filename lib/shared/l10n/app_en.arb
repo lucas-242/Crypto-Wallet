@@ -11,7 +11,7 @@
   "@averagePrice": {
     "description": ""
   },
-  "buy": "buy",
+  "buy": "Buy",
   "@buy": {
     "description": ""
   },
@@ -103,7 +103,7 @@
   "@save": {
       "description": ""
   },
-  "sell": "sell",
+  "sell": "Sell",
   "@sell": {
     "description": ""
   },

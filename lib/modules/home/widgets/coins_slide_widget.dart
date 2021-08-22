@@ -52,10 +52,25 @@ class CoinsSlide extends StatelessWidget {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                        '${cryptoSummary.crypto} - ${toBeginningOfSentenceCase(cryptoSummary.name)}',
+                                    Text.rich(
+                                      TextSpan(
+                                        text: cryptoSummary.crypto,
                                         style: AppTextStyles
-                                            .captionBodyBackground),
+                                            .captionBoldBodyBackground,
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                ' - ${toBeginningOfSentenceCase(cryptoSummary.name)}',
+                                            style: AppTextStyles
+                                                .captionBodyBackground,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // Text(
+                                    //     '${cryptoSummary.crypto} - ${toBeginningOfSentenceCase(cryptoSummary.name)}',
+                                    //     style: AppTextStyles
+                                    //         .captionBodyBackground),
                                     SizedBox(height: 5),
                                     Text(
                                       '${cryptoSummary.amount.toStringAsFixed(8)} ',

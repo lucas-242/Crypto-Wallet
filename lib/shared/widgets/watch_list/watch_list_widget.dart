@@ -59,7 +59,7 @@ class WatchList extends StatelessWidget {
                       children: [
                         Text(
                           toBeginningOfSentenceCase(cryptos[index].name)!,
-                          style: AppTextStyles.captionBody,
+                          style: AppTextStyles.captionBoldBody,
                         ),
                         Text(
                           cryptos[index].crypto,
@@ -84,8 +84,8 @@ class WatchList extends StatelessWidget {
                                   ? Icons.arrow_downward
                                   : Icons.arrow_upward,
                               color: cryptoPercentage.isNegative
-                                  ? AppColors.grey
-                                  : AppColors.primary,
+                                  ? AppColors.red
+                                  : AppColors.green,
                               size: 15,
                             ),
                           ],

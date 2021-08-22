@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
+import 'package:crypto_wallet/shared/constants/cryptos.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dashboard_model.dart';
@@ -56,7 +58,7 @@ class WalletBloc extends ChangeNotifier {
     var result = <CryptoModel>[];
 
     return await _coinRepository
-        .getMarketData(coins: coins.map((e) => e.name).toList())
+        .getMarketData(coins: CryptoHelper.getCoinApiNamesFromList(coins))
         .then((response) {
       coins.forEach((coin) {
         response.any((element) {
@@ -95,7 +97,7 @@ class WalletBloc extends ChangeNotifier {
   Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
     return await _coinRepository
-        .getPrices(coins: coins.map((e) => e.name).toList())
+        .getPrices(coins: CryptoHelper.getCoinApiNamesFromList(coins))
         .then((response) {
       coins.forEach((coin) {
         var price = double.parse(response[coin.name]['usd'].toString());
@@ -140,7 +142,7 @@ class WalletBloc extends ChangeNotifier {
 
     List<CryptoSummary> cryptosSummary = [];
     var sortedCryptos = cryptos;
-    var colorIndex = 0;
+    // var colorIndex = 0;
     sortedCryptos.sort((a, b) => b.totalNow.compareTo(a.totalNow));
     sortedCryptos.forEach((crypto) {
       cryptosSummary.add(CryptoSummary(
@@ -149,10 +151,11 @@ class WalletBloc extends ChangeNotifier {
         value: crypto.totalNow,
         amount: crypto.amount,
         percent: (crypto.totalNow * 100) / total,
-        color: chartColors[colorIndex],
+        // color: chartColors[colorIndex],
+        color: Color(Cryptos.colors[crypto.crypto] ?? AppColors.grey.value),
         image: crypto.image,
       ));
-      colorIndex++;
+      // colorIndex++;
     });
 
     dashboardData = dashboardData.copyWith(
