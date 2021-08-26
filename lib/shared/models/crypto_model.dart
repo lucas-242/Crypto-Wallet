@@ -81,9 +81,10 @@ class CryptoModel {
       id: map['id'],
       name: map['name'],
       crypto: map['crypto'],
-      amount: map['amount'],
-      averagePrice: map['averagePrice'],
-      totalInvested: map['totalInvested'],
+      // * These converts are used to prevent the following error: "type 'int' is not a subtype of type 'double'"
+      amount: double.tryParse(map['amount'].toString()) ?? 0,
+      averagePrice: double.tryParse(map['averagePrice'].toString()) ?? 0,
+      totalInvested: double.tryParse(map['totalInvested'].toString()) ?? 0,
       updatedAt: DateTime.parse(map['updatedAt'].toDate().toString()),
       user: map['user'],
     );

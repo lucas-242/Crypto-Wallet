@@ -208,6 +208,7 @@ class MarketDataApiResponse {
     );
   }
 
+  // * This function is used to prevent the following error: "type 'int' is not a subtype of type 'double'"
   static double _convertToDouble(dynamic param) {
     if (param != null && param is num) return param.toDouble();
 

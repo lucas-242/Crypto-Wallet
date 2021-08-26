@@ -169,6 +169,8 @@ class WalletBloc extends ChangeNotifier {
       percentVariation: percentVariation,
       cryptosSummary: cryptosSummary,
     );
+
+    print('ai');
   }
 
   // List<Color> get chartColors {
