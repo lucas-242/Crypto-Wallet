@@ -33,6 +33,7 @@
   "registerTrade": "Registrar Trade",
   "save": "Salvar",
   "sell": "Venda",
+  "soldAmount": "Montante vendido",
   "total": "Total",
   "totalInvested": "Total investido",
   "tradeDetails": "Detalhes do Trade",

@@ -64,7 +64,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
     super.dispose();
   }
 
-  void onPressedSecondary() async {
+  void onSave() async {
     final tradesBloc = context.read<TradesBloc>();
     final walletBloc = context.read<WalletBloc>();
     await bloc
@@ -167,7 +167,10 @@ class _InsertTradePageState extends State<InsertTradePage> {
                           ),
                           SizedBox(height: 10),
                           CustomTextFormField(
-                            labelText: bloc.appLocalizations.investedAmount,
+                            labelText:
+                                bloc.trade.operationType == TradeType.sell
+                                    ? bloc.appLocalizations.soldAmount
+                                    : bloc.appLocalizations.investedAmount,
                             icon: Icons.savings_outlined,
                             keyboardType: TextInputType.number,
                             controller: tradedAmoutController,
@@ -209,7 +212,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                         ],
                       ),
                     ),
-                          SizedBox(height: 20),
+                    SizedBox(height: 20),
                     Text(bloc.appLocalizations.hintTrade,
                         style: AppTextStyles.input),
                   ],
@@ -227,7 +230,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 firstButtonStyle: AppTextStyles.buttonGrey,
                 secondButtonStyle: AppTextStyles.buttonPrimary,
                 onPressedFirst: () => Navigator.of(context).pop(),
-                onPressedSecond: () => onPressedSecondary());
+                onPressedSecond: () => onSave());
           }
 
           return SizedBox();

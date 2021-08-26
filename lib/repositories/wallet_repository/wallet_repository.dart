@@ -172,6 +172,7 @@ class WalletRepository {
     } else {
       var amount = crypto.amount - trade.amount;
       var totalInvested = crypto.totalInvested - trade.amountInvested;
+      totalInvested = totalInvested < 0 ? 0 : totalInvested;
 
       // !When selling the average price doesn't change
       crypto = crypto.copyWith(

@@ -1,141 +1,43 @@
 {
   "oneYear": "1y",
-  "@oneYear": {
-    "description": ""
-  },
   "amount": "Amount",
-  "@amount": {
-    "description": ""
-  },
   "averagePrice": "Average price",
-  "@averagePrice": {
-    "description": ""
-  },
   "buy": "Buy",
-  "@buy": {
-    "description": ""
-  },
   "cancel": "Cancel",
-  "@cancel": {
-      "description": ""
-  },
   "crypto": "Crypto",
-  "@crypto": {
-      "description": ""
-  },
   "cryptoAmount": "Crypto amount",
-  "@cryptoAmount": {
-      "description": ""
-  },
   "dashboard": "Dashboard",
-  "@dashboard": {
-    "description": ""
-  },
   "date": "Date",
-  "@date": {
-    "description": ""
-  },
   "delete": "Delete",
-  "@date": {
-    "description": ""
-  },
   "errorFieldNull": "This field can't be null",
   "errorFieldWrongDate": "Insert a valid date",
   "errorFieldTradePrice": "The trade must be equals or greater than $0,00",
   "errorLogin": "Error trying to login",
-  "@errorLogin": {
-    "description": ""
-  },
   "fee": "Fee",
-  "@fee": {
-    "description": ""
-  },
   "gainLoss": "Gain / Loss",
-  "@gainLoss": {
-    "description": ""
-  },
   "googleButton": "Enter with Google",
-  "@googleButton": {
-    "description": ""
-  },
   "hintFieldCrypto": "Select a crypto", 
   "hintFieldDate": "dd/MM/yyyy", 
   "hintFieldOperationType": "Select the operation type", 
-  "hintTrade": "Note: For now we only use dollars for operations. Pay attention to filling in the fields.", 
+  "hintTrade": "Note: We only use dollars for operations. Pay attention to filling in the fields.", 
   "logo": "See all your cryptos in one place",
-  "@logo": {
-    "description": ""
-  },
   "inYourWallet": "In your wallet",
-  "@inYourWallet": {
-    "description": ""
-  },
   "invested": "invested",
-  "@invested": {
-    "description": ""
-  },
   "investedAmount": "Invested amount",
-  "@investedAmount": {
-      "description": ""
-  },
   "noCryptos": "No cryptos in the wallet",
-  "@noCryptos": {
-      "description": ""
-  },
   "noData": "There is no data on your wallet",
-  "@noData": {
-      "description": ""
-  },
   "noTrades": "No trades in the wallet",
-  "@noTrades": {
-      "description": ""
-  },
   "operationType": "Operation Type",
-  "@operationType": {
-      "description": ""
-  },
   "price": "Price",
-  "@price": {
-    "description": ""
-  },
   "register": "register",
-  "@register": {
-    "description": ""
-  },
   "registerTrade": "Register Trade",
-  "@registerTrade": {
-      "description": ""
-  },
   "save": "Save",
-  "@save": {
-      "description": ""
-  },
   "sell": "Sell",
-  "@sell": {
-    "description": ""
-  },
+  "soldAmount": "Sold amount",
   "total": "Total",
-  "@total": {
-    "description": ""
-  },
   "totalInvested": "Total invested",
-  "@totalInvested": {
-    "description": ""
-  },
   "tradeDetails": "Trade Details",
-  "@tradeDetails": {
-      "description": ""
-  },
-  "tradePrice": "Trade price",
-  "@tradePrice": {
-      "description": ""
-  },
+  "tradePrice": "Crypto price",
   "trades": "Trades",
-  "@trades": {
-      "description": ""
-  },
-  "wallet": "Wallet",
-  "@wallet": {
-    "description": ""
-  }
+  "wallet": "Wallet"
 }
