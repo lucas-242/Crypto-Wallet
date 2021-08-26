@@ -20,6 +20,8 @@ class CryptoModel {
 
   double get gainLoss => totalNow - totalInvested;
 
+  double get gainLossPercent => (gainLoss * 100 / totalNow) / 100;
+
   CryptoModel({
     DateTime? updatedAt,
     this.id,

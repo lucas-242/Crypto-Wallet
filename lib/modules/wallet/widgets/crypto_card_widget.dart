@@ -175,11 +175,26 @@ class _CryptoCardState extends State<CryptoCard> {
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
-                            Text(
-                              NumberFormat.currency(symbol: '\$')
-                                  .format(widget.crypto.gainLoss),
-                              style: AppTextStyles.cryptoTitle
-                                  .copyWith(fontSize: 15),
+                            Row(
+                              children: [
+                                Text(
+                                  NumberFormat.currency(symbol: '\$')
+                                          .format(widget.crypto.gainLoss) +
+                                      ' (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(widget.crypto.gainLossPercent)})',
+                                  style: AppTextStyles.cryptoTitle
+                                      .copyWith(fontSize: 15),
+                                ),
+                                SizedBox(width: 5),
+                                Icon(
+                                  widget.crypto.gainLoss.isNegative
+                                      ? Icons.arrow_downward
+                                      : Icons.arrow_upward,
+                                  color: widget.crypto.gainLoss.isNegative
+                                      ? AppColors.red
+                                      : AppColors.green,
+                                  size: 16,
+                                ),
+                              ],
                             ),
                           ],
                         ),
