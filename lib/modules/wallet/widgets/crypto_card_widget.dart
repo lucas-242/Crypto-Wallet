@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
@@ -125,8 +126,10 @@ class _CryptoCardState extends State<CryptoCard> {
                                   .copyWith(fontSize: 15),
                             ),
                             Text(
-                              NumberFormat.currency(symbol: '\$')
-                                  .format(widget.crypto.price),
+                              NumberFormat.currency(
+                                symbol: '\$',
+                                decimalDigits: WalletHelper.getDecimalDigits(widget.crypto.price),
+                              ).format(widget.crypto.price),
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -142,8 +145,10 @@ class _CryptoCardState extends State<CryptoCard> {
                                   .copyWith(fontSize: 15),
                             ),
                             Text(
-                              NumberFormat.currency(symbol: '\$')
-                                  .format(widget.crypto.averagePrice),
+                              NumberFormat.currency(
+                                symbol: '\$',
+                                decimalDigits: WalletHelper.getDecimalDigits(widget.crypto.price),
+                              ).format(widget.crypto.averagePrice),
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -159,8 +164,10 @@ class _CryptoCardState extends State<CryptoCard> {
                                   .copyWith(fontSize: 15),
                             ),
                             Text(
-                              NumberFormat.currency(symbol: '\$')
-                                  .format(widget.crypto.totalInvested),
+                              NumberFormat.currency(
+                                symbol: '\$',
+                                decimalDigits: WalletHelper.getDecimalDigits(widget.crypto.price),
+                              ).format(widget.crypto.totalInvested),
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -178,8 +185,11 @@ class _CryptoCardState extends State<CryptoCard> {
                             Row(
                               children: [
                                 Text(
-                                  NumberFormat.currency(symbol: '\$')
-                                          .format(widget.crypto.gainLoss) +
+                                  NumberFormat.currency(
+                                        symbol: '\$',
+                                        decimalDigits:
+                                            WalletHelper.getDecimalDigits(widget.crypto.price),
+                                      ).format(widget.crypto.gainLoss) +
                                       ' (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(widget.crypto.gainLossPercent)})',
                                   style: AppTextStyles.cryptoTitle
                                       .copyWith(fontSize: 15),

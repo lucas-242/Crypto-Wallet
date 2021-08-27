@@ -2,6 +2,7 @@ import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/constants/cryptos.dart';
+import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
@@ -31,10 +32,17 @@ class _InsertTradePageState extends State<InsertTradePage> {
   late final InsertTradeBloc bloc;
   late final String uid;
 
-  final priceController =
-      MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: ',');
-  final tradedAmoutController =
-      MoneyMaskedTextController(leftSymbol: '\$', decimalSeparator: ',');
+  //TODO: Decimal Separator according to the language and crypto
+  final priceController = MoneyMaskedTextController(
+    leftSymbol: '\$',
+    decimalSeparator: ',',
+    precision: WalletHelper.decimalDigitsToSmallCryptos,
+  );
+  final tradedAmoutController = MoneyMaskedTextController(
+    leftSymbol: '\$',
+    decimalSeparator: ',',
+    precision: WalletHelper.decimalDigitsToSmallCryptos,
+  );
   final cryptoAmountController =
       MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
   final feeController =
@@ -135,8 +143,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             mode: Mode.BOTTOM_SHEET,
                             items: Cryptos.list
                                 .map((e) => DropdownItem(
-                                    text: '$e - ${Cryptos.names[e]}',
-                                    value: e))
+                                    text: '$e - ${Cryptos.names[e]}', value: e))
                                 .toList(),
                             itemAsString: (DropdownItem u) => u.text,
                             onChanged: (DropdownItem? data) {

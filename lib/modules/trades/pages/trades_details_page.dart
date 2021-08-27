@@ -1,6 +1,7 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
+import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
@@ -115,8 +116,10 @@ class _TradesDetailsState extends State<TradesDetails> {
                 SizedBox(height: 10),
                 TradeDetailsRow(
                   leftText: appLocalizations.tradePrice,
-                  rightText:
-                      NumberFormat.currency(symbol: '\$').format(trade.price),
+                  rightText: NumberFormat.currency(
+                    symbol: '\$',
+                    decimalDigits: WalletHelper.getDecimalDigits(trade.price),
+                  ).format(trade.price),
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(
@@ -133,8 +136,10 @@ class _TradesDetailsState extends State<TradesDetails> {
                 SizedBox(height: 10),
                 TradeDetailsRow(
                   leftText: appLocalizations.total,
-                  rightText: NumberFormat.currency(symbol: '\$')
-                      .format(trade.amountInvested),
+                  rightText: NumberFormat.currency(
+                    symbol: '\$',
+                    decimalDigits: WalletHelper.getDecimalDigits(trade.price),
+                  ).format(trade.amountInvested),
                 ),
               ],
             ),
