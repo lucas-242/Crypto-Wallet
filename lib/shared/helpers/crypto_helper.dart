@@ -5,47 +5,47 @@
 
 // abstract class CryptoHelper {
 //   static Future<String> getCryptoName(String crypto) async {
-//     var finded = await _search(crypto);
+//     var found = await _search(crypto);
 
-//     if (finded.isEmpty) {
+//     if (found.isEmpty) {
 //       return '';
 //     }
 
-//     return finded.first['name'];
+//     return found.first['name'];
 //   }
 
 //   static Future<String> getCryptoApiName(String crypto) async {
-//     var finded = await _search(crypto);
+//     var found = await _search(crypto);
 
-//     if (finded.isEmpty) {
+//     if (found.isEmpty) {
 //       return '';
 //     }
 
-//     return finded.first['id'];
+//     return found.first['id'];
 //   }
 
 //   static Future<List<String>> getAllCryptoApiNames() async {
 //     var cryptos = await json.decode(await _getJson()) as List<dynamic>;
 
-//     var finded = cryptos.where((item) => Cryptos.list.contains(item['symbol']));
+//     var found = cryptos.where((item) => Cryptos.list.contains(item['symbol']));
 
-//     if (finded.isEmpty) {
+//     if (found.isEmpty) {
 //       return [];
 //     }
 
-//     return finded.map((e) => e['id'] as String).toList();
+//     return found.map((e) => e['id'] as String).toList();
 //   }
 
 //   static Future<List<dynamic>> _search(String crypto) async {
 //     var cryptos = await json.decode(await _getJson()) as List<dynamic>;
 
-//     var finded = cryptos.where((item) => item['symbol'] == crypto);
+//     var found = cryptos.where((item) => item['symbol'] == crypto);
 
-//     if (finded.isEmpty) {
+//     if (found.isEmpty) {
 //       return [];
 //     }
 
-//     return finded.toList();
+//     return found.toList();
 //   }
 
 //   static Future<String> _getJson() {

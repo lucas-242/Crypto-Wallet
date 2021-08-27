@@ -70,9 +70,15 @@ class _TradesListPageState extends State<TradesListPage> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 } else if (status.statusPage == StatusPage.error) {
-                  return Container(
-                    height: SizeConfig.height * 0.7,
-                    child: Center(child: Text(status.error)),
+                  return RefreshIndicator(
+                    onRefresh: () => bloc.getTrades(uid),
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                        height: SizeConfig.height * 0.7,
+                        child: Center(child: Text(status.error)),
+                      ),
+                    ),
                   );
                 } else if (status.statusPage == StatusPage.noData) {
                   return Container(

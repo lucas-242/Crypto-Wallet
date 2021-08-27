@@ -146,7 +146,6 @@ class WalletBloc extends ChangeNotifier {
 
     List<CryptoSummary> cryptosSummary = [];
     var sortedCryptos = cryptos;
-    // var colorIndex = 0;
     sortedCryptos.sort((a, b) => b.totalNow.compareTo(a.totalNow));
     sortedCryptos.forEach((crypto) {
       cryptosSummary.add(CryptoSummary(
@@ -155,11 +154,9 @@ class WalletBloc extends ChangeNotifier {
         value: crypto.totalNow,
         amount: crypto.amount,
         percent: (crypto.totalNow * 100) / totalNow,
-        // color: chartColors[colorIndex],
         color: Color(Cryptos.colors[crypto.crypto] ?? AppColors.grey.value),
         image: crypto.image,
       ));
-      // colorIndex++;
     });
 
     walletData = walletData.copyWith(
@@ -169,8 +166,6 @@ class WalletBloc extends ChangeNotifier {
       percentVariation: percentVariation,
       cryptosSummary: cryptosSummary,
     );
-
-    print('ai');
   }
 
   // List<Color> get chartColors {

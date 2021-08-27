@@ -20,6 +20,7 @@ class _WalletPageState extends State<WalletPage> {
   late final Auth auth;
   late final WalletBloc bloc;
   late AppLocalizations appLocalizations;
+  //TODO: Move to the bloc
   int? openedIndex;
 
   @override
