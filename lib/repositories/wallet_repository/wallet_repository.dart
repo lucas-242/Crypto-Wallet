@@ -195,6 +195,8 @@ class WalletRepository {
   ) {
     double amount = 0;
     double totalInvested = 0;
+    double averagePrice = 0;
+
     trades.forEach((element) {
       if (element.operationType == TradeType.buy) {
         totalInvested += element.amountInvested;
@@ -205,7 +207,12 @@ class WalletRepository {
       }
     });
 
-    var averagePrice = _calculateAveragePrice(trades, amount);
+    amount = amount < 0 ? 0 : amount;
+    totalInvested = totalInvested < 0 ? 0 : totalInvested;
+
+    if (amount > 0) {
+      averagePrice = _calculateAveragePrice(trades, amount);
+    }
 
     crypto = crypto.copyWith(
       amount: amount,

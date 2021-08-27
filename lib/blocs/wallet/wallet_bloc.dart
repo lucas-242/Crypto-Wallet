@@ -20,7 +20,7 @@ class WalletBloc extends ChangeNotifier {
   List<CryptoModel> cryptos = [];
 
   WalletModel walletData = new WalletModel();
-  
+
   ///The index of the opened Crypto Card of the Wallet Page
   int? openedIndex;
 
