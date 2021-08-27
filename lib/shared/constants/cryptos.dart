@@ -54,6 +54,7 @@ abstract class Cryptos {
   static const nano = 'NANO';
   static const erg = 'ERG';
   static const slp = 'SLP';
+  static const coti = "COTI";
 
   static const List<String> list = [
     btc,
@@ -81,6 +82,37 @@ abstract class Cryptos {
     etc,
     fil,
     trx,
+    dai,
+    avax,
+    aave,
+    ftt,
+    atom,
+    ceth,
+    grt,
+    eos,
+    cusdc,
+    xmr,
+    cake,
+    klay,
+    cdai,
+    shib,
+    axs,
+    neo,
+    cro,
+    algo,
+    mkr,
+    xtz,
+    bsv,
+    ksm,
+    miota,
+    amp,
+    btt,
+    leo,
+    rvn,
+    nano,
+    erg,
+    slp,
+    coti,
   ];
 
   static const Map<String, String> apiIds = {
@@ -139,6 +171,7 @@ abstract class Cryptos {
     nano: 'nano',
     erg: 'ergo',
     slp: 'smooth-love-potion',
+    coti: 'coti',
   };
 
   static const Map<String, String> apiNames = {
@@ -197,6 +230,7 @@ abstract class Cryptos {
     nano: 'Nano',
     erg: 'Ergo',
     slp: 'Smooth Love Potion',
+    coti: 'Coti',
   };
 
   static const colors = {
@@ -225,5 +259,6 @@ abstract class Cryptos {
     etc: 0xFF168F1A,
     fil: 0xFF0090FF,
     trx: 0xFFC12F26,
+    coti: 0xFF2D65B0,
   };
 }
