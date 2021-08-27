@@ -54,7 +54,7 @@ abstract class Cryptos {
   static const nano = 'NANO';
   static const erg = 'ERG';
   static const slp = 'SLP';
-  static const coti = "COTI";
+  static const coti = 'COTI';
 
   static const List<String> list = [
     btc,
@@ -174,7 +174,7 @@ abstract class Cryptos {
     coti: 'coti',
   };
 
-  static const Map<String, String> apiNames = {
+  static const Map<String, String> names = {
     btc: 'Bitcoin',
     ada: 'Cardano',
     eth: 'Ethereum',

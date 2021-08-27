@@ -126,7 +126,7 @@ class WalletRepository {
     var averagePrice = _calculateAveragePrice(trades, trade.amount);
 
     var crypto = CryptoModel(
-      name: Cryptos.apiNames[trade.crypto]!,
+      name: Cryptos.names[trade.crypto]!,
       crypto: trade.crypto,
       amount: trade.amount,
       averagePrice: averagePrice,

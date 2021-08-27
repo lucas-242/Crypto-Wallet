@@ -135,7 +135,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             mode: Mode.BOTTOM_SHEET,
                             items: Cryptos.list
                                 .map((e) => DropdownItem(
-                                    text: '$e - ${Cryptos.apiNames[e]}',
+                                    text: '$e - ${Cryptos.names[e]}',
                                     value: e))
                                 .toList(),
                             itemAsString: (DropdownItem u) => u.text,

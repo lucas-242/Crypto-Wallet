@@ -59,10 +59,17 @@ import 'package:crypto_wallet/shared/models/crypto_model.dart';
 abstract class CryptoHelper {
   ///Get a list of api ids from the [coins] list o CryptoModel
   static List<String> getCoinApiIdsFromList(List<CryptoModel> coins) {
-    var apiCoins = Cryptos.list
-        .where((element) => Cryptos.list.contains(coins.map((e) => e.crypto)))
-        .toList();
+    var coinNames = coins.map((e) => e.crypto).toList();
 
-    return apiCoins;
+    var apiIds = Cryptos.apiIds.entries.map((mapEntry) {
+      if (coinNames.contains(mapEntry.key))
+        return mapEntry.value;
+      else
+        return '';
+    }).toList();
+
+    apiIds.removeWhere((e) => e == '');
+
+    return apiIds;
   }
 }
