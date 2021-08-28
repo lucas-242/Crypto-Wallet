@@ -155,36 +155,56 @@ class _InsertTradePageState extends State<InsertTradePage> {
                           ),
                           SizedBox(height: 10),
                           DropdownSearch<DropdownItem>(
-                            label: bloc.appLocalizations.crypto,
-                            mode: Mode.BOTTOM_SHEET,
-                            selectedItem: bloc.trade.crypto.isNotEmpty
-                                ? DropdownItem(
-                                    text:
-                                        '${bloc.trade.crypto} - ${Cryptos.names[bloc.trade.crypto]}',
-                                    value: bloc.trade.crypto,
-                                  )
-                                : null,
-                            items: Cryptos.list
-                                .map((e) => DropdownItem(
-                                    text: '$e - ${Cryptos.names[e]}', value: e))
-                                .toList(),
-                            itemAsString: (DropdownItem u) => u.text,
-                            onChanged: (DropdownItem? data) {
-                              if (data != null) {
-                                bloc.onChange(crypto: data.value);
-                                setState(() {});
-                              }
-                            },
-                            showSearchBox: true,
-                            validator: (item) => bloc.validateCrypto(item),
-                            dropdownBuilder: (_, item, value) =>
-                                _dropdownBuilder(
-                                    value: value,
-                                    hint:
-                                        bloc.appLocalizations.hintFieldCrypto),
-                            dropdownButtonBuilder: (_) =>
-                                _dropdownButtonBuilder(),
-                          ),
+                              label: bloc.appLocalizations.crypto,
+                              mode: Mode.BOTTOM_SHEET,
+                              selectedItem: bloc.trade.crypto.isNotEmpty
+                                  ? DropdownItem(
+                                      text:
+                                          '${bloc.trade.crypto} - ${Cryptos.names[bloc.trade.crypto]}',
+                                      value: bloc.trade.crypto,
+                                    )
+                                  : null,
+                              items: Cryptos.list
+                                  .map((e) => DropdownItem(
+                                      text: '$e - ${Cryptos.names[e]}',
+                                      value: e))
+                                  .toList(),
+                              itemAsString: (DropdownItem u) => u.text,
+                              onChanged: (DropdownItem? data) {
+                                if (data != null) {
+                                  bloc.onChange(crypto: data.value);
+                                  setState(() {});
+                                }
+                              },
+                              showSearchBox: true,
+                              searchFieldProps: TextFieldProps(
+                                style: AppTextStyles.input,
+                                decoration: InputDecoration(
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelText: bloc.appLocalizations.search,
+                                  hintText: 'BTC, ETH, ADA ...',
+                                  hintStyle: AppTextStyles.input,
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(),
+                                  prefixIcon: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 18),
+                                    child: Icon(Icons.search,
+                                        color: AppColors.primary),
+                                  ),
+                                ),
+                              ),
+                              validator: (item) => bloc.validateCrypto(item),
+                              dropdownBuilder: (_, item, value) =>
+                                  _dropdownBuilder(
+                                      value: value,
+                                      hint: bloc
+                                          .appLocalizations.hintFieldCrypto),
+                              dropdownButtonBuilder: (_) =>
+                                  _dropdownButtonBuilder(),
+                              emptyBuilder: (_, message) =>
+                                  _dropdownEmptyBuilder()),
                           SizedBox(height: 15),
                           CustomTextFormField(
                             labelText: bloc.appLocalizations.cryptoAmount,
@@ -275,6 +295,17 @@ class _InsertTradePageState extends State<InsertTradePage> {
           child: Text(
             value == null || value == '' ? hint : value,
             style: AppTextStyles.input,
+          ),
+        ),
+      );
+
+  // * There is a bug that put a yellow undeline on message
+  Widget _dropdownEmptyBuilder() => Padding(
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        child: Container(
+          child: Text(
+            bloc.appLocalizations.noResults,
+            style: AppTextStyles.captionBody.copyWith(fontSize: 20),
           ),
         ),
       );
