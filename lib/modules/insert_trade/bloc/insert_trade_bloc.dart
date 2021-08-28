@@ -3,6 +3,7 @@ import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
+import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
@@ -17,10 +18,7 @@ class InsertTradeBloc extends ChangeNotifier {
   late InterstitialAd _interstitialAd;
 
   final formKey = GlobalKey<FormState>();
-  TradeModel trade = TradeModel(
-    operationType: TradeType.buy,
-    crypto: Cryptos.btc,
-  );
+  TradeModel trade = TradeModel();
 
   final statusNotifier = ValueNotifier<InsertTradeStatus>(InsertTradeStatus());
 
@@ -33,9 +31,7 @@ class InsertTradeBloc extends ChangeNotifier {
       : _walletRepository = walletRepository;
 
   String? validateCrypto(DropdownItem? value) {
-    return value == null
-        ? appLocalizations.errorFieldNull
-        : null;
+    return value == null ? appLocalizations.errorFieldNull : null;
   }
 
   String? validateCryptoAmount(String? value) {
@@ -60,7 +56,9 @@ class InsertTradeBloc extends ChangeNotifier {
   }
 
   String? validateDate(String? value) {
-    return value == null || value.length != 10 ? appLocalizations.errorFieldWrongDate : null;
+    return value == null || value.length != 10
+        ? appLocalizations.errorFieldWrongDate
+        : null;
   }
 
   String? validateTradePrice(String? value) {
@@ -120,9 +118,10 @@ class InsertTradeBloc extends ChangeNotifier {
 
     status = InsertTradeStatus.loading();
 
-    if (_interstitialAd.responseInfo != null) _interstitialAd.show();
-
     var cryptos = await _walletRepository.getAllCryptos(uid);
+    _validateAmount(cryptos);
+
+    if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
     return await _walletRepository.addTrade(cryptos, trade).then((value) {
       tradesBloc.getTrades(uid);
@@ -134,9 +133,20 @@ class InsertTradeBloc extends ChangeNotifier {
       );
       status = InsertTradeStatus();
     }).catchError((error) {
-      print(error);
       status = InsertTradeStatus.error(error.toString());
     });
+  }
+
+  ///Verify if the user has enough amount in [cryptos] to create a selling trade
+  void _validateAmount(List<CryptoModel> cryptos) {
+    if (trade.operationType == TradeType.sell) {
+      var found = cryptos.where((c) => c.crypto == trade.crypto);
+      if (found.isEmpty || found.first.amount < trade.amount) {
+        var error = appLocalizations.errorInsufficientBalance;
+        status = InsertTradeStatus.error(error);
+        throw Exception(error);
+      }
+    }
   }
 
   ///Load the InterstitialAd

@@ -13,7 +13,7 @@ class TradeModel {
 
   TradeModel({
     this.id,
-    required this.operationType,
+    this.operationType = '',
     this.crypto = '',
     this.amount = 0,
     this.amountInvested = 0,

@@ -13,8 +13,8 @@ SnackBar getAppSnackBar({
     content: Text(message),
     duration: Duration(seconds: 4),
     backgroundColor: type == SnackBarType.error
-        ? AppColors.grey
-        : (type == SnackBarType.success ? AppColors.green : AppColors.red),
+        ? AppColors.red
+        : (type == SnackBarType.success ? AppColors.green : AppColors.grey),
     action: SnackBarAction(
       label: 'x',
       textColor: AppColors.stroke,

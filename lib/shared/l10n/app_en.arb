@@ -12,6 +12,7 @@
   "errorFieldNull": "This field can't be null",
   "errorFieldWrongDate": "Insert a valid date",
   "errorFieldTradePrice": "The trade must be equals or greater than $0,00",
+  "errorInsufficientBalance": "Insufficient balance to carry out the transaction",
   "errorLogin": "Error trying to login",
   "fee": "Fee",
   "gainLoss": "Gain / Loss",

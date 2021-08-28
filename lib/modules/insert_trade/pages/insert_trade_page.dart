@@ -77,7 +77,15 @@ class _InsertTradePageState extends State<InsertTradePage> {
     final walletBloc = context.read<WalletBloc>();
     await bloc
         .addTrade(tradesBloc: tradesBloc, walletBloc: walletBloc, uid: uid)
-        .then((value) => Navigator.pop(context));
+        .then((value) => Navigator.pop(context))
+        .catchError((error) {
+      if (error.message == bloc.appLocalizations.errorInsufficientBalance) {
+        ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
+          message: error.message,
+          type: SnackBarType.error,
+        ));
+      }
+    });
   }
 
   @override
@@ -113,6 +121,14 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             label: bloc.appLocalizations.operationType,
                             mode: Mode.BOTTOM_SHEET,
                             maxHeight: SizeConfig.height * 0.15,
+                            selectedItem: bloc.trade.operationType.isNotEmpty
+                                ? DropdownItem(
+                                    value: bloc.trade.operationType,
+                                    text: bloc.trade.operationType ==
+                                            TradeType.buy
+                                        ? bloc.appLocalizations.buy
+                                        : bloc.appLocalizations.sell)
+                                : null,
                             items: TradeType.list
                                 .map((e) => DropdownItem(
                                     value: e,
@@ -124,8 +140,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             onChanged: (DropdownItem? data) {
                               if (data != null) {
                                 bloc.onChange(operationType: data.value);
+                                setState(() {});
                               }
-                              setState(() {});
                             },
                             validator: (item) => bloc.validateCrypto(item),
                             dropdownBuilder: (_, item, value) =>
@@ -141,6 +157,13 @@ class _InsertTradePageState extends State<InsertTradePage> {
                           DropdownSearch<DropdownItem>(
                             label: bloc.appLocalizations.crypto,
                             mode: Mode.BOTTOM_SHEET,
+                            selectedItem: bloc.trade.crypto.isNotEmpty
+                                ? DropdownItem(
+                                    text:
+                                        '${bloc.trade.crypto} - ${Cryptos.names[bloc.trade.crypto]}',
+                                    value: bloc.trade.crypto,
+                                  )
+                                : null,
                             items: Cryptos.list
                                 .map((e) => DropdownItem(
                                     text: '$e - ${Cryptos.names[e]}', value: e))
@@ -149,8 +172,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             onChanged: (DropdownItem? data) {
                               if (data != null) {
                                 bloc.onChange(crypto: data.value);
+                                setState(() {});
                               }
-                              setState(() {});
                             },
                             showSearchBox: true,
                             validator: (item) => bloc.validateCrypto(item),
