@@ -3,12 +3,9 @@ import 'dart:ui';
 
 import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
-import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/wallet_model.dart';
-import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/foundation.dart';
 
 import 'wallet_status.dart';
@@ -37,7 +34,7 @@ class WalletBloc extends ChangeNotifier {
   Future<void> getCryptos(String uid) async {
     status = WalletStatus.loading();
 
-    await _walletRepository.getAllCryptos(uid).then((result) async {
+    await _walletRepository.getCryptos(uid).then((result) async {
       if (result.isNotEmpty) {
         cryptos = await getCryptosMarketData(result);
         setWalletData();
@@ -61,12 +58,11 @@ class WalletBloc extends ChangeNotifier {
     var result = <CryptoModel>[];
 
     return await _coinRepository
-        .getMarketData(coins: CryptoHelper.getCoinApiIdsFromList(coins))
+        .getMarketData(coins: coins.map((e) => e.cryptoId).toList())
         .then((response) {
       coins.forEach((coin) {
         response.any((element) {
-          var apiId = Cryptos.apiIds[coin.crypto];
-          if (apiId == element.id) {
+          if (coin.cryptoId == element.id) {
             var price = element.currentPrice;
 
             var history = new CryptoHistory(
@@ -123,7 +119,7 @@ class WalletBloc extends ChangeNotifier {
   // }
 
   void updateCrypto(CryptoModel model) {
-    var index = cryptos.indexWhere((element) => element.crypto == model.crypto);
+    var index = cryptos.indexWhere((element) => element.symbol == model.symbol);
 
     if (index == -1) {
       cryptos.add(model);
@@ -152,12 +148,13 @@ class WalletBloc extends ChangeNotifier {
     sortedCryptos.sort((a, b) => b.totalNow.compareTo(a.totalNow));
     sortedCryptos.forEach((crypto) {
       cryptosSummary.add(CryptoSummary(
+        cryptoId: crypto.cryptoId,
         name: crypto.name,
-        crypto: crypto.crypto,
+        crypto: crypto.symbol,
         value: crypto.totalNow,
         amount: crypto.amount,
         percent: (crypto.totalNow * 100) / totalNow,
-        color: Color(Cryptos.colors[crypto.crypto] ?? AppColors.grey.value),
+        color: Color(_walletRepository.findCryptoInfos(crypto.cryptoId).color),
         image: crypto.image,
       ));
     });

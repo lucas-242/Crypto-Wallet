@@ -78,7 +78,8 @@ class InsertTradeBloc extends ChangeNotifier {
 
   void onChange({
     String? operationType,
-    String? crypto,
+    String? cryptoId,
+    String? cryptoSymbol,
     double? amount,
     double? ammountInvested,
     double? price,
@@ -98,7 +99,8 @@ class InsertTradeBloc extends ChangeNotifier {
       operationType: operationType,
       amount: amount,
       amountInvested: ammountInvested,
-      crypto: crypto,
+      cryptoId: cryptoId,
+      cryptoSymbol: cryptoSymbol,
       date: formattedDate,
       price: price,
       fee: fee,
@@ -117,7 +119,7 @@ class InsertTradeBloc extends ChangeNotifier {
 
     status = InsertTradeStatus.loading();
 
-    var cryptos = await _walletRepository.getAllCryptos(uid);
+    var cryptos = await _walletRepository.getCryptos(uid);
     _validateAmount(cryptos);
 
     if (_interstitialAd.responseInfo != null) _interstitialAd.show();
@@ -135,7 +137,7 @@ class InsertTradeBloc extends ChangeNotifier {
   ///Verify if the user has enough amount in [cryptos] to create a selling trade
   void _validateAmount(List<CryptoModel> cryptos) {
     if (trade.operationType == TradeType.sell) {
-      var found = cryptos.where((c) => c.crypto == trade.crypto);
+      var found = cryptos.where((c) => c.cryptoId == trade.cryptoId);
       if (found.isEmpty || found.first.amount < trade.amount) {
         var error = appLocalizations.errorInsufficientBalance;
         status = InsertTradeStatus.error(error);

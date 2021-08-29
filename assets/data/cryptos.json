@@ -15,366 +15,6 @@
         "name": "Aave"
     },
     {
-        "id": "aave-aave",
-        "symbol": "aAAVE",
-        "name": "Aave AAVE"
-    },
-    {
-        "id": "aave-amm-bptbalweth",
-        "symbol": "aAmmBptBALWETH",
-        "name": "Aave AMM BptBALWETH"
-    },
-    {
-        "id": "aave-amm-bptwbtcweth",
-        "symbol": "aAmmBptWBTCWETH",
-        "name": "Aave AMM BptWBTCWETH"
-    },
-    {
-        "id": "aave-amm-dai",
-        "symbol": "aAmmDAI",
-        "name": "Aave AMM DAI"
-    },
-    {
-        "id": "aave-amm-uniaaveweth",
-        "symbol": "aammuniaaveweth",
-        "name": "Aave AMM UniAAVEWETH"
-    },
-    {
-        "id": "aave-amm-unibatweth",
-        "symbol": "aAmmUniBATWETH",
-        "name": "Aave AMM UniBATWETH"
-    },
-    {
-        "id": "aave-amm-unicrvweth",
-        "symbol": "aAmmUniCRVWETH",
-        "name": "Aave AMM UniCRVWETH"
-    },
-    {
-        "id": "aave-amm-unidaiusdc",
-        "symbol": "aAmmUniDAIUSDC",
-        "name": "Aave AMM UniDAIUSDC"
-    },
-    {
-        "id": "aave-amm-unidaiweth",
-        "symbol": "aammunidaiweth",
-        "name": "Aave AMM UniDAIWETH"
-    },
-    {
-        "id": "aave-amm-unilinkweth",
-        "symbol": "aAmmUniLINKWETH",
-        "name": "Aave AMM UniLINKWETH"
-    },
-    {
-        "id": "aave-amm-unimkrweth",
-        "symbol": "aAmmUniMKRWETH",
-        "name": "Aave AMM UniMKRWETH"
-    },
-    {
-        "id": "aave-amm-unirenweth",
-        "symbol": "aAmmUniRENWETH",
-        "name": "Aave AMM UniRENWETH"
-    },
-    {
-        "id": "aave-amm-unisnxweth",
-        "symbol": "aAmmUniSNXWETH",
-        "name": "Aave AMM UniSNXWETH"
-    },
-    {
-        "id": "aave-amm-uniuniweth",
-        "symbol": "aAmmUniUNIWETH",
-        "name": "Aave AMM UniUNIWETH"
-    },
-    {
-        "id": "aave-amm-uniusdcweth",
-        "symbol": "aAmmUniUSDCWETH",
-        "name": "Aave AMM UniUSDCWETH"
-    },
-    {
-        "id": "aave-amm-uniwbtcusdc",
-        "symbol": "aAmmUniWBTCUSDC",
-        "name": "Aave AMM UniWBTCUSDC"
-    },
-    {
-        "id": "aave-amm-uniwbtcweth",
-        "symbol": "aammuniwbtcweth",
-        "name": "Aave AMM UniWBTCWETH"
-    },
-    {
-        "id": "aave-amm-uniyfiweth",
-        "symbol": "aAmmUniYFIWETH",
-        "name": "Aave AMM UniYFIWETH"
-    },
-    {
-        "id": "aave-amm-usdc",
-        "symbol": "aAmmUSDC",
-        "name": "Aave AMM USDC"
-    },
-    {
-        "id": "aave-amm-usdt",
-        "symbol": "aAmmUSDT",
-        "name": "Aave AMM USDT"
-    },
-    {
-        "id": "aave-amm-wbtc",
-        "symbol": "aAmmWBTC",
-        "name": "Aave AMM WBTC"
-    },
-    {
-        "id": "aave-amm-weth",
-        "symbol": "aAmmWETH",
-        "name": "Aave AMM WETH"
-    },
-    {
-        "id": "aave-bal",
-        "symbol": "abal",
-        "name": "Aave BAL"
-    },
-    {
-        "id": "aave-balancer-pool-token",
-        "symbol": "abpt",
-        "name": "Aave Balancer Pool Token"
-    },
-    {
-        "id": "aave-bat",
-        "symbol": "abat",
-        "name": "Aave BAT"
-    },
-    {
-        "id": "aave-bat-v1",
-        "symbol": "abat",
-        "name": "Aave BAT v1"
-    },
-    {
-        "id": "aave-busd",
-        "symbol": "abusd",
-        "name": "Aave BUSD"
-    },
-    {
-        "id": "aave-busd-v1",
-        "symbol": "abusd",
-        "name": "Aave BUSD v1"
-    },
-    {
-        "id": "aave-crv",
-        "symbol": "aCRV",
-        "name": "Aave CRV"
-    },
-    {
-        "id": "aave-dai",
-        "symbol": "adai",
-        "name": "Aave DAI"
-    },
-    {
-        "id": "aave-dai-v1",
-        "symbol": "adai",
-        "name": "Aave DAI v1"
-    },
-    {
-        "id": "aave-enj",
-        "symbol": "aenj",
-        "name": "Aave ENJ"
-    },
-    {
-        "id": "aave-enj-v1",
-        "symbol": "aenj",
-        "name": "Aave ENJ v1"
-    },
-    {
-        "id": "aave-eth-v1",
-        "symbol": "aeth",
-        "name": "Aave ETH v1"
-    },
-    {
-        "id": "aavegotchi",
-        "symbol": "ghst",
-        "name": "Aavegotchi"
-    },
-    {
-        "id": "aave-gusd",
-        "symbol": "agusd",
-        "name": "Aave GUSD"
-    },
-    {
-        "id": "aave-knc",
-        "symbol": "aknc",
-        "name": "Aave KNC"
-    },
-    {
-        "id": "aave-knc-v1",
-        "symbol": "aknc",
-        "name": "Aave KNC v1"
-    },
-    {
-        "id": "aave-link",
-        "symbol": "alink",
-        "name": "Aave LINK"
-    },
-    {
-        "id": "aave-link-v1",
-        "symbol": "alink",
-        "name": "Aave LINK v1"
-    },
-    {
-        "id": "aave-mana",
-        "symbol": "amana",
-        "name": "Aave MANA"
-    },
-    {
-        "id": "aave-mana-v1",
-        "symbol": "amana",
-        "name": "Aave MANA v1"
-    },
-    {
-        "id": "aave-mkr",
-        "symbol": "amkr",
-        "name": "Aave MKR"
-    },
-    {
-        "id": "aave-mkr-v1",
-        "symbol": "amkr",
-        "name": "Aave MKR v1"
-    },
-    {
-        "id": "aave-polygon-aave",
-        "symbol": "amAAVE",
-        "name": "Aave Polygon AAVE"
-    },
-    {
-        "id": "aave-polygon-dai",
-        "symbol": "amDAI",
-        "name": "Aave Polygon DAI"
-    },
-    {
-        "id": "aave-polygon-usdc",
-        "symbol": "amusdc",
-        "name": "Aave Polygon USDC"
-    },
-    {
-        "id": "aave-polygon-usdt",
-        "symbol": "amUSDT",
-        "name": "Aave Polygon USDT"
-    },
-    {
-        "id": "aave-polygon-wbtc",
-        "symbol": "amWBTC",
-        "name": "Aave Polygon WBTC"
-    },
-    {
-        "id": "aave-polygon-weth",
-        "symbol": "amWETH",
-        "name": "Aave Polygon WETH"
-    },
-    {
-        "id": "aave-polygon-wmatic",
-        "symbol": "amWMATIC",
-        "name": "Aave Polygon WMATIC"
-    },
-    {
-        "id": "aave-rai",
-        "symbol": "arai",
-        "name": "Aave RAI"
-    },
-    {
-        "id": "aave-ren",
-        "symbol": "aren",
-        "name": "Aave REN"
-    },
-    {
-        "id": "aave-ren-v1",
-        "symbol": "aren",
-        "name": "Aave REN v1"
-    },
-    {
-        "id": "aave-snx",
-        "symbol": "asnx",
-        "name": "Aave SNX"
-    },
-    {
-        "id": "aave-snx-v1",
-        "symbol": "asnx",
-        "name": "Aave SNX v1"
-    },
-    {
-        "id": "aave-susd",
-        "symbol": "asusd",
-        "name": "Aave SUSD"
-    },
-    {
-        "id": "aave-susd-v1",
-        "symbol": "asusd",
-        "name": "Aave SUSD v1"
-    },
-    {
-        "id": "aave-tusd",
-        "symbol": "atusd",
-        "name": "Aave TUSD"
-    },
-    {
-        "id": "aave-tusd-v1",
-        "symbol": "atusd",
-        "name": "Aave TUSD v1"
-    },
-    {
-        "id": "aave-uni",
-        "symbol": "auni",
-        "name": "Aave UNI"
-    },
-    {
-        "id": "aave-usdc",
-        "symbol": "ausdc",
-        "name": "Aave USDC"
-    },
-    {
-        "id": "aave-usdc-v1",
-        "symbol": "ausdc",
-        "name": "Aave USDC v1"
-    },
-    {
-        "id": "aave-usdt",
-        "symbol": "ausdt",
-        "name": "Aave USDT"
-    },
-    {
-        "id": "aave-usdt-v1",
-        "symbol": "ausdt",
-        "name": "Aave USDT v1"
-    },
-    {
-        "id": "aave-wbtc",
-        "symbol": "awbtc",
-        "name": "Aave WBTC"
-    },
-    {
-        "id": "aave-wbtc-v1",
-        "symbol": "awbtc",
-        "name": "Aave WBTC v1"
-    },
-    {
-        "id": "aave-weth",
-        "symbol": "aweth",
-        "name": "Aave WETH"
-    },
-    {
-        "id": "aave-xsushi",
-        "symbol": "aXSUSHI",
-        "name": "Aave XSUSHI"
-    },
-    {
-        "id": "aave-yfi",
-        "symbol": "aYFI",
-        "name": "Aave YFI"
-    },
-    {
-        "id": "aave-zrx",
-        "symbol": "azrx",
-        "name": "Aave ZRX"
-    },
-    {
-        "id": "aave-zrx-v1",
-        "symbol": "azrx",
-        "name": "Aave ZRX v1"
-    },
-    {
         "id": "aax-token",
         "symbol": "aab",
         "name": "AAX Token"
@@ -4307,7 +3947,8 @@
     {
         "id": "binancecoin",
         "symbol": "bnb",
-        "name": "Binance Coin"
+        "name": "Binance Coin",
+        "color": "0xFFF3BA2F"
     },
     {
         "id": "binance-ecosystem-value",
@@ -4377,7 +4018,8 @@
     {
         "id": "binance-usd",
         "symbol": "busd",
-        "name": "Binance USD"
+        "name": "Binance USD",
+        "color": "0xFFEDB70B"
     },
     {
         "id": "binance-vnd",
@@ -4672,7 +4314,8 @@
     {
         "id": "bitcoin",
         "symbol": "btc",
-        "name": "Bitcoin"
+        "name": "Bitcoin",
+        "color": "0xFFF79319"
     },
     {
         "id": "bitcoin-2",
@@ -4722,7 +4365,8 @@
     {
         "id": "bitcoin-cash",
         "symbol": "bch",
-        "name": "Bitcoin Cash"
+        "name": "Bitcoin Cash",
+        "color": "0xFF0AC18E"
     },
     {
         "id": "bitcoin-cash-abc-2",
@@ -7407,7 +7051,8 @@
     {
         "id": "cardano",
         "symbol": "ada",
-        "name": "Cardano"
+        "name": "Cardano",
+        "color": "0xFF26508C"
     },
     {
         "id": "cardence",
@@ -7927,7 +7572,8 @@
     {
         "id": "chainlink",
         "symbol": "link",
-        "name": "Chainlink"
+        "name": "Chainlink",
+        "color": "0xFF2E52AF"
     },
     {
         "id": "chainlink-nft-vault-nftx",
@@ -9302,7 +8948,8 @@
     {
         "id": "coti",
         "symbol": "coti",
-        "name": "COTI"
+        "name": "COTI",
+        "color": "0xFF2D65B0"
     },
     {
         "id": "cotrader",
@@ -12127,7 +11774,8 @@
     {
         "id": "dogecoin",
         "symbol": "doge",
-        "name": "Dogecoin"
+        "name": "Dogecoin",
+        "color": "0xFFBB9F36"
     },
     {
         "id": "dogecoin-2",
@@ -14082,7 +13730,8 @@
     {
         "id": "ethereum",
         "symbol": "eth",
-        "name": "Ethereum"
+        "name": "Ethereum",
+        "color": "0xFF686f95"
     },
     {
         "id": "ethereum-apex",
@@ -14107,7 +13756,8 @@
     {
         "id": "ethereum-classic",
         "symbol": "etc",
-        "name": "Ethereum Classic"
+        "name": "Ethereum Classic",
+        "color": "0xFF168F1A"
     },
     {
         "id": "ethereum-eagle-project",
@@ -15202,7 +14852,8 @@
     {
         "id": "filecoin",
         "symbol": "fil",
-        "name": "Filecoin"
+        "name": "Filecoin",
+        "color": "0xFF0090FF"
     },
     {
         "id": "filecoin-iou",
@@ -19772,7 +19423,8 @@
     {
         "id": "internet-computer",
         "symbol": "icp",
-        "name": "Internet Computer"
+        "name": "Internet Computer",
+        "color": "0xFF28A9E0"
     },
     {
         "id": "internet-exchange-token",
@@ -22242,7 +21894,8 @@
     {
         "id": "litecoin",
         "symbol": "ltc",
-        "name": "Litecoin"
+        "name": "Litecoin",
+        "color": "0xFF222222"
     },
     {
         "id": "litecoin-bep2",
@@ -23322,7 +22975,8 @@
     {
         "id": "matic-network",
         "symbol": "matic",
-        "name": "Polygon"
+        "name": "Polygon",
+        "color": "0xFF8247E5"
     },
     {
         "id": "maticpad",
@@ -29432,7 +29086,8 @@
     {
         "id": "polkadot",
         "symbol": "dot",
-        "name": "Polkadot"
+        "name": "Polkadot",
+        "color": "0xFF343335"
     },
     {
         "id": "polkafoundry",
@@ -31877,7 +31532,8 @@
     {
         "id": "ripple",
         "symbol": "xrp",
-        "name": "XRP"
+        "name": "XRP",
+        "color": "0xFF5B5F64"
     },
     {
         "id": "ripple-alpha",
@@ -34842,7 +34498,8 @@
     {
         "id": "solana",
         "symbol": "sol",
-        "name": "Solana"
+        "name": "Solana",
+        "color": "0xFF8775DB"
     },
     {
         "id": "solanasail-governance-token",
@@ -35897,7 +35554,8 @@
     {
         "id": "stellar",
         "symbol": "xlm",
-        "name": "Stellar"
+        "name": "Stellar",
+        "color": "0xFF0F0F0F"
     },
     {
         "id": "stellar-diamond",
@@ -37222,7 +36880,8 @@
     {
         "id": "terra-luna",
         "symbol": "luna",
-        "name": "Terra"
+        "name": "Terra",
+        "color": "0xFFFFD952"
     },
     {
         "id": "terran-coin",
@@ -37277,7 +36936,8 @@
     {
         "id": "tether",
         "symbol": "usdt",
-        "name": "Tether"
+        "name": "Tether",
+        "color": "0xFF05AD85"
     },
     {
         "id": "tether-eurt",
@@ -37552,7 +37212,8 @@
     {
         "id": "theta-token",
         "symbol": "theta",
-        "name": "Theta Network"
+        "name": "Theta Network",
+        "color": "0xFFB1EBED"
     },
     {
         "id": "thetimeschaincoin",
@@ -38637,7 +38298,8 @@
     {
         "id": "tron",
         "symbol": "trx",
-        "name": "TRON"
+        "name": "TRON",
+        "color": "0xFFC12F26"
     },
     {
         "id": "tron-atm",
@@ -39672,7 +39334,8 @@
     {
         "id": "uniswap",
         "symbol": "uni",
-        "name": "Uniswap"
+        "name": "Uniswap",
+        "color": "0xFFFE1A87"
     },
     {
         "id": "uniswap-state-dollar",
@@ -40002,7 +39665,8 @@
     {
         "id": "usd-coin",
         "symbol": "usdc",
-        "name": "USD Coin"
+        "name": "USD Coin",
+        "color": "0xFF2674C9"
     },
     {
         "id": "usdf",
@@ -40337,7 +40001,8 @@
     {
         "id": "vechain",
         "symbol": "vet",
-        "name": "VeChain"
+        "name": "VeChain",
+        "color": "0xFF4284BC"
     },
     {
         "id": "veco",
@@ -41937,7 +41602,8 @@
     {
         "id": "wrapped-bitcoin",
         "symbol": "wbtc",
-        "name": "Wrapped Bitcoin"
+        "name": "Wrapped Bitcoin",
+        "color": "0xFFF79319"
     },
     {
         "id": "wrapped-celo",

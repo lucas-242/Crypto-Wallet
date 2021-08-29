@@ -40,8 +40,8 @@ class CryptoInfoModel {
     return CryptoInfoModel(
       id: map['id'],
       name: map['name'],
-      symbol: map['symbol'],
-      color: map['color'] ?? 0xFF424A57,
+      symbol: map['symbol'].toUpperCase(),
+      color: map['color'] != null ? int.parse(map['color']) : 0xFF424A57,
     );
   }
 

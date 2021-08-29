@@ -33,7 +33,7 @@ class _MainAppState extends State<MainApp> {
 
   @override
   void initState() {
-    walletRepository.getAllCryptoInfos(context);
+    walletRepository.getCryptoInfos(context);
     super.initState();
   }
 

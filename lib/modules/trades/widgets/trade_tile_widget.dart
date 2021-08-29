@@ -31,7 +31,7 @@ class TradeTile extends StatelessWidget {
             child: Column(
               children: [
                 TradeDetailsRow(
-                  leftText: trade.crypto,
+                  leftText: trade.cryptoSymbol,
                   leftTextStyle: AppTextStyles.captionBoldBody
                       .copyWith(color: AppColors.primary),
                   rightText: toBeginningOfSentenceCase(

@@ -94,7 +94,7 @@ class _TradesDetailsState extends State<TradesDetails> {
               children: [
                 Center(
                     child:
-                        Text(trade.crypto, style: AppTextStyles.titleRegular)),
+                        Text(trade.cryptoSymbol, style: AppTextStyles.titleRegular)),
                 SizedBox(height: 25),
                 TradeDetailsRow(
                   leftText: appLocalizations.operationType,
@@ -139,7 +139,7 @@ class _TradesDetailsState extends State<TradesDetails> {
                   rightText: NumberFormat.currency(
                     symbol: '\$',
                     decimalDigits: WalletHelper.getDecimalDigits(trade.price),
-                  ).format(trade.amountInvested),
+                  ).format(trade.amountDollars),
                 ),
               ],
             ),

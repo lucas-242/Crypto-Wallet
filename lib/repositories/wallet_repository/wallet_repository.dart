@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_wallet/shared/models/crypto_info_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:flutter/widgets.dart';
@@ -12,7 +11,7 @@ class WalletRepository {
   List<CryptoInfoModel> cryptoList = [];
 
   ///Fetch all crytpo infos from the data file
-  void getAllCryptoInfos(BuildContext context) async {
+  void getCryptoInfos(BuildContext context) async {
     if (cryptoList.isEmpty) {
       var source = await DefaultAssetBundle.of(context)
           .loadString('assets/data/cryptos.json');
@@ -21,8 +20,12 @@ class WalletRepository {
     }
   }
 
+  CryptoInfoModel findCryptoInfos(String id) {
+    return cryptoList.firstWhere((e) => e.id == id);
+  }
+
   ///Fetch for all user's cryptos
-  Future<List<CryptoModel>> getAllCryptos(String uid) async {
+  Future<List<CryptoModel>> getCryptos(String uid) async {
     try {
       List<CryptoModel> result = [];
 
@@ -46,15 +49,15 @@ class WalletRepository {
   }
 
   ///Fetch for all user's trades
-  Future<List<TradeModel>> getAllTrades(
-      {required String uid, String? crypto}) async {
+  Future<List<TradeModel>> getTrades(
+      {required String uid, String? cryptoId}) async {
     try {
       List<TradeModel> result = [];
 
       await FirebaseFirestore.instance
           .collection('trades')
           .where('user', isEqualTo: uid)
-          .where('crypto', isEqualTo: crypto)
+          .where('cryptoId', isEqualTo: cryptoId)
           .get()
           .then((QuerySnapshot querySnapshot) {
         result = querySnapshot.docs
@@ -79,7 +82,7 @@ class WalletRepository {
           FirebaseFirestore.instance.collection('trades').doc();
 
       //Get all trades of the same crypto
-      var trades = await getAllTrades(uid: trade.user!, crypto: trade.crypto);
+      var trades = await getTrades(uid: trade.user!, cryptoId: trade.cryptoId);
       trades.add(trade);
 
       late CryptoModel crypto;
@@ -89,7 +92,7 @@ class WalletRepository {
         transaction.set(tradesReference, trade.toMap());
 
         cryptos =
-            cryptos.where((element) => element.crypto == trade.crypto).toList();
+            cryptos.where((element) => element.cryptoId == trade.cryptoId).toList();
         if (cryptos.isEmpty) {
           _createCryptoInTransaction(transaction, trade);
         } else {
@@ -141,13 +144,14 @@ class WalletRepository {
     trades.add(trade);
     var averagePrice = _calculateAveragePrice(trades, trade.amount);
 
+    var infos = findCryptoInfos(trade.cryptoId);
     var crypto = CryptoModel(
-      id: Cryptos.apiIds[trade.crypto]!,
-      name: Cryptos.names[trade.crypto]!,
-      crypto: trade.crypto,
+      cryptoId: trade.cryptoId,
+      name: infos.name,
+      symbol: infos.symbol,
       amount: trade.amount,
       averagePrice: averagePrice,
-      totalInvested: trade.amountInvested,
+      totalInvested: trade.amountDollars,
       user: trade.user!,
       updatedAt: DateTime.now(),
     );
@@ -182,13 +186,13 @@ class WalletRepository {
 
     if (trade.operationType == TradeType.buy) {
       amount = crypto.amount + trade.amount;
-      totalInvested = crypto.totalInvested + trade.amountInvested;
+      totalInvested = crypto.totalInvested + trade.amountDollars;
       averagePrice = _calculateAveragePrice(trades, amount);
     }
     // !When selling the average price doesn't change
     else {
       amount = crypto.amount - trade.amount;
-      totalInvested = crypto.totalInvested - trade.amountInvested;
+      totalInvested = crypto.totalInvested - trade.amountDollars;
       totalInvested = totalInvested < 0 ? 0 : totalInvested;
     }
 
@@ -216,10 +220,10 @@ class WalletRepository {
 
     trades.forEach((element) {
       if (element.operationType == TradeType.buy) {
-        totalInvested += element.amountInvested;
+        totalInvested += element.amountDollars;
         amount += element.amount;
       } else {
-        totalInvested -= element.amountInvested;
+        totalInvested -= element.amountDollars;
         amount -= element.amount;
       }
     });

@@ -1,11 +1,11 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
+import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:crypto_wallet/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
@@ -69,6 +69,18 @@ class _InsertTradePageState extends State<InsertTradePage> {
   void dispose() {
     bloc.dispose();
     super.dispose();
+  }
+
+  DropdownItem? getSelectedItem(TradeModel trade) {
+    if (trade.cryptoId.isNotEmpty) {
+      var crypto = widget.walletRepository.findCryptoInfos(bloc.trade.cryptoId);
+      DropdownItem(
+        text: '${crypto.symbol} - ${crypto.name}',
+        value: crypto.id,
+      );
+    }
+
+    return null;
   }
 
   void onSave() async {
@@ -156,22 +168,17 @@ class _InsertTradePageState extends State<InsertTradePage> {
                           DropdownSearch<DropdownItem>(
                               label: bloc.appLocalizations.crypto,
                               mode: Mode.BOTTOM_SHEET,
-                              selectedItem: bloc.trade.crypto.isNotEmpty
-                                  ? DropdownItem(
-                                      text:
-                                          '${bloc.trade.crypto} - ${Cryptos.names[bloc.trade.crypto]}',
-                                      value: bloc.trade.crypto,
-                                    )
-                                  : null,
-                              items: Cryptos.list
+                              selectedItem: getSelectedItem(bloc.trade),
+                              items: widget.walletRepository.cryptoList
                                   .map((e) => DropdownItem(
-                                      text: '$e - ${Cryptos.names[e]}',
-                                      value: e))
+                                      text: '${e.symbol} - ${e.name}',
+                                      other: e.symbol,
+                                      value: e.id))
                                   .toList(),
                               itemAsString: (DropdownItem u) => u.text,
                               onChanged: (DropdownItem? data) {
                                 if (data != null) {
-                                  bloc.onChange(crypto: data.value);
+                                  bloc.onChange(cryptoId: data.value, cryptoSymbol: data.other);
                                   setState(() {});
                                 }
                               },

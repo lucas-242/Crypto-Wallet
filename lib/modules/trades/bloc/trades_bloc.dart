@@ -25,7 +25,7 @@ class TradesBloc extends ChangeNotifier {
   Future<void> getTrades(String uid) async {
     status = TradesStatus.loading();
 
-    await _walletRepository.getAllTrades(uid: uid).then((value) {
+    await _walletRepository.getTrades(uid: uid).then((value) {
       trades = value;
       trades.sort((a, b) => b.date.compareTo(a.date));
       dates = trades.map((e) => e.date).toSet().toList();
@@ -64,9 +64,9 @@ class TradesBloc extends ChangeNotifier {
   }) async {
     status = TradesStatus.loading();
 
-    var cryptos = await _walletRepository.getAllCryptos(uid);
+    var cryptos = await _walletRepository.getCryptos(uid);
     var found =
-        cryptos.where((element) => element.crypto.compareTo(trade.crypto) == 0);
+        cryptos.where((element) => element.cryptoId.compareTo(trade.cryptoId) == 0);
 
     if (found.isEmpty) {
       status =
@@ -78,7 +78,7 @@ class TradesBloc extends ChangeNotifier {
 
     var crypto = found.first;
     var tradesFiltered = trades
-        .where((element) => element.crypto == trade.crypto && element != trade)
+        .where((element) => element.cryptoId == trade.cryptoId && element != trade)
         .toList();
     await _walletRepository
         .deleteTrade(crypto, tradesFiltered, trade)
