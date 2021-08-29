@@ -55,20 +55,69 @@ abstract class Cryptos {
   static const erg = 'ERG';
   static const slp = 'SLP';
   static const coti = 'COTI';
+  static const near = 'NEAR';
+  static const sushi = 'SUSHI';
+  static const waves = 'WAVES';
+  static const comp = 'COMP';
+  static const cel = 'CEL';
+  static const dash = 'DASH';
+  static const qnt = 'QNT';
+  static const ht = 'HT';
+  static const dcr = 'DCR';
+  static const hbar = 'HBAR';
+  static const ust = 'UST';
+  static const snx = 'SNX';
+  static const hnt = 'HNT';
+  static const xdc = 'XDC';
+  static const chz = 'CHZ';
+  static const bat = 'BAT';
+  static const pax = 'PAX';
+  static const ray = 'RAY';
+  static const sdao = 'SDAO';
+  static const agix = 'AGIX';
+  static const cos = 'COS';
+  static const lbc = 'LBC';
+  static const hbtc = 'HBTC';
+  static const hot = 'HOT';
+  static const xem = 'XEM';
+  static const zec = 'ZEC';
+  static const tfuel = 'TFUEL';
+  static const enj = 'ENJ';
+  static const bcha = 'BCHA';
+  static const stx = 'STX';
+  static const ftm = 'FTM';
+  static const qtum = 'QTUM';
+  static const yfi = 'YFI';
+  static const flow = 'FLOW';
+  static const tusd = 'TUSD';
+  static const zil = 'ZIL';
+  static const btg = 'BTG';
+  static const ar = 'AR';
+  static const tel = 'TEL';
+  static const mana = 'MANA';
+  static const safemoon = 'SAFEMOON';
+  static const audio = 'AUDIO';
+  static const one = 'ONE';
+  static const xsushi = 'XSUSHI';
+  static const dgb = 'DGB';
+  static const nexo = 'NEXO';
+  static const clout = 'CLOUT';
+  static const bnt = 'BNT';
+  static const ont = 'ONT';
 
   static const List<String> list = [
     btc,
-    ada,
     eth,
-    doge,
-    xrp,
+    ada,
     bnb,
+    usdt,
+    doge,
     dot,
+    xrp,
+    usdc,
     sol,
     icp,
     uni,
-    usdt,
-    usdc,
     bch,
     busd,
     luna,
@@ -108,11 +157,60 @@ abstract class Cryptos {
     amp,
     btt,
     leo,
+    near,
+    sushi,
+    waves,
+    comp,
+    cel,
+    dash,
+    qnt,
+    ht,
+    dcr,
+    hbar,
+    ust,
+    snx,
+    hnt,
+    xdc,
+    chz,
+    hbtc,
+    hot,
+    xem,
+    zec,
+    tfuel,
+    enj,
+    bcha,
+    stx,
+    ftm,
+    qtum,
+    yfi,
+    flow,
+    tusd,
+    zil,
     rvn,
+    btg,
+    ar,
+    tel,
+    mana,
+    safemoon,
+    bat,
+    audio,
+    one,
+    xsushi,
+    dgb,
+    nexo,
+    clout,
+    bnt,
+    pax,
+    ont,
     nano,
     erg,
-    slp,
+    ray,
     coti,
+    slp,
+    agix,
+    cos,
+    sdao,
+    lbc,
   ];
 
   static const Map<String, String> apiIds = {
@@ -172,6 +270,55 @@ abstract class Cryptos {
     erg: 'ergo',
     slp: 'smooth-love-potion',
     coti: 'coti',
+    near: 'near',
+    sushi: 'sushi',
+    waves: 'waves',
+    comp: 'compound-governance-token',
+    cel: 'celsius-degree-token',
+    dash: 'dash',
+    qnt: 'quant',
+    ht: 'huobi-token',
+    dcr: 'decred',
+    hbar: 'hedera-hashgraph',
+    ust: 'terrausd',
+    snx: 'havven',
+    hnt: 'helium',
+    xdc: 'xdce-crowd-sale',
+    chz: 'chiliz',
+    bat: 'basic-attention-token',
+    pax: 'payperex',
+    ray: 'raydium',
+    sdao: 'singularitydao',
+    agix: 'singularitynet',
+    cos: 'contentos',
+    lbc: 'lbry-credits',
+    hbtc: 'huobi-btc',
+    hot: 'holotoken',
+    xem: 'nem',
+    zec: 'zcash',
+    tfuel: 'theta-fuel',
+    enj: 'enjincoin',
+    bcha: 'bitcoin-cash-abc-2',
+    stx: 'blockstack',
+    ftm: 'fantom',
+    qtum: 'qtum',
+    yfi: 'yearn-finance',
+    flow: 'flow',
+    tusd: 'true-usd',
+    zil: 'zilliqa',
+    btg: 'bitcoin-gold',
+    ar: 'arweave',
+    tel: 'telcoin',
+    mana: 'decentraland',
+    safemoon: 'safemoon',
+    audio: 'audius',
+    one: 'harmony',
+    xsushi: 'xsushi',
+    dgb: 'digibyte',
+    nexo: 'nexo',
+    clout: 'bitclout',
+    bnt: 'bancor',
+    ont: 'ontology',
   };
 
   static const Map<String, String> names = {
@@ -231,6 +378,55 @@ abstract class Cryptos {
     erg: 'Ergo',
     slp: 'Smooth Love Potion',
     coti: 'Coti',
+    near: 'Near',
+    sushi: 'Sushi',
+    waves: 'Waves',
+    comp: 'Compound',
+    cel: 'Celsius Network',
+    dash: 'Dash',
+    qnt: 'Quant',
+    ht: 'Huobi Token',
+    dcr: 'Decred',
+    hbar: 'Hedera Hashgraph',
+    ust: 'TerraUSD',
+    snx: 'Synthetix Network Token',
+    hnt: 'Helium',
+    xdc: 'XDC Network',
+    chz: 'Chiliz',
+    bat: 'Basic Attention Token',
+    pax: 'PayperEx',
+    ray: 'Raydium',
+    sdao: 'SingularityDAO',
+    agix: 'SingularityNET',
+    cos: 'Contentos',
+    lbc: 'LBRY Credits',
+    hbtc: 'Huobi BTC',
+    hot: 'Holo',
+    xem: 'NEM',
+    zec: 'Zcash',
+    tfuel: 'Theta Fuel',
+    enj: 'Enjin Coin',
+    bcha: 'Bitcoin Cash ABC',
+    stx: 'Stacks',
+    ftm: 'Fantom',
+    qtum: 'Qtum',
+    yfi: 'yearn.finance',
+    flow: 'Flow',
+    tusd: 'TrueUSD',
+    zil: 'Zilliqa',
+    btg: 'Bitcoin Gold',
+    ar: 'Arweave',
+    tel: 'Telcoin',
+    mana: 'Decentraland',
+    safemoon: 'SafeMoon',
+    audio: 'Audius',
+    one: 'Harmony',
+    xsushi: 'xSUSHI',
+    dgb: 'DigiByte',
+    nexo: 'NEXO',
+    clout: 'BitClout',
+    bnt: 'Bancor Network Token',
+    ont: 'Ontology',
   };
 
   static const colors = {
