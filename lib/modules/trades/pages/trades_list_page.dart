@@ -26,6 +26,7 @@ class _TradesListPageState extends State<TradesListPage> {
   void initState() {
     bloc = context.read<TradesBloc>();
     if (bloc.trades.isEmpty) bloc.getTrades(uid);
+    bloc.loadAd();
     super.initState();
   }
 
@@ -33,6 +34,12 @@ class _TradesListPageState extends State<TradesListPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     appLocalizations = AppLocalizations.of(context)!;
+  }
+
+  @override
+  void dispose() {
+    bloc.disposeInterstitialAd();
+    super.dispose();
   }
 
   @override
@@ -63,9 +70,15 @@ class _TradesListPageState extends State<TradesListPage> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 } else if (status.statusPage == StatusPage.error) {
-                  return Container(
-                    height: SizeConfig.height * 0.7,
-                    child: Center(child: Text(status.error)),
+                  return RefreshIndicator(
+                    onRefresh: () => bloc.getTrades(uid),
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                        height: SizeConfig.height * 0.7,
+                        child: Center(child: Text(status.error)),
+                      ),
+                    ),
                   );
                 } else if (status.statusPage == StatusPage.noData) {
                   return Container(
@@ -86,11 +99,13 @@ class _TradesListPageState extends State<TradesListPage> {
                         onRefresh: () => bloc.getTrades(uid),
                         onDelete: (trade) {
                           final walletBloc = context.read<WalletBloc>();
-                          bloc.deleteTrade(
-                            trade: trade,
-                            uid: uid,
-                            walletBloc: walletBloc,
-                          );
+                          bloc
+                              .deleteTrade(
+                                trade: trade,
+                                uid: uid,
+                                walletBloc: walletBloc,
+                              )
+                              .then((value) => bloc.loadAd());
                         },
                       );
                     }),

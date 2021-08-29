@@ -65,18 +65,18 @@ class TradesBloc extends ChangeNotifier {
     status = TradesStatus.loading();
 
     var cryptos = await _walletRepository.getAllCryptos(uid);
-    var finded =
+    var found =
         cryptos.where((element) => element.crypto.compareTo(trade.crypto) == 0);
 
-    if (finded.isEmpty) {
+    if (found.isEmpty) {
       status =
           TradesStatus.error('Something is wrong. Please, restart the app');
       return;
     }
 
-    _interstitialAd.show();
+    if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
-    var crypto = finded.first;
+    var crypto = found.first;
     var tradesFiltered = trades
         .where((element) => element.crypto == trade.crypto && element != trade)
         .toList();

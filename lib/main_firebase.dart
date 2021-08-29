@@ -20,7 +20,7 @@ class _MainFirebaseState extends State<MainFirebase> {
           if (snapshot.hasError) {
             return Material(
               child: Center(
-                child: Text('Não foi possível inicializar o Firebase'),
+                child: Text('Unable to initialize Firebase \n Não foi possível inicializar o Firebase'),
               ),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {

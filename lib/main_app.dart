@@ -8,14 +8,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'blocs/wallet/wallet.dart';
 import 'modules/app/app.dart';
 import 'modules/login/login.dart';
-import 'modules/splash/splash_page.dart';
+import 'modules/splash/splash.dart';
 import 'modules/insert_trade/insert_trade.dart';
 import 'modules/trades/trades.dart';
 import 'repositories/coin_repository/coin_repository.dart';
 import 'repositories/wallet_repository/wallet_repository.dart';
 import 'shared/auth/auth.dart';
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   MainApp() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
@@ -23,8 +23,20 @@ class MainApp extends StatelessWidget {
     ]);
   }
 
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
   final walletRepository = WalletRepository();
   final coinRepository = CoinRepository();
+
+  @override
+  void initState() {
+    walletRepository.getAllCryptoInfos(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -43,9 +55,9 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Crypto Wallet',
         theme: ThemeData(
-            primaryColor: AppColors.primary,
-            primarySwatch:
-                MaterialColor(0xFF3D30BB, AppColors.primaryMaterial)),
+          primaryColor: AppColors.primary,
+          primarySwatch: AppColors.primarySwatch,
+        ),
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.splash,
         routes: {

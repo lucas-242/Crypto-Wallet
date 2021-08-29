@@ -1,4 +1,6 @@
+import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
+import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
 import 'package:crypto_wallet/shared/themes/size_config.dart';
 import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
@@ -8,14 +10,22 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CryptoCard extends StatefulWidget {
   final CryptoModel crypto;
-  const CryptoCard({Key? key, required this.crypto}) : super(key: key);
+  final int index;
+  final int? openedIndex;
+  final Function(int?) onTap;
+  const CryptoCard({
+    Key? key,
+    required this.crypto,
+    required this.index,
+    this.openedIndex,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _CryptoCardState createState() => _CryptoCardState();
 }
 
 class _CryptoCardState extends State<CryptoCard> {
-  bool isOpen = false;
   double height = SizeConfig.height * 0.22;
   late AppLocalizations appLocalizations;
 
@@ -28,13 +38,24 @@ class _CryptoCardState extends State<CryptoCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => setState(() => isOpen = !isOpen),
-      child: Card(
-        elevation: 3,
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Container(
-            width: double.infinity,
+      onTap: () => widget
+          .onTap(widget.openedIndex == widget.index ? null : widget.index),
+      child: AnimatedContainer(
+        duration: Duration(seconds: 0),
+        width: double.infinity,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: widget.openedIndex == widget.index
+                ? Colors.grey[100]
+                : AppColors.background,
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                bottom: widget.openedIndex == widget.index ? 20 : 0,
+                left: 20,
+                right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -45,15 +66,27 @@ class _CryptoCardState extends State<CryptoCard> {
                       children: [
                         ImageFade(image: widget.crypto.image),
                         SizedBox(width: 15),
-                        Text.rich(
-                          TextSpan(
-                              text:
-                                  toBeginningOfSentenceCase(widget.crypto.name),
+                        Container(
+                          width: SizeConfig.width * 0.32,
+                          height: SizeConfig.height * 0.065,
+                          alignment: Alignment.centerLeft,
+                          child: Text.rich(
+                            TextSpan(
+                              text: '${widget.crypto.crypto}',
                               children: [
-                                TextSpan(text: ' . ${widget.crypto.crypto}')
-                              ]),
-                          style: AppTextStyles.cryptoTitleBold
-                              .copyWith(fontSize: 15),
+                                TextSpan(
+                                  text:
+                                      ' - ${toBeginningOfSentenceCase(widget.crypto.name)}',
+                                  style: AppTextStyles.cryptoTitle
+                                      .copyWith(fontSize: 15),
+                                )
+                              ],
+                            ),
+                            style: AppTextStyles.cryptoTitleBold
+                                .copyWith(fontSize: 15),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ],
                     ),
@@ -77,13 +110,13 @@ class _CryptoCardState extends State<CryptoCard> {
                 ),
                 AnimatedContainer(
                   duration: Duration(milliseconds: 250),
-                  height: isOpen ? height : 0,
+                  height: widget.openedIndex == widget.index ? height : 0,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(height: 20),
+                        SizedBox(height: 15),
                         Divider(thickness: 1),
-                        SizedBox(height: 10),
+                        SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -93,8 +126,10 @@ class _CryptoCardState extends State<CryptoCard> {
                                   .copyWith(fontSize: 15),
                             ),
                             Text(
-                              NumberFormat.currency(symbol: '\$')
-                                  .format(widget.crypto.price),
+                              NumberFormat.currency(
+                                symbol: '\$',
+                                decimalDigits: WalletHelper.getDecimalDigits(widget.crypto.price),
+                              ).format(widget.crypto.price),
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -110,8 +145,10 @@ class _CryptoCardState extends State<CryptoCard> {
                                   .copyWith(fontSize: 15),
                             ),
                             Text(
-                              NumberFormat.currency(symbol: '\$')
-                                  .format(widget.crypto.averagePrice),
+                              NumberFormat.currency(
+                                symbol: '\$',
+                                decimalDigits: WalletHelper.getDecimalDigits(widget.crypto.price),
+                              ).format(widget.crypto.averagePrice),
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -127,8 +164,10 @@ class _CryptoCardState extends State<CryptoCard> {
                                   .copyWith(fontSize: 15),
                             ),
                             Text(
-                              NumberFormat.currency(symbol: '\$')
-                                  .format(widget.crypto.totalInvested),
+                              NumberFormat.currency(
+                                symbol: '\$',
+                                decimalDigits: WalletHelper.getDecimalDigits(widget.crypto.price),
+                              ).format(widget.crypto.totalInvested),
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
@@ -143,11 +182,29 @@ class _CryptoCardState extends State<CryptoCard> {
                               style: AppTextStyles.cryptoTitle
                                   .copyWith(fontSize: 15),
                             ),
-                            Text(
-                              NumberFormat.currency(symbol: '\$')
-                                  .format(widget.crypto.gainLoss),
-                              style: AppTextStyles.cryptoTitle
-                                  .copyWith(fontSize: 15),
+                            Row(
+                              children: [
+                                Text(
+                                  NumberFormat.currency(
+                                        symbol: '\$',
+                                        decimalDigits:
+                                            WalletHelper.getDecimalDigits(widget.crypto.price),
+                                      ).format(widget.crypto.gainLoss) +
+                                      ' (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(widget.crypto.gainLossPercent)})',
+                                  style: AppTextStyles.cryptoTitle
+                                      .copyWith(fontSize: 15),
+                                ),
+                                SizedBox(width: 5),
+                                Icon(
+                                  widget.crypto.gainLoss.isNegative
+                                      ? Icons.arrow_downward
+                                      : Icons.arrow_upward,
+                                  color: widget.crypto.gainLoss.isNegative
+                                      ? AppColors.red
+                                      : AppColors.green,
+                                  size: 16,
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -155,6 +212,13 @@ class _CryptoCardState extends State<CryptoCard> {
                     ),
                   ),
                 ),
+                widget.openedIndex == widget.index
+                    ? Container()
+                    : SizedBox(height: 20),
+                widget.openedIndex == widget.index ||
+                        widget.openedIndex == widget.index + 1
+                    ? Container()
+                    : Divider(thickness: 1),
               ],
             ),
           ),

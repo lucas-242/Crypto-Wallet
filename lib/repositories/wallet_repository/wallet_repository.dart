@@ -1,10 +1,26 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto_wallet/shared/models/crypto_info_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
+import 'package:flutter/widgets.dart';
 
 class WalletRepository {
+  List<CryptoInfoModel> cryptoList = [];
+
+  ///Fetch all crytpo infos from the data file
+  void getAllCryptoInfos(BuildContext context) async {
+    if (cryptoList.isEmpty) {
+      var source = await DefaultAssetBundle.of(context)
+          .loadString('assets/data/cryptos.json');
+      var decoded = json.decode(source) as List<dynamic>;
+      cryptoList = decoded.map((e) => CryptoInfoModel.fromMap(e)).toList();
+    }
+  }
+
   ///Fetch for all user's cryptos
   Future<List<CryptoModel>> getAllCryptos(String uid) async {
     try {
@@ -87,7 +103,7 @@ class WalletRepository {
     }
   }
 
-  /// Delete a [trade] of a [crypto] considering [trades] to recalculate the Average Price
+  /// Delete a [trade] of a [crypto] considering the other [trades] to recalculate the Average Price
   Future<void> deleteTrade(
       CryptoModel crypto, List<TradeModel> trades, TradeModel trade) async {
     try {
@@ -96,16 +112,19 @@ class WalletRepository {
 
       return await FirebaseFirestore.instance
           .runTransaction((transaction) async {
-        crypto = _calculateCryptoProperties(
+        if (trades.length == 0) {
+          _deleteCryptoInTransaction(transaction, crypto);
+          transaction.delete(tradesReference);
+          return;
+        }
+        crypto = _recalculateCryptoProperties(
           crypto,
           trades,
-          trade.copyWith(operationType: TradeType.sell),
+          trade,
         );
-        if (crypto.totalInvested <= 0) {
-          _deleteCryptoInTransaction(transaction, crypto);
-        } else {
-          _updateCryptoInTransaction(transaction, crypto);
-        }
+
+        _updateCryptoInTransaction(transaction, crypto);
+
         transaction.delete(tradesReference);
       });
     } catch (error) {
@@ -123,7 +142,8 @@ class WalletRepository {
     var averagePrice = _calculateAveragePrice(trades, trade.amount);
 
     var crypto = CryptoModel(
-      name: Cryptos.apiNames[trade.crypto]!,
+      id: Cryptos.apiIds[trade.crypto]!,
+      name: Cryptos.names[trade.crypto]!,
       crypto: trade.crypto,
       amount: trade.amount,
       averagePrice: averagePrice,
@@ -153,34 +173,70 @@ class WalletRepository {
     print('transaction deleted:  $crypto');
   }
 
-  /// Calculate all [crypto] properties considering [trade] and all the [trades] to calculate the Average Price
+  /// Calculate all [crypto] properties considering [trade] and all the [trades] to calculate the Average Price.
   CryptoModel _calculateCryptoProperties(
       CryptoModel crypto, List<TradeModel> trades, TradeModel trade) {
-    var updatedDate = DateTime.now();
+    double amount = 0;
+    double totalInvested = 0;
+    double averagePrice = crypto.averagePrice;
+
     if (trade.operationType == TradeType.buy) {
-      var amount = crypto.amount + trade.amount;
-      var totalInvested = crypto.totalInvested + trade.amountInvested;
-      var averagePrice = _calculateAveragePrice(trades, amount);
-
-      crypto = crypto.copyWith(
-        amount: amount,
-        totalInvested: totalInvested,
-        averagePrice: averagePrice,
-        updatedAt: updatedDate,
-        user: crypto.user,
-      );
-    } else {
-      var amount = crypto.amount - trade.amount;
-      var totalInvested = crypto.totalInvested - trade.amountInvested;
-
-      // When selling the average price doesn't change
-      crypto = crypto.copyWith(
-        amount: amount,
-        totalInvested: totalInvested,
-        updatedAt: updatedDate,
-        user: crypto.user,
-      );
+      amount = crypto.amount + trade.amount;
+      totalInvested = crypto.totalInvested + trade.amountInvested;
+      averagePrice = _calculateAveragePrice(trades, amount);
     }
+    // !When selling the average price doesn't change
+    else {
+      amount = crypto.amount - trade.amount;
+      totalInvested = crypto.totalInvested - trade.amountInvested;
+      totalInvested = totalInvested < 0 ? 0 : totalInvested;
+    }
+
+    crypto = crypto.copyWith(
+      amount: amount,
+      totalInvested: totalInvested,
+      averagePrice: averagePrice,
+      updatedAt: DateTime.now(),
+      user: crypto.user,
+    );
+
+    return crypto;
+  }
+
+  /// Used to recalculate all the propreties of the [crypto] when deleting a [trade]
+  /// considering all the other [trades]
+  CryptoModel _recalculateCryptoProperties(
+    CryptoModel crypto,
+    List<TradeModel> trades,
+    TradeModel trade,
+  ) {
+    double amount = 0;
+    double totalInvested = 0;
+    double averagePrice = 0;
+
+    trades.forEach((element) {
+      if (element.operationType == TradeType.buy) {
+        totalInvested += element.amountInvested;
+        amount += element.amount;
+      } else {
+        totalInvested -= element.amountInvested;
+        amount -= element.amount;
+      }
+    });
+
+    amount = amount < 0 ? 0 : amount;
+    totalInvested = totalInvested < 0 ? 0 : totalInvested;
+
+    if (amount > 0) {
+      averagePrice = _calculateAveragePrice(trades, amount);
+    }
+
+    crypto = crypto.copyWith(
+      amount: amount,
+      averagePrice: averagePrice,
+      totalInvested: totalInvested,
+      updatedAt: DateTime.now(),
+    );
 
     return crypto;
   }

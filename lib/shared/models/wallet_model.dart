@@ -2,28 +2,32 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-class DashboardModel {
-  double total;
+class WalletModel {
+  double totalNow;
+  double totalInvested;
   double variation;
   double percentVariation;
 
   List<CryptoSummary> cryptosSummary;
 
-  DashboardModel({
-    this.total = 0,
+  WalletModel({
+    this.totalNow = 0,
+    this.totalInvested = 0,
     this.variation = 0,
     this.percentVariation = 0,
     this.cryptosSummary = const [],
   });
 
-  DashboardModel copyWith({
-    double? total,
+  WalletModel copyWith({
+    double? totalNow,
+    double? totalInvested,
     double? variation,
     double? percentVariation,
     List<CryptoSummary>? cryptosSummary,
   }) {
-    return DashboardModel(
-      total: total ?? this.total,
+    return WalletModel(
+      totalInvested: totalInvested ?? this.totalInvested,
+      totalNow: totalNow ?? this.totalNow,
       variation: variation ?? this.variation,
       percentVariation: percentVariation ?? this.percentVariation,
       cryptosSummary: cryptosSummary ?? this.cryptosSummary,
@@ -34,8 +38,9 @@ class DashboardModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is DashboardModel &&
-        other.total == total &&
+    return other is WalletModel &&
+        other.totalInvested == totalInvested &&
+        other.totalNow == totalNow &&
         other.variation == variation &&
         other.percentVariation == percentVariation &&
         listEquals(other.cryptosSummary, cryptosSummary);
@@ -43,7 +48,8 @@ class DashboardModel {
 
   @override
   int get hashCode {
-    return total.hashCode ^
+    return totalNow.hashCode ^
+        totalInvested.hashCode ^
         variation.hashCode ^
         percentVariation.hashCode ^
         cryptosSummary.hashCode;

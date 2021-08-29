@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
@@ -33,14 +34,15 @@ class TradeTile extends StatelessWidget {
                   leftText: trade.crypto,
                   leftTextStyle: AppTextStyles.captionBoldBody
                       .copyWith(color: AppColors.primary),
-                  rightText: toBeginningOfSentenceCase(trade.operationType == TradeType.buy
+                  rightText: toBeginningOfSentenceCase(
+                      trade.operationType == TradeType.buy
                           ? appLocalizations.buy
                           : appLocalizations.sell)!,
                   rightTextStyle: trade.operationType == TradeType.buy
                       ? AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.secondary)
+                          .copyWith(color: AppColors.green)
                       : AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.grey),
+                          .copyWith(color: AppColors.red),
                 ),
                 SizedBox(height: 5),
                 TradeDetailsRow(
@@ -50,8 +52,10 @@ class TradeTile extends StatelessWidget {
                 SizedBox(height: 5),
                 TradeDetailsRow(
                   leftText: appLocalizations.price,
-                  rightText:
-                      NumberFormat.currency(symbol: '\$').format(trade.price),
+                  rightText: NumberFormat.currency(
+                    symbol: '\$',
+                    decimalDigits: WalletHelper.getDecimalDigits(trade.price),
+                  ).format(trade.price),
                 ),
               ],
             ),

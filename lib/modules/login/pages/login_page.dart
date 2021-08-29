@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       appLocalizations.logo,
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.titleBoldGrey,
+                      style: AppTextStyles.titleBold,
                     ),
                   ),
                 ],

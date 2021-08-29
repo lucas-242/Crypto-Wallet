@@ -1,4 +1,4 @@
-import 'package:crypto_wallet/modules/home/home_page.dart';
+import 'package:crypto_wallet/modules/home/pages/home_page.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';

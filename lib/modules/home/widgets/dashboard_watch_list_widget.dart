@@ -15,7 +15,7 @@ class DashboardWatchList extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: 25),
       child: Container(
-        height: SizeConfig.height * 0.3,
+        height: SizeConfig.height * 0.33,
         child: DefaultTabController(
           length: 4,
           initialIndex: 0,
@@ -24,7 +24,7 @@ class DashboardWatchList extends StatelessWidget {
               TabBar(
                 indicatorColor: AppColors.primary,
                 labelColor: AppColors.primary,
-                unselectedLabelColor: AppColors.stroke,
+                unselectedLabelColor: AppColors.grey,
                 tabs: [
                   Tab(text: '24h'),
                   Tab(text: '7d'),

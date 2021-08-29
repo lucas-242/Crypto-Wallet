@@ -3,9 +3,11 @@ import 'dart:ui';
 
 import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
+import 'package:crypto_wallet/shared/constants/cryptos.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/models/dashboard_model.dart';
+import 'package:crypto_wallet/shared/models/wallet_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/foundation.dart';
 
@@ -17,7 +19,10 @@ class WalletBloc extends ChangeNotifier {
 
   List<CryptoModel> cryptos = [];
 
-  DashboardModel dashboardData = new DashboardModel();
+  WalletModel walletData = new WalletModel();
+
+  ///The index of the opened Crypto Card of the Wallet Page
+  int? openedIndex;
 
   final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
   WalletStatus get status => statusNotifier.value;
@@ -35,7 +40,7 @@ class WalletBloc extends ChangeNotifier {
     await _walletRepository.getAllCryptos(uid).then((result) async {
       if (result.isNotEmpty) {
         cryptos = await getCryptosMarketData(result);
-        setDashboardData();
+        setWalletData();
       }
     }).catchError((error) {
       status = WalletStatus.error(error.toString());
@@ -51,16 +56,17 @@ class WalletBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-   Future<List<CryptoModel>> getCryptosMarketData(
+  Future<List<CryptoModel>> getCryptosMarketData(
       List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
 
     return await _coinRepository
-        .getMarketData(coins: coins.map((e) => e.name).toList())
+        .getMarketData(coins: CryptoHelper.getCoinApiIdsFromList(coins))
         .then((response) {
       coins.forEach((coin) {
         response.any((element) {
-          if (element.id == coin.name) {
+          var apiId = Cryptos.apiIds[coin.crypto];
+          if (apiId == element.id) {
             var price = element.currentPrice;
 
             var history = new CryptoHistory(
@@ -92,29 +98,29 @@ class WalletBloc extends ChangeNotifier {
     });
   }
 
-  Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
-    var result = <CryptoModel>[];
-    return await _coinRepository
-        .getPrices(coins: coins.map((e) => e.name).toList())
-        .then((response) {
-      coins.forEach((coin) {
-        var price = double.parse(response[coin.name]['usd'].toString());
-        result.add(coin.copyWith(price: price));
-      });
+  // Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
+  //   var result = <CryptoModel>[];
+  //   return await _coinRepository
+  //       .getPrices(coins: CryptoHelper.getCoinApiNamesFromList(coins))
+  //       .then((response) {
+  //     coins.forEach((coin) {
+  //       var price = double.parse(response[coin.name]['usd'].toString());
+  //       result.add(coin.copyWith(price: price));
+  //     });
 
-      return result;
-    });
-  }
+  //     return result;
+  //   });
+  // }
 
-  /// Init a timer to refresh crypto prices
-  void setTimerToGetPrices() {
-    Timer.periodic(Duration(seconds: 60), (timer) async {
-      var result = await getCryptosPrice(cryptos);
-      if (result.isNotEmpty) cryptos = result;
-      print('refreshed');
-      notifyListeners();
-    });
-  }
+  // /// Init a timer to refresh crypto prices
+  // void setTimerToGetPrices() {
+  //   Timer.periodic(Duration(seconds: 60), (timer) async {
+  //     var result = await getCryptosPrice(cryptos);
+  //     if (result.isNotEmpty) cryptos = result;
+  //     print('refreshed');
+  //     notifyListeners();
+  //   });
+  // }
 
   void updateCrypto(CryptoModel model) {
     var index = cryptos.indexWhere((element) => element.crypto == model.crypto);
@@ -128,19 +134,21 @@ class WalletBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setDashboardData() {
-    double total = cryptos
+  void setWalletData() {
+    double totalNow = cryptos
         .map((e) => e.totalNow)
+        .fold(0, (previousValue, element) => previousValue + element);
+    double totalInvested = cryptos
+        .map((e) => e.totalInvested)
         .fold(0, (previousValue, element) => previousValue + element);
     double variation = cryptos
         .map((e) => e.gainLoss)
         .fold(0, (previousValue, element) => previousValue + element);
 
-    double percentVariation = (variation.abs() * 100) / total;
+    double percentVariation = (variation.abs() * 100) / totalNow;
 
     List<CryptoSummary> cryptosSummary = [];
     var sortedCryptos = cryptos;
-    var colorIndex = 0;
     sortedCryptos.sort((a, b) => b.totalNow.compareTo(a.totalNow));
     sortedCryptos.forEach((crypto) {
       cryptosSummary.add(CryptoSummary(
@@ -148,41 +156,40 @@ class WalletBloc extends ChangeNotifier {
         crypto: crypto.crypto,
         value: crypto.totalNow,
         amount: crypto.amount,
-        percent: (crypto.totalNow * 100) / total,
-        color: chartColors[colorIndex],
+        percent: (crypto.totalNow * 100) / totalNow,
+        color: Color(Cryptos.colors[crypto.crypto] ?? AppColors.grey.value),
         image: crypto.image,
       ));
-      colorIndex++;
     });
 
-    dashboardData = dashboardData.copyWith(
-      total: total,
+    walletData = walletData.copyWith(
+      totalNow: totalNow,
+      totalInvested: totalInvested,
       variation: variation,
       percentVariation: percentVariation,
       cryptosSummary: cryptosSummary,
     );
   }
 
-  List<Color> get chartColors {
-    return [
-      AppColors.primary,
-      AppColors.secondary,
-      AppColors.grey,
-      AppColors.primary,
-      AppColors.secondary,
-      AppColors.grey,
-      AppColors.primary,
-      AppColors.secondary,
-      AppColors.grey,
-      AppColors.primary,
-      AppColors.secondary,
-      AppColors.grey,
-    ];
-  }
+  // List<Color> get chartColors {
+  //   Color? lastColor;
+  //   return List.generate(cryptos.length, (index) {
+  //     if (lastColor == AppColors.primary)
+  //       lastColor = AppColors.secondary;
+  //     else if (lastColor == AppColors.secondary)
+  //       lastColor = AppColors.tertiary;
+  //     else if (lastColor == AppColors.tertiary)
+  //       lastColor = AppColors.grey;
+  //     else
+  //       lastColor = AppColors.primary;
+
+  //     return lastColor!;
+  //   });
+  // }
 
   void eraseData() {
     cryptos = [];
-    dashboardData = new DashboardModel();
+    walletData = new WalletModel();
     notifyListeners();
   }
 }

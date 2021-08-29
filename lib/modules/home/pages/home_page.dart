@@ -7,6 +7,7 @@ import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
+import 'package:crypto_wallet/shared/widgets/total_wallet_card/total_wallet_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.only(left: 25, right: 25, top: 25),
+            padding: EdgeInsets.only(left: 25, right: 25, bottom: 5),
             child: ValueListenableBuilder<WalletStatus>(
               valueListenable: bloc.statusNotifier,
               builder: (context, status, child) {
@@ -99,18 +100,8 @@ class _HomePageState extends State<HomePage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TotalWalletCard(dashboardData: bloc.dashboardData),
-                    CoinsSlide(dashboardData: bloc.dashboardData),
-                    // DonutChart(
-                    //   data: bloc.dashboardData.cryptosSummary
-                    //       .asMap()
-                    //       .entries
-                    //       .map((e) => DonutChartModel(
-                    //           percent: e.value.percent,
-                    //           color: bloc.chartColors[e.key]))
-                    //       .toList(),
-                    // ),
-                    // Chart(bloc: bloc),
+                    TotalWalletCard(walletData: bloc.walletData),
+                    CoinsSlide(walletdData: bloc.walletData),
                     DashboardWatchList(cryptos: bloc.cryptos),
                   ],
                 );

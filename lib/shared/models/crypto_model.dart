@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 
 class CryptoModel {
-  final String? id;
+  final String id;
   final String name;
   final String? image;
   final String crypto;
@@ -20,9 +21,11 @@ class CryptoModel {
 
   double get gainLoss => totalNow - totalInvested;
 
+  double get gainLossPercent => (gainLoss * 100 / totalNow) / 100;
+
   CryptoModel({
     DateTime? updatedAt,
-    this.id,
+    required this.id,
     this.name = '',
     this.image,
     required this.crypto,
@@ -64,6 +67,7 @@ class CryptoModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'crypto': crypto,
       'amount': amount,
@@ -76,12 +80,13 @@ class CryptoModel {
 
   factory CryptoModel.fromMap(Map<String, dynamic> map) {
     return CryptoModel(
-      id: map['id'],
+      id: map['id'] ?? Cryptos.apiIds[map['crypto']],
       name: map['name'],
       crypto: map['crypto'],
-      amount: map['amount'],
-      averagePrice: map['averagePrice'],
-      totalInvested: map['totalInvested'],
+      // * These converts are used to prevent the following error: "type 'int' is not a subtype of type 'double'"
+      amount: double.tryParse(map['amount'].toString()) ?? 0,
+      averagePrice: double.tryParse(map['averagePrice'].toString()) ?? 0,
+      totalInvested: double.tryParse(map['totalInvested'].toString()) ?? 0,
       updatedAt: DateTime.parse(map['updatedAt'].toDate().toString()),
       user: map['user'],
     );

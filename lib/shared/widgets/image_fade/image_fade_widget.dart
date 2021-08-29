@@ -12,7 +12,7 @@ class ImageFade extends StatelessWidget {
       child: Container(
         height: SizeConfig.height * 0.065,
         width: SizeConfig.width * 0.13,
-        color: Colors.white54,
+        color: Colors.white,
         child: Padding(
             padding: EdgeInsets.all(5),
             child: image != null ? Image.network(image!) : Container()),

@@ -1,6 +1,7 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
+import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
@@ -28,8 +29,6 @@ class _TradesDetailsState extends State<TradesDetails> {
   @override
   void initState() {
     bloc = context.read<TradesBloc>();
-    bloc.loadAd();
-
     super.initState();
   }
 
@@ -37,12 +36,6 @@ class _TradesDetailsState extends State<TradesDetails> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     appLocalizations = AppLocalizations.of(context)!;
-  }
-
-  @override
-  void dispose() {
-    bloc.disposeInterstitialAd();
-    super.dispose();
   }
 
   void _deleteTrade() {
@@ -58,7 +51,7 @@ class _TradesDetailsState extends State<TradesDetails> {
       //     message: 'Trade deleted successfully',
       //     type: SnackBarType.success,
       //     onClose: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()));
-      bloc.disposeInterstitialAd();
+      bloc.loadAd();
       Navigator.of(context).pop();
     });
   }
@@ -111,7 +104,7 @@ class _TradesDetailsState extends State<TradesDetails> {
                           : appLocalizations.sell)!,
                   rightTextStyle: trade.operationType == TradeType.buy
                       ? AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.secondary)
+                          .copyWith(color: AppColors.green)
                       : AppTextStyles.captionBoldBody
                           .copyWith(color: AppColors.red),
                 ),
@@ -123,8 +116,10 @@ class _TradesDetailsState extends State<TradesDetails> {
                 SizedBox(height: 10),
                 TradeDetailsRow(
                   leftText: appLocalizations.tradePrice,
-                  rightText:
-                      NumberFormat.currency(symbol: '\$').format(trade.price),
+                  rightText: NumberFormat.currency(
+                    symbol: '\$',
+                    decimalDigits: WalletHelper.getDecimalDigits(trade.price),
+                  ).format(trade.price),
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(
@@ -141,8 +136,10 @@ class _TradesDetailsState extends State<TradesDetails> {
                 SizedBox(height: 10),
                 TradeDetailsRow(
                   leftText: appLocalizations.total,
-                  rightText: NumberFormat.currency(symbol: '\$')
-                      .format(trade.amountInvested),
+                  rightText: NumberFormat.currency(
+                    symbol: '\$',
+                    decimalDigits: WalletHelper.getDecimalDigits(trade.price),
+                  ).format(trade.amountInvested),
                 ),
               ],
             ),

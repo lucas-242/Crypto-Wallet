@@ -1,12 +1,14 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
+import 'package:crypto_wallet/shared/models/crypto_model.dart';
+import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'insert_trade_status.dart';
 
@@ -15,12 +17,11 @@ class InsertTradeBloc extends ChangeNotifier {
   late InterstitialAd _interstitialAd;
 
   final formKey = GlobalKey<FormState>();
-  TradeModel trade = TradeModel(
-    operationType: TradeType.buy,
-    crypto: Cryptos.btc,
-  );
+  TradeModel trade = TradeModel();
 
   final statusNotifier = ValueNotifier<InsertTradeStatus>(InsertTradeStatus());
+
+  late AppLocalizations appLocalizations;
 
   InsertTradeStatus get status => statusNotifier.value;
   set status(InsertTradeStatus status) => statusNotifier.value = status;
@@ -28,10 +29,14 @@ class InsertTradeBloc extends ChangeNotifier {
   InsertTradeBloc({required WalletRepository walletRepository})
       : _walletRepository = walletRepository;
 
+  String? validateCrypto(DropdownItem? value) {
+    return value == null ? appLocalizations.errorFieldNull : null;
+  }
+
   String? validateCryptoAmount(String? value) {
     return value == null ||
             double.parse(value.replaceAll(RegExp(','), '.')) == 0
-        ? "The amount can't be null"
+        ? appLocalizations.errorFieldNull
         : null;
   }
 
@@ -43,17 +48,19 @@ class InsertTradeBloc extends ChangeNotifier {
           .replaceAll(RegExp(r'\.'), '')
           .replaceAll(RegExp(','), '.');
 
-      return double.parse(value) < 0 ? "The amount can't be null" : null;
+      return double.parse(value) < 0 ? appLocalizations.errorFieldNull : null;
     }
 
     return null;
   }
 
   String? validateDate(String? value) {
-    return value == null || value.length != 10 ? "Insert a valid date" : null;
+    return value == null || value.length != 10
+        ? appLocalizations.errorFieldWrongDate
+        : null;
   }
 
-  String? validatePrice(String? value) {
+  String? validateTradePrice(String? value) {
     if (value != null) {
       //Remove $, . from the middle of the number and change , to .
       value = value
@@ -62,7 +69,7 @@ class InsertTradeBloc extends ChangeNotifier {
           .replaceAll(RegExp(','), '.');
 
       return double.parse(value) < 0
-          ? "The trade must be equals or greater than \$0,00"
+          ? appLocalizations.errorFieldTradePrice
           : null;
     }
 
@@ -106,27 +113,35 @@ class InsertTradeBloc extends ChangeNotifier {
   }) async {
     final form = formKey.currentState;
 
-    if (!form!.validate()) return;
+    if (!form!.validate()) throw Exception('Invalid form');
 
     status = InsertTradeStatus.loading();
 
-    _interstitialAd.show();
-
     var cryptos = await _walletRepository.getAllCryptos(uid);
+    _validateAmount(cryptos);
+
+    if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
     return await _walletRepository.addTrade(cryptos, trade).then((value) {
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
-      trade = TradeModel(
-        operationType: TradeType.buy,
-        crypto: Cryptos.btc,
-        user: uid,
-      );
+      trade = TradeModel(user: uid);
       status = InsertTradeStatus();
     }).catchError((error) {
-      print(error);
       status = InsertTradeStatus.error(error.toString());
     });
+  }
+
+  ///Verify if the user has enough amount in [cryptos] to create a selling trade
+  void _validateAmount(List<CryptoModel> cryptos) {
+    if (trade.operationType == TradeType.sell) {
+      var found = cryptos.where((c) => c.crypto == trade.crypto);
+      if (found.isEmpty || found.first.amount < trade.amount) {
+        var error = appLocalizations.errorInsufficientBalance;
+        status = InsertTradeStatus.error(error);
+        throw Exception(error);
+      }
+    }
   }
 
   ///Load the InterstitialAd
