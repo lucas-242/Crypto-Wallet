@@ -1,7 +1,6 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
@@ -126,11 +125,7 @@ class InsertTradeBloc extends ChangeNotifier {
     return await _walletRepository.addTrade(cryptos, trade).then((value) {
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
-      trade = TradeModel(
-        operationType: TradeType.buy,
-        crypto: Cryptos.btc,
-        user: uid,
-      );
+      trade = TradeModel(user: uid);
       status = InsertTradeStatus();
     }).catchError((error) {
       status = InsertTradeStatus.error(error.toString());

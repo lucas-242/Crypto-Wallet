@@ -32,7 +32,6 @@ class _InsertTradePageState extends State<InsertTradePage> {
   late final InsertTradeBloc bloc;
   late final String uid;
 
-  //TODO: Decimal Separator according to the language and crypto
   final priceController = MoneyMaskedTextController(
     leftSymbol: '\$',
     decimalSeparator: ',',

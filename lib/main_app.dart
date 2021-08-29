@@ -15,7 +15,7 @@ import 'repositories/coin_repository/coin_repository.dart';
 import 'repositories/wallet_repository/wallet_repository.dart';
 import 'shared/auth/auth.dart';
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   MainApp() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
@@ -23,8 +23,20 @@ class MainApp extends StatelessWidget {
     ]);
   }
 
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
   final walletRepository = WalletRepository();
   final coinRepository = CoinRepository();
+
+  @override
+  void initState() {
+    walletRepository.getAllCryptoInfos(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

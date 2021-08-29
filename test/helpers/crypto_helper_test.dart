@@ -7,12 +7,14 @@ void main() {
   test('get Crypto API Ids from a CryptoModel list', () async {
     var coins = [
       CryptoModel(
+        id: Cryptos.apiIds[Cryptos.ada]!,
         crypto: Cryptos.ada,
         amount: 500,
         averagePrice: 0.5,
         totalInvested: 250,
       ),
       CryptoModel(
+        id: Cryptos.apiIds[Cryptos.doge]!,
         crypto: Cryptos.doge,
         amount: 500,
         averagePrice: 0.1,
