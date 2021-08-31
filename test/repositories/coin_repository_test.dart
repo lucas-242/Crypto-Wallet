@@ -13,7 +13,7 @@ void main() {
   });
 
   test('get Bitcoin and Ada Cardano market data in USD', () async {
-    final response = await repository.getMarketData(coins: [Cryptos.apiIds[Cryptos.btc]!, Cryptos.apiIds[Cryptos.ada]!]);
+    final response = await repository.getMarketcap(coins: [Cryptos.apiIds[Cryptos.btc]!, Cryptos.apiIds[Cryptos.ada]!]);
     print(response);
     expect(response, isNot(equals(null)));
     expect(response, isNot(equals(isEmpty)));

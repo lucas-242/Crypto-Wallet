@@ -1,6 +1,7 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
@@ -73,7 +74,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
 
   DropdownItem? getSelectedItem(TradeModel trade) {
     if (trade.cryptoId.isNotEmpty) {
-      var crypto = widget.walletRepository.findCryptoInfos(bloc.trade.cryptoId);
+      var crypto = CryptoHelper.findCoin(bloc.trade.cryptoId);
       DropdownItem(
         text: '${crypto.symbol} - ${crypto.name}',
         value: crypto.id,
@@ -169,7 +170,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                               label: bloc.appLocalizations.crypto,
                               mode: Mode.BOTTOM_SHEET,
                               selectedItem: getSelectedItem(bloc.trade),
-                              items: widget.walletRepository.cryptoList
+                              items: CryptoHelper.coinsList
                                   .map((e) => DropdownItem(
                                       text: '${e.symbol} - ${e.name}',
                                       other: e.symbol,

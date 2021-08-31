@@ -1,28 +1,10 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto_wallet/shared/models/crypto_info_model.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
-import 'package:flutter/widgets.dart';
 
 class WalletRepository {
-  List<CryptoInfoModel> cryptoList = [];
-
-  ///Fetch all crytpo infos from the data file
-  void getCryptoInfos(BuildContext context) async {
-    if (cryptoList.isEmpty) {
-      var source = await DefaultAssetBundle.of(context)
-          .loadString('assets/data/cryptos.json');
-      var decoded = json.decode(source) as List<dynamic>;
-      cryptoList = decoded.map((e) => CryptoInfoModel.fromMap(e)).toList();
-    }
-  }
-
-  CryptoInfoModel findCryptoInfos(String id) {
-    return cryptoList.firstWhere((e) => e.id == id);
-  }
 
   ///Fetch for all user's cryptos
   Future<List<CryptoModel>> getCryptos(String uid) async {
@@ -144,7 +126,7 @@ class WalletRepository {
     trades.add(trade);
     var averagePrice = _calculateAveragePrice(trades, trade.amount);
 
-    var infos = findCryptoInfos(trade.cryptoId);
+    var infos = CryptoHelper.findCoin(trade.cryptoId);
     var crypto = CryptoModel(
       cryptoId: trade.cryptoId,
       name: infos.name,

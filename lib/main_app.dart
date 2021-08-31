@@ -32,12 +32,6 @@ class _MainAppState extends State<MainApp> {
   final coinRepository = CoinRepository();
 
   @override
-  void initState() {
-    walletRepository.getCryptoInfos(context);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
@@ -61,7 +55,7 @@ class _MainAppState extends State<MainApp> {
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.splash,
         routes: {
-          AppRoutes.splash: (context) => SplashPage(),
+          AppRoutes.splash: (context) => SplashPage(coinRepository: coinRepository),
           AppRoutes.app: (context) => App(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.tradesDetails: (context) => TradesDetails(),

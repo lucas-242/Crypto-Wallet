@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class MarketDataApiResponse {
+class MarketcapApiResponse {
   String id;
   String symbol;
   String name;
@@ -31,7 +31,7 @@ class MarketDataApiResponse {
   double priceChangePercentage30dInCurrency;
   double priceChangePercentage7dInCurrency;
 
-  MarketDataApiResponse({
+  MarketcapApiResponse({
     required this.id,
     required this.symbol,
     required this.name,
@@ -63,7 +63,7 @@ class MarketDataApiResponse {
     required this.priceChangePercentage7dInCurrency,
   });
 
-  MarketDataApiResponse copyWith({
+  MarketcapApiResponse copyWith({
     String? id,
     String? symbol,
     String? name,
@@ -94,7 +94,7 @@ class MarketDataApiResponse {
     double? priceChangePercentage30dInCurrency,
     double? priceChangePercentage7dInCurrency,
   }) {
-    return MarketDataApiResponse(
+    return MarketcapApiResponse(
       id: id ?? this.id,
       symbol: symbol ?? this.symbol,
       name: name ?? this.name,
@@ -137,7 +137,7 @@ class MarketDataApiResponse {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'symbol': symbol,
+      'symbol': symbol.toUpperCase(),
       'name': name,
       'image': image,
       'currentPrice': currentPrice,
@@ -168,10 +168,10 @@ class MarketDataApiResponse {
     };
   }
 
-  factory MarketDataApiResponse.fromMap(Map<String, dynamic> map) {
-    return MarketDataApiResponse(
+  factory MarketcapApiResponse.fromMap(Map<String, dynamic> map) {
+    return MarketcapApiResponse(
       id: map['id'],
-      symbol: map['symbol'],
+      symbol: map['symbol'].toUpperCase(),
       name: map['name'],
       image: map['image'],
       currentPrice: _convertToDouble(map['current_price']),
@@ -217,8 +217,8 @@ class MarketDataApiResponse {
 
   String toJson() => json.encode(toMap());
 
-  factory MarketDataApiResponse.fromJson(String source) =>
-      MarketDataApiResponse.fromMap(json.decode(source));
+  factory MarketcapApiResponse.fromJson(String source) =>
+      MarketcapApiResponse.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -229,7 +229,7 @@ class MarketDataApiResponse {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MarketDataApiResponse &&
+    return other is MarketcapApiResponse &&
         other.id == id &&
         other.symbol == symbol &&
         other.name == name &&

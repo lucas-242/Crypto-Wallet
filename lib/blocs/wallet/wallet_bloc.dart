@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
+import 'package:crypto_wallet/repositories/coin_repository/models/marketcap_api_response_model.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/wallet_model.dart';
@@ -20,6 +21,8 @@ class WalletBloc extends ChangeNotifier {
 
   ///The index of the opened Crypto Card of the Wallet Page
   int? openedIndex;
+
+  bool canRefresh = false;
 
   final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
   WalletStatus get status => statusNotifier.value;
@@ -57,66 +60,68 @@ class WalletBloc extends ChangeNotifier {
       List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
 
-    return await _coinRepository
-        .getMarketData(coins: coins.map((e) => e.cryptoId).toList())
-        .then((response) {
-      coins.forEach((coin) {
-        response.any((element) {
-          if (coin.cryptoId == element.id) {
-            var price = element.currentPrice;
+    if (canRefresh) {
+      return await _coinRepository
+          .getMarketcap(coins: coins.map((e) => e.cryptoId).toList())
+          .then((marketcap) {
+        result = setCryptoHistory(coins, marketcap);
 
-            var history = new CryptoHistory(
-              high24h: element.high24h,
-              low24h: element.low24h,
-              priceChangePercentage1yInCurrency:
-                  element.priceChangePercentage1yInCurrency,
-              priceChangePercentage24hInCurrency:
-                  element.priceChangePercentage24hInCurrency,
-              priceChangePercentage30dInCurrency:
-                  element.priceChangePercentage30dInCurrency,
-              priceChangePercentage7dInCurrency:
-                  element.priceChangePercentage7dInCurrency,
-            );
-
-            result.add(coin.copyWith(
-              price: price,
-              image: element.image,
-              history: history,
-            ));
-            return true;
-          }
-
-          return false;
-        });
+        CryptoHelper.setCoinsList(marketcapData: marketcap, isUpdate: true);
+        setTimerToRefreshMarketcap();
+        return result;
       });
+    }
 
-      return result;
-    });
+    result = setCryptoHistory(coins, CryptoHelper.coinsList);
+    setTimerToRefreshMarketcap();
+    return result;
   }
 
-  // Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
-  //   var result = <CryptoModel>[];
-  //   return await _coinRepository
-  //       .getPrices(coins: CryptoHelper.getCoinApiNamesFromList(coins))
-  //       .then((response) {
-  //     coins.forEach((coin) {
-  //       var price = double.parse(response[coin.name]['usd'].toString());
-  //       result.add(coin.copyWith(price: price));
-  //     });
+  List<CryptoModel> setCryptoHistory(
+    List<CryptoModel> coins,
+    List<MarketcapApiResponse> marketcap,
+  ) {
+    var result = <CryptoModel>[];
 
-  //     return result;
-  //   });
-  // }
+    coins.forEach((coin) {
+      marketcap.any((element) {
+        if (coin.cryptoId == element.id) {
+          var price = element.currentPrice;
 
-  // /// Init a timer to refresh crypto prices
-  // void setTimerToGetPrices() {
-  //   Timer.periodic(Duration(seconds: 60), (timer) async {
-  //     var result = await getCryptosPrice(cryptos);
-  //     if (result.isNotEmpty) cryptos = result;
-  //     print('refreshed');
-  //     notifyListeners();
-  //   });
-  // }
+          var history = new CryptoHistory(
+            high24h: element.high24h,
+            low24h: element.low24h,
+            priceChangePercentage1yInCurrency:
+                element.priceChangePercentage1yInCurrency,
+            priceChangePercentage24hInCurrency:
+                element.priceChangePercentage24hInCurrency,
+            priceChangePercentage30dInCurrency:
+                element.priceChangePercentage30dInCurrency,
+            priceChangePercentage7dInCurrency:
+                element.priceChangePercentage7dInCurrency,
+          );
+
+          result.add(coin.copyWith(
+            price: price,
+            image: element.image,
+            history: history,
+          ));
+          return true;
+        }
+
+        return false;
+      });
+    });
+
+    return result;
+  }
+
+  /// Set a timer to allow user get new marketcap from API
+  void setTimerToRefreshMarketcap() {
+    Future.delayed(Duration(seconds: 45)).then((value) {
+      canRefresh = true;
+    });
+  }
 
   void updateCrypto(CryptoModel model) {
     var index = cryptos.indexWhere((element) => element.symbol == model.symbol);
@@ -154,7 +159,7 @@ class WalletBloc extends ChangeNotifier {
         value: crypto.totalNow,
         amount: crypto.amount,
         percent: (crypto.totalNow * 100) / totalNow,
-        color: Color(_walletRepository.findCryptoInfos(crypto.cryptoId).color),
+        color: CryptoHelper.getCoinColor(crypto.cryptoId),
         image: crypto.image,
       ));
     });
