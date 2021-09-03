@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/constants/routes.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
@@ -13,11 +11,7 @@ import 'package:crypto_wallet/shared/themes/themes.dart';
 final _auth = FirebaseAuth.instance;
 
 class SplashPage extends StatefulWidget {
-  final CoinRepository coinRepository;
-  const SplashPage({
-    Key? key,
-    required this.coinRepository,
-  }) : super(key: key);
+  const SplashPage({Key? key}) : super(key: key);
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -32,13 +26,7 @@ class _SplashPageState extends State<SplashPage> {
       if (user != null) {
         final auth = context.read<Auth>();
         auth.user = user;
-
-        //TODO: This call can consume a lot of time to init the app. Consider to create alternative ways to load the app
-        widget.coinRepository.getCoinsByMarketcap().then((value) {
-          CryptoHelper.setCoinsList(marketcapData: value);
-          Navigator.pushReplacementNamed(context, AppRoutes.app);
-        });
-
+        Navigator.pushReplacementNamed(context, AppRoutes.app);
         userStream.cancel();
       } else
         Navigator.pushReplacementNamed(context, AppRoutes.login);

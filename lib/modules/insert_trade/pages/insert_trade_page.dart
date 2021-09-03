@@ -55,6 +55,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
     uid = FirebaseAuth.instance.currentUser!.uid;
     bloc = InsertTradeBloc(walletRepository: widget.walletRepository);
 
+    bloc.checkCryptoList();
     bloc.loadAd();
     bloc.onChange(user: uid);
     super.initState();
@@ -179,7 +180,9 @@ class _InsertTradePageState extends State<InsertTradePage> {
                               itemAsString: (DropdownItem u) => u.text,
                               onChanged: (DropdownItem? data) {
                                 if (data != null) {
-                                  bloc.onChange(cryptoId: data.value, cryptoSymbol: data.other);
+                                  bloc.onChange(
+                                      cryptoId: data.value,
+                                      cryptoSymbol: data.other);
                                   setState(() {});
                                 }
                               },

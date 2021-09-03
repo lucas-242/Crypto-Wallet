@@ -2,6 +2,7 @@ import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
@@ -76,6 +77,17 @@ class InsertTradeBloc extends ChangeNotifier {
     return null;
   }
 
+  /// Check if app crypto list has been filled
+  void checkCryptoList() {
+    if (CryptoHelper.cryptosIsLoaded()) {
+      status = InsertTradeStatus();
+    } else {
+      status = InsertTradeStatus.loading();
+      Future.delayed(Duration(seconds: 1)).then((value) => checkCryptoList());
+    }
+  }
+
+  /// Change the trade properties when the user changes a field
   void onChange({
     String? operationType,
     String? cryptoId,

@@ -22,7 +22,7 @@ class WalletBloc extends ChangeNotifier {
   ///The index of the opened Crypto Card of the Wallet Page
   int? openedIndex;
 
-  bool canRefresh = false;
+  bool canRefresh = true;
 
   final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
   WalletStatus get status => statusNotifier.value;
@@ -39,6 +39,7 @@ class WalletBloc extends ChangeNotifier {
 
     await _walletRepository.getCryptos(uid).then((result) async {
       if (result.isNotEmpty) {
+        //TODO: API limits to 50 results. Need to check if the user has more than 50 coins in wallet
         cryptos = await getCryptosMarketData(result);
         setWalletData();
       }
@@ -62,7 +63,7 @@ class WalletBloc extends ChangeNotifier {
 
     if (canRefresh) {
       return await _coinRepository
-          .getMarketcap(coins: coins.map((e) => e.cryptoId).toList())
+          .getCoins(coins: coins.map((e) => e.cryptoId).toList())
           .then((marketcap) {
         result = setCryptoHistory(coins, marketcap);
 
@@ -118,6 +119,7 @@ class WalletBloc extends ChangeNotifier {
 
   /// Set a timer to allow user get new marketcap from API
   void setTimerToRefreshMarketcap() {
+    canRefresh = false;
     Future.delayed(Duration(seconds: 45)).then((value) {
       canRefresh = true;
     });
