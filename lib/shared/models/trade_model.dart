@@ -5,9 +5,13 @@ class TradeModel {
   final String operationType;
   final String cryptoSymbol;
   final String cryptoId;
+  ///Amount traded in coin Type
   final double amount;
+  ///Amount traded in USD
   final double amountDollars;
+  ///Coin price in USD
   final double price;
+  ///Fee in the same coin type
   final double fee;
   final DateTime date;
   final String? user;
@@ -31,7 +35,7 @@ class TradeModel {
     String? cryptoSymbol,
     String? cryptoId,
     double? amount,
-    double? amountInvested,
+    double? amountDollars,
     double? price,
     DateTime? date,
     double? fee,
@@ -43,7 +47,7 @@ class TradeModel {
       cryptoId: cryptoId ?? this.cryptoId,
       operationType: operationType ?? this.operationType,
       amount: amount ?? this.amount,
-      amountDollars: amountInvested ?? this.amountDollars,
+      amountDollars: amountDollars ?? this.amountDollars,
       price: price ?? this.price,
       fee: fee ?? this.fee,
       date: date ?? this.date,

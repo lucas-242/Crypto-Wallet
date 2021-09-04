@@ -93,7 +93,7 @@ class InsertTradeBloc extends ChangeNotifier {
     String? cryptoId,
     String? cryptoSymbol,
     double? amount,
-    double? ammountInvested,
+    double? amountDollars,
     double? price,
     double? fee,
     String? date,
@@ -110,7 +110,7 @@ class InsertTradeBloc extends ChangeNotifier {
     trade = trade.copyWith(
       operationType: operationType,
       amount: amount,
-      amountInvested: ammountInvested,
+      amountDollars: amountDollars,
       cryptoId: cryptoId,
       cryptoSymbol: cryptoSymbol,
       date: formattedDate,
@@ -146,9 +146,10 @@ class InsertTradeBloc extends ChangeNotifier {
     });
   }
 
-  ///Verify if the user has enough amount in [cryptos] to create a selling trade
+  ///Verify if the user has enough amount in [cryptos] to create a selling or transfer trade
   void _validateAmount(List<CryptoModel> cryptos) {
-    if (trade.operationType == TradeType.sell) {
+    if (trade.operationType == TradeType.sell ||
+        trade.operationType == TradeType.transfer) {
       var found = cryptos.where((c) => c.cryptoId == trade.cryptoId);
       if (found.isEmpty || found.first.amount < trade.amount) {
         var error = appLocalizations.errorInsufficientBalance;

@@ -36,6 +36,7 @@ abstract class CryptoHelper {
     }
   }
 
+  /// Check if the coinList is already filled
   static bool cryptosIsLoaded() {
     if (_coinsList.length == Cryptos.list.length) return true;
 

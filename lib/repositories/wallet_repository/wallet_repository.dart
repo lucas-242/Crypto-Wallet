@@ -5,7 +5,6 @@ import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 
 class WalletRepository {
-
   ///Fetch for all user's cryptos
   Future<List<CryptoModel>> getCryptos(String uid) async {
     try {
@@ -65,22 +64,33 @@ class WalletRepository {
 
       //Get all trades of the same crypto
       var trades = await getTrades(uid: trade.user!, cryptoId: trade.cryptoId);
-      trades.add(trade);
 
-      late CryptoModel crypto;
+      //Get only the cryptos where id is equal of the trade id
+      cryptos = cryptos
+          .where((element) => element.cryptoId == trade.cryptoId)
+          .toList();
+
+      // !When transfering the trade price is the average price and the Amount in Dollars is calculated
+      if (trade.operationType == TradeType.transfer && cryptos.isNotEmpty) {
+        var crypto = cryptos.single;
+        var amountDollars = crypto.averagePrice * trade.fee;
+        trade = trade.copyWith(
+            price: crypto.averagePrice, amountDollars: amountDollars);
+      }
+
+      trades.add(trade);
 
       return await FirebaseFirestore.instance
           .runTransaction((transaction) async {
-        transaction.set(tradesReference, trade.toMap());
-
-        cryptos =
-            cryptos.where((element) => element.cryptoId == trade.cryptoId).toList();
         if (cryptos.isEmpty) {
           _createCryptoInTransaction(transaction, trade);
         } else {
-          crypto = _calculateCryptoProperties(cryptos.single, trades, trade);
+          var crypto =
+              _calculateCryptoProperties(cryptos.single, trades, trade);
           _updateCryptoInTransaction(transaction, crypto);
         }
+
+        transaction.set(tradesReference, trade.toMap());
       });
     } catch (error) {
       print("Failed to add trade: ${error.toString()}");
@@ -162,8 +172,8 @@ class WalletRepository {
   /// Calculate all [crypto] properties considering [trade] and all the [trades] to calculate the Average Price.
   CryptoModel _calculateCryptoProperties(
       CryptoModel crypto, List<TradeModel> trades, TradeModel trade) {
-    double amount = 0;
-    double totalInvested = 0;
+    double amount = crypto.amount;
+    double totalInvested = crypto.totalInvested;
     double averagePrice = crypto.averagePrice;
 
     if (trade.operationType == TradeType.buy) {
@@ -172,8 +182,14 @@ class WalletRepository {
       averagePrice = _calculateAveragePrice(trades, amount);
     }
     // !When selling the average price doesn't change
-    else {
+    else if (trade.operationType == TradeType.sell) {
       amount = crypto.amount - trade.amount;
+      totalInvested = crypto.totalInvested - trade.amountDollars;
+      totalInvested = totalInvested < 0 ? 0 : totalInvested;
+    }
+    // !When transfering trades amount indicate the amount transfer to another wallet
+    else {
+      amount = crypto.amount - trade.fee;
       totalInvested = crypto.totalInvested - trade.amountDollars;
       totalInvested = totalInvested < 0 ? 0 : totalInvested;
     }
@@ -204,9 +220,12 @@ class WalletRepository {
       if (element.operationType == TradeType.buy) {
         totalInvested += element.amountDollars;
         amount += element.amount;
-      } else {
+      } else if (element.operationType == TradeType.sell) {
         totalInvested -= element.amountDollars;
         amount -= element.amount;
+      } else {
+        totalInvested -= element.amountDollars;
+        amount -= element.fee;
       }
     });
 
