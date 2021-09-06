@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/shared/helpers/trade_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
@@ -31,18 +32,13 @@ class TradeTile extends StatelessWidget {
             child: Column(
               children: [
                 TradeDetailsRow(
-                  leftText: trade.crypto,
+                  leftText: trade.cryptoSymbol,
                   leftTextStyle: AppTextStyles.captionBoldBody
                       .copyWith(color: AppColors.primary),
                   rightText: toBeginningOfSentenceCase(
-                      trade.operationType == TradeType.buy
-                          ? appLocalizations.buy
-                          : appLocalizations.sell)!,
-                  rightTextStyle: trade.operationType == TradeType.buy
-                      ? AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.green)
-                      : AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.red),
+                      TradeTypeHelper.getTradeLabel(
+                          trade.operationType, appLocalizations))!,
+                  rightTextStyle: TradeTypeHelper.getTradeColor(trade),
                 ),
                 SizedBox(height: 5),
                 TradeDetailsRow(
@@ -50,13 +46,22 @@ class TradeTile extends StatelessWidget {
                   rightText: trade.amount.toStringAsFixed(8),
                 ),
                 SizedBox(height: 5),
-                TradeDetailsRow(
-                  leftText: appLocalizations.price,
-                  rightText: NumberFormat.currency(
-                    symbol: '\$',
-                    decimalDigits: WalletHelper.getDecimalDigits(trade.price),
-                  ).format(trade.price),
-                ),
+                if (trade.operationType != TradeType.transfer)
+                  TradeDetailsRow(
+                    leftText: appLocalizations.price,
+                    rightText: NumberFormat.currency(
+                      symbol: '\$',
+                      decimalDigits: WalletHelper.getDecimalDigits(trade.price),
+                    ).format(trade.price),
+                  )
+                else
+                  TradeDetailsRow(
+                    leftText: appLocalizations.fee,
+                    rightText: NumberFormat.currency(
+                      symbol: '\$',
+                      decimalDigits: WalletHelper.getDecimalDigits(trade.fee),
+                    ).format(trade.fee),
+                  ),
               ],
             ),
           ),

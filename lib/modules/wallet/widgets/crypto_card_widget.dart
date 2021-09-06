@@ -72,7 +72,7 @@ class _CryptoCardState extends State<CryptoCard> {
                           alignment: Alignment.centerLeft,
                           child: Text.rich(
                             TextSpan(
-                              text: '${widget.crypto.crypto}',
+                              text: '${widget.crypto.symbol}',
                               children: [
                                 TextSpan(
                                   text:

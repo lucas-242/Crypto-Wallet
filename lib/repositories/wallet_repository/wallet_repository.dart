@@ -1,28 +1,12 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto_wallet/shared/models/crypto_info_model.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
-import 'package:flutter/widgets.dart';
 
 class WalletRepository {
-  List<CryptoInfoModel> cryptoList = [];
-
-  ///Fetch all crytpo infos from the data file
-  void getAllCryptoInfos(BuildContext context) async {
-    if (cryptoList.isEmpty) {
-      var source = await DefaultAssetBundle.of(context)
-          .loadString('assets/data/cryptos.json');
-      var decoded = json.decode(source) as List<dynamic>;
-      cryptoList = decoded.map((e) => CryptoInfoModel.fromMap(e)).toList();
-    }
-  }
-
   ///Fetch for all user's cryptos
-  Future<List<CryptoModel>> getAllCryptos(String uid) async {
+  Future<List<CryptoModel>> getCryptos(String uid) async {
     try {
       List<CryptoModel> result = [];
 
@@ -46,15 +30,15 @@ class WalletRepository {
   }
 
   ///Fetch for all user's trades
-  Future<List<TradeModel>> getAllTrades(
-      {required String uid, String? crypto}) async {
+  Future<List<TradeModel>> getTrades(
+      {required String uid, String? cryptoId}) async {
     try {
       List<TradeModel> result = [];
 
       await FirebaseFirestore.instance
           .collection('trades')
           .where('user', isEqualTo: uid)
-          .where('crypto', isEqualTo: crypto)
+          .where('cryptoId', isEqualTo: cryptoId)
           .get()
           .then((QuerySnapshot querySnapshot) {
         result = querySnapshot.docs
@@ -79,23 +63,34 @@ class WalletRepository {
           FirebaseFirestore.instance.collection('trades').doc();
 
       //Get all trades of the same crypto
-      var trades = await getAllTrades(uid: trade.user!, crypto: trade.crypto);
-      trades.add(trade);
+      var trades = await getTrades(uid: trade.user!, cryptoId: trade.cryptoId);
 
-      late CryptoModel crypto;
+      //Get only the cryptos where id is equal of the trade id
+      cryptos = cryptos
+          .where((element) => element.cryptoId == trade.cryptoId)
+          .toList();
+
+      // !When transfering the trade price is the average price and the Amount in Dollars is calculated
+      if (trade.operationType == TradeType.transfer && cryptos.isNotEmpty) {
+        var crypto = cryptos.single;
+        var amountDollars = crypto.averagePrice * trade.fee;
+        trade = trade.copyWith(
+            price: crypto.averagePrice, amountDollars: amountDollars);
+      }
+
+      trades.add(trade);
 
       return await FirebaseFirestore.instance
           .runTransaction((transaction) async {
-        transaction.set(tradesReference, trade.toMap());
-
-        cryptos =
-            cryptos.where((element) => element.crypto == trade.crypto).toList();
         if (cryptos.isEmpty) {
           _createCryptoInTransaction(transaction, trade);
         } else {
-          crypto = _calculateCryptoProperties(cryptos.single, trades, trade);
+          var crypto =
+              _calculateCryptoProperties(cryptos.single, trades, trade);
           _updateCryptoInTransaction(transaction, crypto);
         }
+
+        transaction.set(tradesReference, trade.toMap());
       });
     } catch (error) {
       print("Failed to add trade: ${error.toString()}");
@@ -141,13 +136,14 @@ class WalletRepository {
     trades.add(trade);
     var averagePrice = _calculateAveragePrice(trades, trade.amount);
 
+    var infos = CryptoHelper.findCoin(trade.cryptoId);
     var crypto = CryptoModel(
-      id: Cryptos.apiIds[trade.crypto]!,
-      name: Cryptos.names[trade.crypto]!,
-      crypto: trade.crypto,
+      cryptoId: trade.cryptoId,
+      name: infos.name,
+      symbol: infos.symbol,
       amount: trade.amount,
       averagePrice: averagePrice,
-      totalInvested: trade.amountInvested,
+      totalInvested: trade.amountDollars,
       user: trade.user!,
       updatedAt: DateTime.now(),
     );
@@ -176,19 +172,25 @@ class WalletRepository {
   /// Calculate all [crypto] properties considering [trade] and all the [trades] to calculate the Average Price.
   CryptoModel _calculateCryptoProperties(
       CryptoModel crypto, List<TradeModel> trades, TradeModel trade) {
-    double amount = 0;
-    double totalInvested = 0;
+    double amount = crypto.amount;
+    double totalInvested = crypto.totalInvested;
     double averagePrice = crypto.averagePrice;
 
     if (trade.operationType == TradeType.buy) {
       amount = crypto.amount + trade.amount;
-      totalInvested = crypto.totalInvested + trade.amountInvested;
+      totalInvested = crypto.totalInvested + trade.amountDollars;
       averagePrice = _calculateAveragePrice(trades, amount);
     }
     // !When selling the average price doesn't change
-    else {
+    else if (trade.operationType == TradeType.sell) {
       amount = crypto.amount - trade.amount;
-      totalInvested = crypto.totalInvested - trade.amountInvested;
+      totalInvested = crypto.totalInvested - trade.amountDollars;
+      totalInvested = totalInvested < 0 ? 0 : totalInvested;
+    }
+    // !When transfering trades amount indicate the amount transfer to another wallet
+    else {
+      amount = crypto.amount - trade.fee;
+      totalInvested = crypto.totalInvested - trade.amountDollars;
       totalInvested = totalInvested < 0 ? 0 : totalInvested;
     }
 
@@ -216,11 +218,14 @@ class WalletRepository {
 
     trades.forEach((element) {
       if (element.operationType == TradeType.buy) {
-        totalInvested += element.amountInvested;
+        totalInvested += element.amountDollars;
         amount += element.amount;
-      } else {
-        totalInvested -= element.amountInvested;
+      } else if (element.operationType == TradeType.sell) {
+        totalInvested -= element.amountDollars;
         amount -= element.amount;
+      } else {
+        totalInvested -= element.amountDollars;
+        amount -= element.fee;
       }
     });
 

@@ -2,9 +2,11 @@ import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/trades/widgets/trade_tile_list_widget.dart';
 import 'package:crypto_wallet/shared/constants/routes.dart';
+import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +22,6 @@ class TradesListPage extends StatefulWidget {
 class _TradesListPageState extends State<TradesListPage> {
   final uid = FirebaseAuth.instance.currentUser!.uid;
   late final TradesBloc bloc;
-  late AppLocalizations appLocalizations;
 
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _TradesListPageState extends State<TradesListPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    appLocalizations = AppLocalizations.of(context)!;
+    bloc.appLocalizations = AppLocalizations.of(context)!;
   }
 
   @override
@@ -46,7 +47,7 @@ class _TradesListPageState extends State<TradesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: appLocalizations.trades,
+        title: bloc.appLocalizations.trades,
         actions: [
           TextButton(
             onPressed: () =>
@@ -83,32 +84,48 @@ class _TradesListPageState extends State<TradesListPage> {
                 } else if (status.statusPage == StatusPage.noData) {
                   return Container(
                     height: SizeConfig.height * 0.7,
-                    child: Center(child: Text(appLocalizations.noTrades)),
+                    child: Center(child: Text(bloc.appLocalizations.noTrades)),
                   );
                 } else {
                   return Expanded(
-                    child:
-                        Consumer<TradesBloc>(builder: (context, bloc, child) {
-                      return TradeTileList(
-                        bloc: bloc,
-                        onTap: (trade) => Navigator.pushNamed(
-                          context,
-                          AppRoutes.tradesDetails,
-                          arguments: {'trade': trade, 'uid': uid},
+                    child: Column(
+                      children: [
+                        DropdownSearch<DropdownItem>(
+                          label: bloc.appLocalizations.filter,
+                          selectedItem: bloc.filterSelected,
+                          mode: Mode.MENU,
+                          maxHeight: SizeConfig.height * 0.22,
+                          items: bloc.cryptoList,
+                          itemAsString: (DropdownItem u) => u.text,
+                          onChanged: (DropdownItem? item) => bloc.onFilter(item),
                         ),
-                        onRefresh: () => bloc.getTrades(uid),
-                        onDelete: (trade) {
-                          final walletBloc = context.read<WalletBloc>();
-                          bloc
-                              .deleteTrade(
-                                trade: trade,
-                                uid: uid,
-                                walletBloc: walletBloc,
-                              )
-                              .then((value) => bloc.loadAd());
-                        },
-                      );
-                    }),
+                        SizedBox(height: 20),
+                        Expanded(
+                          child: Consumer<TradesBloc>(
+                              builder: (context, bloc, child) {
+                            return TradeTileList(
+                              bloc: bloc,
+                              onTap: (trade) => Navigator.pushNamed(
+                                context,
+                                AppRoutes.tradesDetails,
+                                arguments: {'trade': trade, 'uid': uid},
+                              ),
+                              onRefresh: () => bloc.getTrades(uid),
+                              onDelete: (trade) {
+                                final walletBloc = context.read<WalletBloc>();
+                                bloc
+                                    .deleteTrade(
+                                      trade: trade,
+                                      uid: uid,
+                                      walletBloc: walletBloc,
+                                    )
+                                    .then((value) => bloc.loadAd());
+                              },
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
                   );
                 }
               },

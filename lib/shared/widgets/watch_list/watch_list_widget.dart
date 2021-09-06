@@ -62,7 +62,7 @@ class WatchList extends StatelessWidget {
                           style: AppTextStyles.captionBoldBody,
                         ),
                         Text(
-                          cryptos[index].crypto,
+                          cryptos[index].symbol,
                           style: AppTextStyles.captionBody,
                         ),
                       ],

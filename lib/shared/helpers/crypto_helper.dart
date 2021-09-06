@@ -1,75 +1,53 @@
-// import 'dart:convert';
+import 'dart:ui';
 
-// import 'package:crypto_wallet/shared/constants/cryptos.dart';
-// import 'package:flutter/services.dart' show rootBundle;
-
-// abstract class CryptoHelper {
-//   static Future<String> getCryptoName(String crypto) async {
-//     var found = await _search(crypto);
-
-//     if (found.isEmpty) {
-//       return '';
-//     }
-
-//     return found.first['name'];
-//   }
-
-//   static Future<String> getCryptoApiName(String crypto) async {
-//     var found = await _search(crypto);
-
-//     if (found.isEmpty) {
-//       return '';
-//     }
-
-//     return found.first['id'];
-//   }
-
-//   static Future<List<String>> getAllCryptoApiNames() async {
-//     var cryptos = await json.decode(await _getJson()) as List<dynamic>;
-
-//     var found = cryptos.where((item) => Cryptos.list.contains(item['symbol']));
-
-//     if (found.isEmpty) {
-//       return [];
-//     }
-
-//     return found.map((e) => e['id'] as String).toList();
-//   }
-
-//   static Future<List<dynamic>> _search(String crypto) async {
-//     var cryptos = await json.decode(await _getJson()) as List<dynamic>;
-
-//     var found = cryptos.where((item) => item['symbol'] == crypto);
-
-//     if (found.isEmpty) {
-//       return [];
-//     }
-
-//     return found.toList();
-//   }
-
-//   static Future<String> _getJson() {
-//     return rootBundle.loadString('assets/data/cryptos_data.json');
-//   }
-// }
-
+import 'package:crypto_wallet/repositories/coin_repository/models/marketcap_api_response_model.dart';
 import 'package:crypto_wallet/shared/constants/cryptos.dart';
-import 'package:crypto_wallet/shared/models/crypto_model.dart';
+import 'package:crypto_wallet/shared/themes/themes.dart';
 
 abstract class CryptoHelper {
-  ///Get a list of api ids from the [coins] list o CryptoModel
-  static List<String> getCoinApiIdsFromList(List<CryptoModel> coins) {
-    var coinNames = coins.map((e) => e.crypto).toList();
+  static List<MarketcapApiResponse> _coinsList = [];
+  static List<MarketcapApiResponse> get coinsList => _coinsList;
 
-    var apiIds = Cryptos.apiIds.entries.map((mapEntry) {
-      if (coinNames.contains(mapEntry.key))
-        return mapEntry.value;
-      else
-        return '';
-    }).toList();
+  ///Find coin in coinList by the [id]
+  static MarketcapApiResponse findCoin(String id) {
+    return _coinsList.firstWhere((e) => e.id == id);
+  }
 
-    apiIds.removeWhere((e) => e == '');
+  /// Set the coinsList with the new [marketcapData] using [isUpdate] flag to consider if it's an update of the data
+  static void setCoinsList(
+      {required List<MarketcapApiResponse> marketcapData,
+      bool isUpdate = false}) {
+    if (isUpdate && _coinsList.length > 0) {
+      var sort = false;
+      marketcapData.forEach((coin) {
+        var index = _coinsList.indexWhere((element) => coin.id == element.id);
+        if (index > -1)
+          _coinsList[index] = coin;
+        else {
+          _coinsList.add(coin);
+          sort = true;
+        }
+      });
+      if (sort) {
+        _coinsList.sort((a, b) => a.marketCapRank.compareTo(b.marketCapRank));
+      }
+    } else {
+      _coinsList = marketcapData;
+    }
+  }
 
-    return apiIds;
+  /// Check if the coinList is already filled
+  static bool cryptosIsLoaded() {
+    if (_coinsList.length == Cryptos.list.length) return true;
+
+    return false;
+  }
+
+  ///Get coin color by [id]
+  static Color getCoinColor(String id) {
+    var found = findCoin(id);
+    return Cryptos.colors[found.id] != null
+        ? Color(Cryptos.colors[found.id]!)
+        : AppColors.text;
   }
 }

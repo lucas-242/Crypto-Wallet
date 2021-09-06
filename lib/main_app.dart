@@ -14,6 +14,7 @@ import 'modules/trades/trades.dart';
 import 'repositories/coin_repository/coin_repository.dart';
 import 'repositories/wallet_repository/wallet_repository.dart';
 import 'shared/auth/auth.dart';
+import 'shared/helpers/crypto_helper.dart';
 
 class MainApp extends StatefulWidget {
   MainApp() {
@@ -33,7 +34,9 @@ class _MainAppState extends State<MainApp> {
 
   @override
   void initState() {
-    walletRepository.getAllCryptoInfos(context);
+    coinRepository.getAppCoins().then((value) {
+      CryptoHelper.setCoinsList(marketcapData: value);
+    });
     super.initState();
   }
 
@@ -61,7 +64,8 @@ class _MainAppState extends State<MainApp> {
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.splash,
         routes: {
-          AppRoutes.splash: (context) => SplashPage(),
+          AppRoutes.splash: (context) =>
+              SplashPage(),
           AppRoutes.app: (context) => App(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.tradesDetails: (context) => TradesDetails(),

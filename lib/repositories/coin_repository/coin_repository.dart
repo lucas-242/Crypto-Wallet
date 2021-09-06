@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:crypto_wallet/repositories/coin_repository/models/market_data_api_response_model.dart';
+import 'package:crypto_wallet/repositories/coin_repository/models/marketcap_api_response_model.dart';
+import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/constants/environment.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,21 +58,28 @@ class CoinRepository {
     }
   }
 
-  ///Get the [coins] market date in the [currency]
-  Future<List<MarketDataApiResponse>> getMarketData({
-    required List<String> coins,
+  ///Get the [coins] market data in the [currency]
+  ///
+  ///If [formattedCoins] is informed, ignore the [coins] for parameter creation
+  ///
+  /// Api limits to 50 results when using coins filter
+  Future<List<MarketcapApiResponse>> getCoins({
+    List<String> coins = const [],
     String currency = 'usd',
+    int limit = 50,
+    int page = 1,
+    String? formattedCoins,
   }) async {
     try {
-      String formattedCoins = _formatToUrl(coins);
+      if (formattedCoins == null) formattedCoins = _formatToUrl(coins);
 
       var uri =
-          '${Environment.coingeckoApi}coins/markets?ids=$formattedCoins&vs_currency=$currency&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h,7d,30d,1y';
+          '${Environment.coingeckoApi}coins/markets?ids=$formattedCoins&vs_currency=$currency&order=market_cap_desc&per_page=$limit&page=$page&sparkline=false&price_change_percentage=24h,7d,30d,1y';
 
       var response = await http.get(Uri.parse(uri));
       Iterable body = json.decode(response.body);
-      var result = List<MarketDataApiResponse>.from(
-          body.map((x) => MarketDataApiResponse.fromMap(x)));
+      var result = List<MarketcapApiResponse>.from(
+          body.map((x) => MarketcapApiResponse.fromMap(x)));
       return result;
     } catch (error) {
       print(error.toString());
@@ -79,11 +87,51 @@ class CoinRepository {
     }
   }
 
+  /// Get all app coins sorted by marketcap
+  Future<List<MarketcapApiResponse>> getAppCoins() async {
+    List<MarketcapApiResponse> response = [];
+    var formattedCoins = _formatToUrl(Cryptos.list);
+    var apiLimit = 50;
+
+    var pages = (Cryptos.list.length / apiLimit).ceil();
+
+    for (var i = 0; i < pages; i++) {
+      var coins = await getCoins(
+        coins: Cryptos.list,
+        limit: apiLimit,
+        page: i + 1,
+        formattedCoins: formattedCoins,
+      );
+      response.addAll(coins);
+    }
+
+    return response;
+  }
+  // Future<List<MarketcapApiResponse>> getFirst500Coins() async {
+  //   var response = await getCoins(limit: 250);
+  //   var secondPage = await getCoins(limit: 250, page: 2);
+  //   response.addAll(secondPage);
+
+  //   var otherCoinsList = ['lbry-credits'];
+  //   List<String> finalOtherCoinsList = [];
+  //   otherCoinsList.asMap().forEach((index, element) {
+  //     if (!response.any((e) => e.id == element)) finalOtherCoinsList.add(element);
+  //   });
+
+  //   var other = await getCoins(coins: finalOtherCoinsList);
+  //   response.addAll(other);
+
+  //   return response;
+  // }
+
   /// Format [urlParameter] to a string to use in URL
   String _formatToUrl(List<String> urlParameter) {
+    if (urlParameter.isEmpty) return '';
+
     var result = urlParameter.toString();
     result =
         result.substring(1, result.length - 1).replaceAll(RegExp(r"\s+"), '');
+    print(result);
     return result;
   }
 }

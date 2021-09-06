@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 
 class CryptoModel {
-  final String id;
+  final String? id;
   final String name;
   final String? image;
-  final String crypto;
+  final String symbol;
+  final String cryptoId;
   final double amount;
   final double averagePrice;
   final double totalInvested;
@@ -25,10 +25,11 @@ class CryptoModel {
 
   CryptoModel({
     DateTime? updatedAt,
-    required this.id,
+    this.id,
     this.name = '',
     this.image,
-    required this.crypto,
+    required this.symbol,
+    required this.cryptoId,
     required this.amount,
     required this.averagePrice,
     required this.totalInvested,
@@ -42,6 +43,7 @@ class CryptoModel {
     String? name,
     String? image,
     String? crypto,
+    String? cryptoId,
     double? amount,
     double? averagePrice,
     double? totalInvested,
@@ -54,7 +56,8 @@ class CryptoModel {
       id: id ?? this.id,
       name: name ?? this.name,
       image: image ?? this.image,
-      crypto: crypto ?? this.crypto,
+      symbol: crypto ?? this.symbol,
+      cryptoId: cryptoId ?? this.cryptoId,
       amount: amount ?? this.amount,
       averagePrice: averagePrice ?? this.averagePrice,
       totalInvested: totalInvested ?? this.totalInvested,
@@ -67,9 +70,9 @@ class CryptoModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
-      'crypto': crypto,
+      'cryptoId': cryptoId,
+      'symbol': symbol,
       'amount': amount,
       'averagePrice': averagePrice,
       'totalInvested': totalInvested,
@@ -80,9 +83,10 @@ class CryptoModel {
 
   factory CryptoModel.fromMap(Map<String, dynamic> map) {
     return CryptoModel(
-      id: map['id'] ?? Cryptos.apiIds[map['crypto']],
+      id: map['id'],
       name: map['name'],
-      crypto: map['crypto'],
+      symbol: map['symbol'],
+      cryptoId: map['cryptoId'],
       // * These converts are used to prevent the following error: "type 'int' is not a subtype of type 'double'"
       amount: double.tryParse(map['amount'].toString()) ?? 0,
       averagePrice: double.tryParse(map['averagePrice'].toString()) ?? 0,
@@ -99,7 +103,7 @@ class CryptoModel {
 
   @override
   String toString() {
-    return 'CryptoModel(id: $id, name: $name, crypto: $crypto, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, price: $price, updatedAt: $updatedAt, user: $user)';
+    return 'CryptoModel(id: $id, name: $name, symbol: $symbol, amount: $amount, averagePrice: $averagePrice, totalInvested: $totalInvested, price: $price, updatedAt: $updatedAt, user: $user)';
   }
 
   @override
@@ -109,7 +113,8 @@ class CryptoModel {
     return other is CryptoModel &&
         other.id == id &&
         other.name == name &&
-        other.crypto == crypto &&
+        other.symbol == symbol &&
+        other.cryptoId == cryptoId &&
         other.amount == amount &&
         other.averagePrice == averagePrice &&
         other.totalInvested == totalInvested &&
@@ -121,7 +126,8 @@ class CryptoModel {
   int get hashCode {
     return id.hashCode ^
         name.hashCode ^
-        crypto.hashCode ^
+        symbol.hashCode ^
+        cryptoId.hashCode ^
         amount.hashCode ^
         averagePrice.hashCode ^
         totalInvested.hashCode ^

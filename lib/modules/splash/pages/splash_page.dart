@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:crypto_wallet/shared/auth/auth.dart';
-import 'package:crypto_wallet/shared/constants/routes.dart';
-import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:crypto_wallet/shared/auth/auth.dart';
+import 'package:crypto_wallet/shared/constants/routes.dart';
+import 'package:crypto_wallet/shared/themes/themes.dart';
 
 final _auth = FirebaseAuth.instance;
 
@@ -25,7 +26,6 @@ class _SplashPageState extends State<SplashPage> {
       if (user != null) {
         final auth = context.read<Auth>();
         auth.user = user;
-
         Navigator.pushReplacementNamed(context, AppRoutes.app);
         userStream.cancel();
       } else

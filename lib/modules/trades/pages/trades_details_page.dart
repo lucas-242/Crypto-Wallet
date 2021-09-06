@@ -1,6 +1,6 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/shared/constants/trade_type.dart';
+import 'package:crypto_wallet/shared/helpers/trade_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
@@ -93,20 +93,14 @@ class _TradesDetailsState extends State<TradesDetails> {
             child: Column(
               children: [
                 Center(
-                    child:
-                        Text(trade.crypto, style: AppTextStyles.titleRegular)),
+                    child: Text(trade.cryptoSymbol,
+                        style: AppTextStyles.titleRegular)),
                 SizedBox(height: 25),
                 TradeDetailsRow(
                   leftText: appLocalizations.operationType,
                   rightText: toBeginningOfSentenceCase(
-                      trade.operationType == TradeType.buy
-                          ? appLocalizations.buy
-                          : appLocalizations.sell)!,
-                  rightTextStyle: trade.operationType == TradeType.buy
-                      ? AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.green)
-                      : AppTextStyles.captionBoldBody
-                          .copyWith(color: AppColors.red),
+                      TradeTypeHelper.getTradeLabel(trade.operationType, appLocalizations))!,
+                  rightTextStyle: TradeTypeHelper.getTradeColor(trade),
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(
@@ -139,7 +133,7 @@ class _TradesDetailsState extends State<TradesDetails> {
                   rightText: NumberFormat.currency(
                     symbol: '\$',
                     decimalDigits: WalletHelper.getDecimalDigits(trade.price),
-                  ).format(trade.amountInvested),
+                  ).format(trade.amountDollars),
                 ),
               ],
             ),

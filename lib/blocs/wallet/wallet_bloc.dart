@@ -1,14 +1,12 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
+import 'package:crypto_wallet/repositories/coin_repository/models/marketcap_api_response_model.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
 import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/wallet_model.dart';
-import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/foundation.dart';
 
 import 'wallet_status.dart';
@@ -24,6 +22,8 @@ class WalletBloc extends ChangeNotifier {
   ///The index of the opened Crypto Card of the Wallet Page
   int? openedIndex;
 
+  bool canRefresh = true;
+
   final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
   WalletStatus get status => statusNotifier.value;
   set status(WalletStatus status) => statusNotifier.value = status;
@@ -37,8 +37,9 @@ class WalletBloc extends ChangeNotifier {
   Future<void> getCryptos(String uid) async {
     status = WalletStatus.loading();
 
-    await _walletRepository.getAllCryptos(uid).then((result) async {
+    await _walletRepository.getCryptos(uid).then((result) async {
       if (result.isNotEmpty) {
+        //TODO: API limits to 50 results. Need to check if the user has more than 50 coins in wallet
         cryptos = await getCryptosMarketData(result);
         setWalletData();
       }
@@ -60,70 +61,72 @@ class WalletBloc extends ChangeNotifier {
       List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
 
-    return await _coinRepository
-        .getMarketData(coins: CryptoHelper.getCoinApiIdsFromList(coins))
-        .then((response) {
-      coins.forEach((coin) {
-        response.any((element) {
-          var apiId = Cryptos.apiIds[coin.crypto];
-          if (apiId == element.id) {
-            var price = element.currentPrice;
+    if (canRefresh) {
+      return await _coinRepository
+          .getCoins(coins: coins.map((e) => e.cryptoId).toList())
+          .then((marketcap) {
+        result = setCryptoHistory(coins, marketcap);
 
-            var history = new CryptoHistory(
-              high24h: element.high24h,
-              low24h: element.low24h,
-              priceChangePercentage1yInCurrency:
-                  element.priceChangePercentage1yInCurrency,
-              priceChangePercentage24hInCurrency:
-                  element.priceChangePercentage24hInCurrency,
-              priceChangePercentage30dInCurrency:
-                  element.priceChangePercentage30dInCurrency,
-              priceChangePercentage7dInCurrency:
-                  element.priceChangePercentage7dInCurrency,
-            );
-
-            result.add(coin.copyWith(
-              price: price,
-              image: element.image,
-              history: history,
-            ));
-            return true;
-          }
-
-          return false;
-        });
+        CryptoHelper.setCoinsList(marketcapData: marketcap, isUpdate: true);
+        setTimerToRefreshMarketcap();
+        return result;
       });
+    }
 
-      return result;
+    result = setCryptoHistory(coins, CryptoHelper.coinsList);
+    setTimerToRefreshMarketcap();
+    return result;
+  }
+
+  List<CryptoModel> setCryptoHistory(
+    List<CryptoModel> coins,
+    List<MarketcapApiResponse> marketcap,
+  ) {
+    var result = <CryptoModel>[];
+
+    coins.forEach((coin) {
+      marketcap.any((element) {
+        if (coin.cryptoId == element.id) {
+          var price = element.currentPrice;
+
+          var history = new CryptoHistory(
+            high24h: element.high24h,
+            low24h: element.low24h,
+            priceChangePercentage1yInCurrency:
+                element.priceChangePercentage1yInCurrency,
+            priceChangePercentage24hInCurrency:
+                element.priceChangePercentage24hInCurrency,
+            priceChangePercentage30dInCurrency:
+                element.priceChangePercentage30dInCurrency,
+            priceChangePercentage7dInCurrency:
+                element.priceChangePercentage7dInCurrency,
+          );
+
+          result.add(coin.copyWith(
+            price: price,
+            image: element.image,
+            history: history,
+          ));
+          return true;
+        }
+
+        return false;
+      });
+    });
+
+    return result;
+  }
+
+  /// Set a timer to allow user get new marketcap from API
+  void setTimerToRefreshMarketcap() {
+    canRefresh = false;
+    Future.delayed(Duration(seconds: 45)).then((value) {
+      canRefresh = true;
     });
   }
 
-  // Future<List<CryptoModel>> getCryptosPrice(List<CryptoModel> coins) async {
-  //   var result = <CryptoModel>[];
-  //   return await _coinRepository
-  //       .getPrices(coins: CryptoHelper.getCoinApiNamesFromList(coins))
-  //       .then((response) {
-  //     coins.forEach((coin) {
-  //       var price = double.parse(response[coin.name]['usd'].toString());
-  //       result.add(coin.copyWith(price: price));
-  //     });
-
-  //     return result;
-  //   });
-  // }
-
-  // /// Init a timer to refresh crypto prices
-  // void setTimerToGetPrices() {
-  //   Timer.periodic(Duration(seconds: 60), (timer) async {
-  //     var result = await getCryptosPrice(cryptos);
-  //     if (result.isNotEmpty) cryptos = result;
-  //     print('refreshed');
-  //     notifyListeners();
-  //   });
-  // }
-
   void updateCrypto(CryptoModel model) {
-    var index = cryptos.indexWhere((element) => element.crypto == model.crypto);
+    var index = cryptos.indexWhere((element) => element.symbol == model.symbol);
 
     if (index == -1) {
       cryptos.add(model);
@@ -152,12 +155,13 @@ class WalletBloc extends ChangeNotifier {
     sortedCryptos.sort((a, b) => b.totalNow.compareTo(a.totalNow));
     sortedCryptos.forEach((crypto) {
       cryptosSummary.add(CryptoSummary(
+        cryptoId: crypto.cryptoId,
         name: crypto.name,
-        crypto: crypto.crypto,
+        crypto: crypto.symbol,
         value: crypto.totalNow,
         amount: crypto.amount,
         percent: (crypto.totalNow * 100) / totalNow,
-        color: Color(Cryptos.colors[crypto.crypto] ?? AppColors.grey.value),
+        color: CryptoHelper.getCoinColor(crypto.cryptoId),
         image: crypto.image,
       ));
     });

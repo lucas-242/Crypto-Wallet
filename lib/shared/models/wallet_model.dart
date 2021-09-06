@@ -57,6 +57,7 @@ class WalletModel {
 }
 
 class CryptoSummary {
+  String cryptoId;
   String crypto;
   String name;
   Color? color;
@@ -66,6 +67,7 @@ class CryptoSummary {
   double percent;
 
   CryptoSummary({
+    required this.cryptoId,
     required this.crypto,
     required this.name,
     this.image,

@@ -2,6 +2,7 @@ import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
@@ -76,11 +77,23 @@ class InsertTradeBloc extends ChangeNotifier {
     return null;
   }
 
+  /// Check if app crypto list has been filled
+  void checkCryptoList() {
+    if (CryptoHelper.cryptosIsLoaded()) {
+      status = InsertTradeStatus();
+    } else {
+      status = InsertTradeStatus.loading();
+      Future.delayed(Duration(seconds: 1)).then((value) => checkCryptoList());
+    }
+  }
+
+  /// Change the trade properties when the user changes a field
   void onChange({
     String? operationType,
-    String? crypto,
+    String? cryptoId,
+    String? cryptoSymbol,
     double? amount,
-    double? ammountInvested,
+    double? amountDollars,
     double? price,
     double? fee,
     String? date,
@@ -97,8 +110,9 @@ class InsertTradeBloc extends ChangeNotifier {
     trade = trade.copyWith(
       operationType: operationType,
       amount: amount,
-      amountInvested: ammountInvested,
-      crypto: crypto,
+      amountDollars: amountDollars,
+      cryptoId: cryptoId,
+      cryptoSymbol: cryptoSymbol,
       date: formattedDate,
       price: price,
       fee: fee,
@@ -117,7 +131,7 @@ class InsertTradeBloc extends ChangeNotifier {
 
     status = InsertTradeStatus.loading();
 
-    var cryptos = await _walletRepository.getAllCryptos(uid);
+    var cryptos = await _walletRepository.getCryptos(uid);
     _validateAmount(cryptos);
 
     if (_interstitialAd.responseInfo != null) _interstitialAd.show();
@@ -132,10 +146,11 @@ class InsertTradeBloc extends ChangeNotifier {
     });
   }
 
-  ///Verify if the user has enough amount in [cryptos] to create a selling trade
+  ///Verify if the user has enough amount in [cryptos] to create a selling or transfer trade
   void _validateAmount(List<CryptoModel> cryptos) {
-    if (trade.operationType == TradeType.sell) {
-      var found = cryptos.where((c) => c.crypto == trade.crypto);
+    if (trade.operationType == TradeType.sell ||
+        trade.operationType == TradeType.transfer) {
+      var found = cryptos.where((c) => c.cryptoId == trade.cryptoId);
       if (found.isEmpty || found.first.amount < trade.amount) {
         var error = appLocalizations.errorInsufficientBalance;
         status = InsertTradeStatus.error(error);

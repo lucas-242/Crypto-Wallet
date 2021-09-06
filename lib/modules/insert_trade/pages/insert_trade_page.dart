@@ -1,11 +1,13 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
+import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
+import 'package:crypto_wallet/shared/helpers/trade_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
+import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:crypto_wallet/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
@@ -54,6 +56,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
     uid = FirebaseAuth.instance.currentUser!.uid;
     bloc = InsertTradeBloc(walletRepository: widget.walletRepository);
 
+    bloc.checkCryptoList();
     bloc.loadAd();
     bloc.onChange(user: uid);
     super.initState();
@@ -69,6 +72,18 @@ class _InsertTradePageState extends State<InsertTradePage> {
   void dispose() {
     bloc.dispose();
     super.dispose();
+  }
+
+  DropdownItem? getSelectedItem(TradeModel trade) {
+    if (trade.cryptoId.isNotEmpty) {
+      var crypto = CryptoHelper.findCoin(bloc.trade.cryptoId);
+      DropdownItem(
+        text: '${crypto.symbol} - ${crypto.name}',
+        value: crypto.id,
+      );
+    }
+
+    return null;
   }
 
   void onSave() async {
@@ -119,21 +134,19 @@ class _InsertTradePageState extends State<InsertTradePage> {
                           DropdownSearch<DropdownItem>(
                             label: bloc.appLocalizations.operationType,
                             mode: Mode.BOTTOM_SHEET,
-                            maxHeight: SizeConfig.height * 0.15,
+                            maxHeight: SizeConfig.height * 0.22,
                             selectedItem: bloc.trade.operationType.isNotEmpty
                                 ? DropdownItem(
                                     value: bloc.trade.operationType,
-                                    text: bloc.trade.operationType ==
-                                            TradeType.buy
-                                        ? bloc.appLocalizations.buy
-                                        : bloc.appLocalizations.sell)
+                                    text: TradeTypeHelper.getTradeLabel(
+                                        bloc.trade.operationType,
+                                        bloc.appLocalizations))
                                 : null,
                             items: TradeType.list
                                 .map((e) => DropdownItem(
                                     value: e,
-                                    text: e == TradeType.buy
-                                        ? bloc.appLocalizations.buy
-                                        : bloc.appLocalizations.sell))
+                                    text: TradeTypeHelper.getTradeLabel(
+                                        e, bloc.appLocalizations)))
                                 .toList(),
                             itemAsString: (DropdownItem u) => u.text,
                             onChanged: (DropdownItem? data) {
@@ -152,26 +165,23 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             dropdownButtonBuilder: (_) =>
                                 _dropdownButtonBuilder(),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 25),
                           DropdownSearch<DropdownItem>(
                               label: bloc.appLocalizations.crypto,
                               mode: Mode.BOTTOM_SHEET,
-                              selectedItem: bloc.trade.crypto.isNotEmpty
-                                  ? DropdownItem(
-                                      text:
-                                          '${bloc.trade.crypto} - ${Cryptos.names[bloc.trade.crypto]}',
-                                      value: bloc.trade.crypto,
-                                    )
-                                  : null,
-                              items: Cryptos.list
+                              selectedItem: getSelectedItem(bloc.trade),
+                              items: CryptoHelper.coinsList
                                   .map((e) => DropdownItem(
-                                      text: '$e - ${Cryptos.names[e]}',
-                                      value: e))
+                                      text: '${e.symbol} - ${e.name}',
+                                      auxValue: e.symbol,
+                                      value: e.id))
                                   .toList(),
                               itemAsString: (DropdownItem u) => u.text,
                               onChanged: (DropdownItem? data) {
                                 if (data != null) {
-                                  bloc.onChange(crypto: data.value);
+                                  bloc.onChange(
+                                      cryptoId: data.value,
+                                      cryptoSymbol: data.auxValue);
                                   setState(() {});
                                 }
                               },
@@ -204,7 +214,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                                   _dropdownButtonBuilder(),
                               emptyBuilder: (_, message) =>
                                   _dropdownEmptyBuilder()),
-                          SizedBox(height: 15),
+                          SizedBox(height: 25),
                           CustomTextFormField(
                             labelText: bloc.appLocalizations.cryptoAmount,
                             icon: Icons.account_balance_wallet_outlined,
@@ -214,30 +224,36 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             onChanged: (value) => bloc.onChange(
                                 amount: cryptoAmountController.numberValue),
                           ),
-                          SizedBox(height: 10),
-                          CustomTextFormField(
-                            labelText:
-                                bloc.trade.operationType == TradeType.sell
-                                    ? bloc.appLocalizations.soldAmount
-                                    : bloc.appLocalizations.investedAmount,
-                            icon: Icons.savings_outlined,
-                            keyboardType: TextInputType.number,
-                            controller: tradedAmoutController,
-                            validator: bloc.validateTradedAmount,
-                            onChanged: (value) => bloc.onChange(
-                                ammountInvested:
-                                    tradedAmoutController.numberValue),
-                          ),
-                          SizedBox(height: 10),
-                          CustomTextFormField(
-                            labelText: bloc.appLocalizations.tradePrice,
-                            icon: Icons.attach_money_outlined,
-                            keyboardType: TextInputType.number,
-                            controller: priceController,
-                            validator: bloc.validateTradePrice,
-                            onChanged: (value) => bloc.onChange(
-                                price: priceController.numberValue),
-                          ),
+                          if (bloc.trade.operationType != TradeType.transfer)
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: CustomTextFormField(
+                                labelText:
+                                    bloc.trade.operationType == TradeType.sell
+                                        ? bloc.appLocalizations.soldAmount
+                                        : bloc.appLocalizations.investedAmount,
+                                icon: Icons.savings_outlined,
+                                keyboardType: TextInputType.number,
+                                controller: tradedAmoutController,
+                                validator: bloc.validateTradedAmount,
+                                onChanged: (value) => bloc.onChange(
+                                    amountDollars:
+                                        tradedAmoutController.numberValue),
+                              ),
+                            ),
+                          if (bloc.trade.operationType != TradeType.transfer)
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: CustomTextFormField(
+                                labelText: bloc.appLocalizations.tradePrice,
+                                icon: Icons.attach_money_outlined,
+                                keyboardType: TextInputType.number,
+                                controller: priceController,
+                                validator: bloc.validateTradePrice,
+                                onChanged: (value) => bloc.onChange(
+                                    price: priceController.numberValue),
+                              ),
+                            ),
                           SizedBox(height: 10),
                           CustomTextFormField(
                             labelText: bloc.appLocalizations.date,
