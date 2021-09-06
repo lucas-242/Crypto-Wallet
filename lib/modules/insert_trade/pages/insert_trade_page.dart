@@ -173,7 +173,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                               items: CryptoHelper.coinsList
                                   .map((e) => DropdownItem(
                                       text: '${e.symbol} - ${e.name}',
-                                      other: e.symbol,
+                                      auxValue: e.symbol,
                                       value: e.id))
                                   .toList(),
                               itemAsString: (DropdownItem u) => u.text,
@@ -181,7 +181,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                                 if (data != null) {
                                   bloc.onChange(
                                       cryptoId: data.value,
-                                      cryptoSymbol: data.other);
+                                      cryptoSymbol: data.auxValue);
                                   setState(() {});
                                 }
                               },

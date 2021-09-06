@@ -1,5 +1,5 @@
 {
-  "oneYear": "1y",
+  "all": "All",
   "amount": "Amount",
   "averagePrice": "Average price",
   "buy": "Buy",
@@ -15,6 +15,7 @@
   "errorInsufficientBalance": "Insufficient balance to carry out the transaction",
   "errorLogin": "Error trying to login",
   "fee": "Fee",
+  "filter": "Filter",
   "gainLoss": "Gain / Loss",
   "googleButton": "Enter with Google",
   "hintFieldCrypto": "Select a crypto", 
@@ -29,6 +30,7 @@
   "noData": "There is no data on your wallet",
   "noResults": "No results for the searched term",
   "noTrades": "No trades in the wallet",
+  "oneYear": "1y",
   "operationType": "Operation Type",
   "price": "Price",
   "register": "register",

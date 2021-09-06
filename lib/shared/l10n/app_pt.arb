@@ -1,5 +1,5 @@
 {
-  "oneYear": "1a",
+  "all": "Todos",
   "amount": "Montante",
   "averagePrice": "Preço médio",
   "buy": "Compra",
@@ -15,6 +15,7 @@
   "errorInsufficientBalance": "Saldo insuficiente para efetuar a operação",
   "errorLogin": "Erro ao tentar logar",
   "fee": "Taxa",
+  "filter": "Filtrar",
   "gainLoss": "Ganho / Perda",
   "googleButton": "Entrar com Google",
   "hintFieldCrypto": "Selecione uma cripto", 
@@ -25,6 +26,7 @@
   "inYourWallet": "Em sua carteira",
   "invested": "investido",
   "investedAmount": "Montante investido",
+  "oneYear": "1a",
   "operationType": "Tipo de Operação",
   "noCryptos": "Não há criptos na carteira",
   "noData": "Não há dados na sua carteira",
