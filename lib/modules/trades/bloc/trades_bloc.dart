@@ -65,7 +65,6 @@ class TradesBloc extends ChangeNotifier {
       0,
       DropdownItem(value: '', text: appLocalizations.all),
     );
-    print(cryptoList);
   }
 
   void onFilter(DropdownItem? item) {
