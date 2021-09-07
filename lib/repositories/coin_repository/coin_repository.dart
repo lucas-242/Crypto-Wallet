@@ -131,7 +131,6 @@ class CoinRepository {
     var result = urlParameter.toString();
     result =
         result.substring(1, result.length - 1).replaceAll(RegExp(r"\s+"), '');
-    print(result);
     return result;
   }
 }

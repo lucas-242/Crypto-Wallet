@@ -38,7 +38,8 @@ abstract class CryptoHelper {
 
   /// Check if the coinList is already filled
   static bool cryptosIsLoaded() {
-    if (_coinsList.length == Cryptos.list.length) return true;
+    // ! Not all coins are being returned by the API
+    if (_coinsList.length >= 400) return true;
 
     return false;
   }
