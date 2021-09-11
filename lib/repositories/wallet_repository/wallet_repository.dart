@@ -87,7 +87,12 @@ class WalletRepository {
         } else {
           var crypto =
               _calculateCryptoProperties(cryptos.single, trades, trade);
-          _updateCryptoInTransaction(transaction, crypto);
+          // Delete it from wallet if the user no longer has the crypto
+          if (crypto.amount == 0) {
+            _deleteCryptoInTransaction(transaction, crypto);
+          } else {
+            _updateCryptoInTransaction(transaction, crypto);
+          }
         }
 
         transaction.set(tradesReference, trade.toMap());
