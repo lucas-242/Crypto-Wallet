@@ -90,7 +90,7 @@ class _TradesListPageState extends State<TradesListPage> {
                   return Expanded(
                     child: Column(
                       children: [
-                        //TODO: Add search box and reusable builder functions
+                        //TODO: Add search box and custom dropdown widget
                         DropdownSearch<DropdownItem>(
                           label: bloc.appLocalizations.filter,
                           selectedItem: bloc.filterSelected,

@@ -1,15 +1,24 @@
-import 'package:crypto_wallet/modules/home/pages/home_page.dart';
-import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/modules/wallet/wallet.dart';
-import 'package:crypto_wallet/shared/themes/themes.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../app.dart';
-import 'app_bottom_navigation_widget.dart';
+import 'package:crypto_wallet/modules/app/app.dart';
+import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
+import 'package:crypto_wallet/modules/login/login.dart';
+import 'package:crypto_wallet/modules/splash/splash.dart';
+import 'package:crypto_wallet/modules/trades/trades.dart';
+import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
+import 'package:crypto_wallet/shared/constants/routes.dart';
 
+import 'app_scaffold_widget.dart';
+
+/// Widget that is the Material App
 class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+  final WalletRepository walletRepository;
+  const App({
+    Key? key,
+    required this.walletRepository,
+  }) : super(key: key);
 
   @override
   _AppState createState() => _AppState();
@@ -18,19 +27,23 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    var appBloc = context.watch<AppBloc>();
-    SizeConfig(context, kBottomNavigationBarHeight);
-    return Scaffold(
-        body: [
-          HomePage(),
-          WalletPage(),
-          TradesListPage(),
-        ][appBloc.currentPageIndex],
-        bottomNavigationBar: AppBottomNavigationBar(
-          key: appBloc.bottomNavigationKey,
-          currentPage: appBloc.currentPageIndex,
-          onTap: (index) => appBloc.changePage(index),
-        ),
+    return MaterialApp(
+        title: 'Crypto Wallet',
+        theme: Provider.of<AppBloc>(context).currentTheme,
+        debugShowCheckedModeBanner: false,
+        initialRoute: AppRoutes.splash,
+        routes: {
+          AppRoutes.splash: (context) =>
+              SplashPage(),
+          AppRoutes.app: (context) => AppScaffold(),
+          AppRoutes.login: (context) => LoginPage(),
+          AppRoutes.tradesDetails: (context) => TradesDetails(),
+          AppRoutes.tradesInsert: (context) => InsertTradePage(
+                walletRepository: widget.walletRepository,
+              ),
+        },
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }
