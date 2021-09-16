@@ -4,6 +4,7 @@ import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
 import 'package:crypto_wallet/shared/themes/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback? onPressedDarkMode;
@@ -14,6 +15,8 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = context.read<Auth>();
     final user = auth.user!;
+    final appLocalizations = AppLocalizations.of(context)!;
+
     return Padding(
       padding: EdgeInsets.only(left: 20, right: 20, top: 60, bottom: 15),
       child: Column(
@@ -57,7 +60,7 @@ class CustomDrawer extends StatelessWidget {
                         color: AppColors.grey,
                       ),
                       SizedBox(width: 15),
-                      Text('Dark Mode', style: AppTextStyles.buttonGrey),
+                      Text(appLocalizations.darkMode, style: AppTextStyles.buttonGrey),
                     ],
                   ),
                 ),
@@ -78,7 +81,7 @@ class CustomDrawer extends StatelessWidget {
                             color: AppColors.grey,
                           ),
                           SizedBox(width: 15),
-                          Text('Logout', style: AppTextStyles.buttonGrey),
+                          Text(appLocalizations.logout, style: AppTextStyles.buttonGrey),
                         ],
                       ),
                     ),

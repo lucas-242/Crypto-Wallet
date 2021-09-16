@@ -314,7 +314,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
         ),
       );
 
-  // * There is a bug that put a yellow undeline on message
+  // !There is a bug that put a yellow undeline on message
   Widget _dropdownEmptyBuilder() => Padding(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: Container(
