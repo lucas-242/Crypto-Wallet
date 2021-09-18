@@ -37,7 +37,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 15),
-                Text(user.displayName!, style: AppTextStyles.titleRegular),
+                Text(user.displayName!, style: AppTextStyles.title),
               ],
             ),
           ),

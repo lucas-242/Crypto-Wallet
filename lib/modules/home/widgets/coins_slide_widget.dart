@@ -20,7 +20,7 @@ class CoinsSlide extends StatelessWidget {
         SizedBox(height: 20),
         Text(
           appLocalizations.inYourWallet,
-          style: AppTextStyles.titleRegular,
+          style: AppTextStyles.title,
         ),
         SizedBox(height: 15),
         Container(
@@ -56,13 +56,13 @@ class CoinsSlide extends StatelessWidget {
                                       TextSpan(
                                         text: cryptoSummary.crypto,
                                         style: AppTextStyles
-                                            .captionBoldBodyBackground,
+                                            .bodyBoldWhite,
                                         children: [
                                           TextSpan(
                                             text:
                                                 ' - ${toBeginningOfSentenceCase(cryptoSummary.name)}',
                                             style: AppTextStyles
-                                                .captionBodyBackground,
+                                                .bodyWhite,
                                           ),
                                         ],
                                       ),
@@ -73,13 +73,13 @@ class CoinsSlide extends StatelessWidget {
                                     Text(
                                       '${cryptoSummary.amount.toStringAsFixed(8)} ',
                                       style: AppTextStyles
-                                          .captionBoldBodyBackground,
+                                          .bodyBoldWhite,
                                     ),
                                     SizedBox(height: 5),
                                     Text(
                                       '${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(cryptoSummary.percent / 100)}',
                                       style:
-                                          AppTextStyles.captionBodyBackground,
+                                          AppTextStyles.bodyWhite,
                                     ),
                                   ],
                                 )

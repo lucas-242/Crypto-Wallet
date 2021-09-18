@@ -21,8 +21,8 @@ class TradeDetailsRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(leftText, style: leftTextStyle ?? AppTextStyles.captionBody),
-        Text(rightText, style: rightTextStyle ?? AppTextStyles.captionBoldBody),
+        Text(leftText, style: leftTextStyle ?? AppTextStyles.body),
+        Text(rightText, style: rightTextStyle ?? AppTextStyles.bodyBold),
       ],
     );
   }

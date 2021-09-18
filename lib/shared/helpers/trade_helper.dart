@@ -8,10 +8,10 @@ abstract class TradeTypeHelper {
   /// Get the trade color indicator according to the type
   static TextStyle getTradeColor(TradeModel trade) =>
       trade.operationType == TradeType.buy
-          ? AppTextStyles.captionBoldBody.copyWith(color: AppColors.green)
+          ? AppTextStyles.bodyBold.copyWith(color: AppColors.green)
           : trade.operationType == TradeType.transfer
-              ? AppTextStyles.captionBoldBody.copyWith(color: AppColors.input)
-              : AppTextStyles.captionBoldBody.copyWith(color: AppColors.red);
+              ? AppTextStyles.bodyBold.copyWith(color: AppColors.input)
+              : AppTextStyles.bodyBold.copyWith(color: AppColors.red);
 
   /// Get the Label trade type according to the language
   static String getTradeLabel(

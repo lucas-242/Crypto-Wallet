@@ -320,7 +320,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
         child: Container(
           child: Text(
             bloc.appLocalizations.noResults,
-            style: AppTextStyles.captionBody.copyWith(fontSize: 20),
+            style: AppTextStyles.body.copyWith(fontSize: 20),
           ),
         ),
       );

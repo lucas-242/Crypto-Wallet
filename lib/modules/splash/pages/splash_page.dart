@@ -51,14 +51,14 @@ class _SplashPageState extends State<SplashPage> {
           Center(
             child: Text(
               'Crypto',
-              style: AppTextStyles.titleHome.copyWith(color: AppColors.primary),
+              style: AppTextStyles.logo.copyWith(color: AppColors.primary),
               textAlign: TextAlign.center,
             ),
           ),
           Center(
             child: Text(
               'Wallet',
-              style: AppTextStyles.titleHome,
+              style: AppTextStyles.logo,
               textAlign: TextAlign.center,
             ),
           ),
