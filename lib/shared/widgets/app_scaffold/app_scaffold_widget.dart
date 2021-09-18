@@ -1,4 +1,6 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
+import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/constants/routes.dart';
@@ -46,10 +48,15 @@ class AppScaffold extends StatelessWidget {
       });
     }
 
+    void changeTheme() {
+      context.read<AppBloc>().changeTheme(AdaptiveTheme.of(context));
+    }
+
     return Scaffold(
       key: scaffoldKey,
       drawer: Drawer(
         child: CustomDrawer(
+          onPressedDarkMode: () => changeTheme(),
           onPressedLogout: () => signOut(),
         ),
       ),

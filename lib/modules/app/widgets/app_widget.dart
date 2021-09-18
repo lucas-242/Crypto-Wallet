@@ -1,6 +1,7 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:crypto_wallet/shared/themes/app_themes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
@@ -27,14 +28,18 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return AdaptiveTheme(
+      light: AppThemes.lightTheme,
+      dark: AppThemes.darkTheme,
+      initial: AdaptiveThemeMode.light,
+      builder: (theme, darkTheme) => MaterialApp(
         title: 'Crypto Wallet',
-        theme: Provider.of<AppBloc>(context).currentTheme,
+        theme: theme,
+        darkTheme: darkTheme,
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.splash,
         routes: {
-          AppRoutes.splash: (context) =>
-              SplashPage(),
+          AppRoutes.splash: (context) => SplashPage(),
           AppRoutes.app: (context) => AppScaffold(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.tradesDetails: (context) => TradesDetails(),
@@ -44,6 +49,7 @@ class _AppState extends State<App> {
         },
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+      ),
     );
   }
 }

@@ -28,6 +28,8 @@ abstract class Cryptos {
     'filecoin': 0xFF0090FF,
     'tron': 0xFFC12F26,
     'coti': 0xFF2D65B0,
+    'avalanche-2': 0xFFE84142,
+    'cosmos': 0xFF2B2E46,
   };
 
   ///List of ids of the coins in the app

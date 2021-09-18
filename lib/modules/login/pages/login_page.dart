@@ -40,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
     SizeConfig(context, kBottomNavigationBarHeight);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: Container(
         width: SizeConfig.width,
         height: SizeConfig.height,

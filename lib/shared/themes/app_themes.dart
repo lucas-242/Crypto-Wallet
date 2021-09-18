@@ -1,17 +1,32 @@
+import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 
 //TODO: Finish and use these themes
 abstract class AppThemes {
-  static ThemeData darkTheme = ThemeData.dark().copyWith(
-    primaryColor: Color(0xff1f655d),
-    accentColor: Color(0xff40bf7a),
-    textTheme: TextTheme(),
+  static ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: AppColors.primarySwatch,
+    primaryColor: AppColors.primary,
+    textTheme: TextTheme(
+      headline1: AppTextStyles.logo,
+      headline2: AppTextStyles.title,
+      headline3: AppTextStyles.titleBold,
+      headline4: AppTextStyles.cryptoTitle,
+      headline5: AppTextStyles.cryptoTitleBold,
+      bodyText1: AppTextStyles.bodyWhite,
+      bodyText2: AppTextStyles.body,
+      caption: AppTextStyles.bodyBold,
+      // subtitle1:
+      // subtitle2:
+      // overline:
+    ),
   );
 
-  static ThemeData lightTheme = ThemeData.light().copyWith(
+  static ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primarySwatch: AppColors.primarySwatch,
     primaryColor: AppColors.primary,
-    accentColor: AppColors.primary,
     textTheme: TextTheme(
       headline1: AppTextStyles.logo,
       // headline2: AppTextStyles.logo,

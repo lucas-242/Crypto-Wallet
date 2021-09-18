@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:crypto_wallet/shared/themes/app_themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,13 +33,15 @@ class AppBloc extends ChangeNotifier {
   }
 
   /// Change the app theme
-  void toggleTheme() {
+  void changeTheme(AdaptiveThemeManager adaptiveTheme) {
     if (_themeType == ThemeType.Dark) {
       _currentTheme = AppThemes.lightTheme;
       _themeType = ThemeType.Light;
+      adaptiveTheme.setLight();
     } else {
       _currentTheme = AppThemes.darkTheme;
       _themeType = ThemeType.Dark;
+      adaptiveTheme.setDark();
     }
     notifyListeners();
   }

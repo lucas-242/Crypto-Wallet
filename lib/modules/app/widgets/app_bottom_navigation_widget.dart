@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/shared/themes/themes.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class AppBottomNavigationBar extends StatefulWidget {
@@ -13,6 +14,14 @@ class AppBottomNavigationBar extends StatefulWidget {
 }
 
 class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
+    late AppLocalizations appLocalizations;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appLocalizations = AppLocalizations.of(context)!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,16 +55,16 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.home),
             icon: Icon(Icons.home_outlined),
-            label: 'Dashboard',
+            label: appLocalizations.dashboard,
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.account_balance_wallet),
             icon: Icon(Icons.account_balance_wallet_outlined),
-            label: 'Wallet',
+            label: appLocalizations.wallet
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
-            label: 'Trades',
+            label: appLocalizations.trades,
           ),
         ],
       ),

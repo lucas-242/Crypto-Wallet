@@ -5,8 +5,8 @@ import 'package:crypto_wallet/shared/themes/app_text_styles.dart';
 import 'package:crypto_wallet/shared/themes/size_config.dart';
 import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 class CryptoCard extends StatefulWidget {
   final CryptoModel crypto;
@@ -47,7 +47,7 @@ class _CryptoCardState extends State<CryptoCard> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: widget.openedIndex == widget.index
-                ? Colors.grey[100]
+                ? AppColors.backgroundAccent
                 : AppColors.background,
           ),
           child: Padding(
