@@ -7,7 +7,7 @@ import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_scaffold/app_scaffold_widget.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:crypto_wallet/shared/widgets/custom_dropdown/custom_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -90,39 +90,15 @@ class _TradesListPageState extends State<TradesListPage> {
                   return Expanded(
                     child: Column(
                       children: [
-                        //TODO: Add search box and custom dropdown widget
-                        DropdownSearch<DropdownItem>(
+                        CustomDropdown(
                           label: bloc.appLocalizations.filter,
-                          selectedItem: bloc.filterSelected,
-                          mode: Mode.BOTTOM_SHEET,
-                          maxHeight: SizeConfig.height * 0.22,
+                          hint: bloc.appLocalizations.hintFieldCrypto,
                           items: bloc.cryptoList,
-                          itemAsString: (DropdownItem u) => u.text,
+                          selectedItem: bloc.filterSelected,
                           onChanged: (DropdownItem? item) =>
                               bloc.onFilter(item),
-                          dropdownBuilder: (_, item, value) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Container(
-                                child: Text(
-                                  value.isEmpty
-                                      ? bloc.appLocalizations.hintFieldCrypto
-                                      : value,
-                                  style: AppTextStyles.input,
-                                ),
-                              ),
-                            );
-                          },
-                          dropdownButtonBuilder: (_) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              child: Icon(
-                                Icons.arrow_drop_down,
-                                size: 24,
-                                color: AppColors.text,
-                              ),
-                            );
-                          },
+                          showSeach: true,
+                          searchHint: 'BTC, ETH, ADA ...',
                         ),
                         SizedBox(height: 10),
                         Expanded(
