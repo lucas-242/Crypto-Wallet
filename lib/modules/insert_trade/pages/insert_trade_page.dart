@@ -104,12 +104,13 @@ class _InsertTradePageState extends State<InsertTradePage> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: CustomAppBar(
         title: bloc.appLocalizations.registerTrade,
         leading: BackButton(color: AppColors.primary),
       ),
-      backgroundColor: AppColors.background,
       body: Padding(
         padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 5),
         child: ValueListenableBuilder<InsertTradeStatus>(
@@ -235,8 +236,10 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    Text(bloc.appLocalizations.hintTrade,
-                        style: AppTextStyles.input),
+                    Text(
+                      bloc.appLocalizations.hintTrade,
+                      style: textTheme.caption,
+                    ),
                   ],
                 ),
               );
@@ -249,8 +252,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
             return BottomButtons(
                 fisrtLabel: bloc.appLocalizations.cancel,
                 secondLabel: bloc.appLocalizations.save,
-                firstButtonStyle: AppTextStyles.buttonGrey,
-                secondButtonStyle: AppTextStyles.buttonPrimary,
+                secondButtonStyle: textTheme.button!.copyWith(color: AppColors.primary),
                 onPressedFirst: () => Navigator.of(context).pop(),
                 onPressedSecond: () => onSave());
           }

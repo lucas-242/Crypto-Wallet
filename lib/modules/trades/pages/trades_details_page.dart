@@ -61,6 +61,7 @@ class _TradesDetailsState extends State<TradesDetails> {
     arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     trade = arguments['trade'] as TradeModel;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -94,7 +95,7 @@ class _TradesDetailsState extends State<TradesDetails> {
               children: [
                 Center(
                     child: Text(trade.cryptoSymbol,
-                        style: AppTextStyles.title)),
+                        style: textTheme.headline2)),
                 SizedBox(height: 25),
                 TradeDetailsRow(
                   leftText: appLocalizations.operationType,

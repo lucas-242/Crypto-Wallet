@@ -30,7 +30,7 @@ class _AppScaffoldState extends State<AppScaffold> {
         bottomNavigationBar: AppBottomNavigationBar(
           key: appBloc.bottomNavigationKey,
           currentPage: appBloc.currentPageIndex,
-          onTap: (index) => appBloc.changePage(index),
+          onTap: (index) => appBloc.changePage(index)
         ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 
 class TradeDetailsRow extends StatelessWidget {
@@ -18,11 +17,13 @@ class TradeDetailsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(leftText, style: leftTextStyle ?? AppTextStyles.body),
-        Text(rightText, style: rightTextStyle ?? AppTextStyles.bodyBold),
+        Text(leftText, style: leftTextStyle),
+        Text(rightText, style: rightTextStyle ?? textTheme.subtitle2),
       ],
     );
   }

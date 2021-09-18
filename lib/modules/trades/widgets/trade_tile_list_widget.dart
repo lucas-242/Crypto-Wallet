@@ -20,6 +20,8 @@ class TradeTileList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
@@ -36,7 +38,7 @@ class TradeTileList extends StatelessWidget {
                       width: SizeConfig.width,
                       child: Text(DateFormat.yMd().format(date),
                           textAlign: TextAlign.left,
-                          style: AppTextStyles.bodyBold),
+                          style: textTheme.subtitle2),
                     ),
                     Divider(),
                   ],

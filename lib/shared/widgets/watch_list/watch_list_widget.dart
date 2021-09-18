@@ -21,6 +21,8 @@ class WatchList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return ListView.builder(
       itemCount: cryptos.length,
       itemBuilder: (context, index) {
@@ -59,26 +61,20 @@ class WatchList extends StatelessWidget {
                       children: [
                         Text(
                           toBeginningOfSentenceCase(cryptos[index].name)!,
-                          style: AppTextStyles.bodyBold,
+                          style: textTheme.subtitle2,
                         ),
-                        Text(
-                          cryptos[index].symbol,
-                          style: AppTextStyles.body,
-                        ),
+                        Text(cryptos[index].symbol),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '${NumberFormat.currency(symbol: '\$').format(cryptos[index].price)}',
-                          style: AppTextStyles.body,
-                        ),
+                            '${NumberFormat.currency(symbol: '\$').format(cryptos[index].price)}'),
                         Row(
                           children: [
                             Text(
-                                '${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(cryptoPercentage / 100)}',
-                                style: AppTextStyles.body),
+                                '${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(cryptoPercentage / 100)}'),
                             Icon(
                               cryptoPercentage.isNegative
                                   ? Icons.arrow_downward

@@ -22,17 +22,18 @@ class BottomButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Container(
       height: SizeConfig.height * 0.085,
-      color: AppColors.background,
+      // color: AppColors.background,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Divider(
             thickness: 1,
             height: 1,
-            color: AppColors.stroke,
+            color: theme.dividerColor,
           ),
           Container(
             height: SizeConfig.height * 0.08,
@@ -43,7 +44,7 @@ class BottomButtons extends StatelessWidget {
                     label: fisrtLabel,
                     onPressed: onPressedFirst,
                     style:
-                        firstButtonStyle ?? AppTextStyles.buttonPrimary,
+                        firstButtonStyle,
                   ),
                 ),
                 VerticalDivider(),
@@ -52,7 +53,7 @@ class BottomButtons extends StatelessWidget {
                     label: secondLabel,
                     onPressed: onPressedSecond,
                     style:
-                        secondButtonStyle ?? AppTextStyles.buttonPrimary,
+                        secondButtonStyle,
                   ),
                 ),
               ],

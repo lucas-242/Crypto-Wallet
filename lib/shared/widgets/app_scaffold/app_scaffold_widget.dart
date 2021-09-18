@@ -64,7 +64,6 @@ class AppScaffold extends StatelessWidget {
         title: title,
         leading: IconButton(
           icon: Icon(Icons.menu),
-          color: AppColors.grey,
           onPressed: () {
             scaffoldKey.currentState!.openDrawer(); // this opens drawer
           },

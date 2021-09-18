@@ -27,6 +27,7 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: EdgeInsets.only(bottom: 16),
       child: Column(
@@ -38,13 +39,13 @@ class CustomTextFormField extends StatelessWidget {
             keyboardType: keyboardType,
             textInputAction: textInputAction,
             onChanged: onChanged,
-            style: AppTextStyles.input,
+            style: textTheme.caption,
             decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelText: labelText,
-              // labelStyle: AppTextStyles.input,
+              // labelStyle: textTheme.caption,
               hintText: hintText,
-              hintStyle: AppTextStyles.input,
+              hintStyle: textTheme.caption,
               contentPadding: EdgeInsets.zero,
               border: OutlineInputBorder(),
               prefixIcon: Padding(

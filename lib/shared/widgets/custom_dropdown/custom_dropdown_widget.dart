@@ -28,7 +28,9 @@ class CustomDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
-    final maxHeight = items.length <= 3 ?  SizeConfig.height * 0.22 : SizeConfig.height * 0.28;
+    final textTheme = Theme.of(context).textTheme;
+    final maxHeight =
+        items.length <= 3 ? SizeConfig.height * 0.22 : SizeConfig.height * 0.28;
 
     return DropdownSearch<DropdownItem>(
       label: label,
@@ -41,12 +43,12 @@ class CustomDropdown extends StatelessWidget {
       validator: validator,
       showSearchBox: showSeach,
       searchFieldProps: TextFieldProps(
-        style: AppTextStyles.input,
+        style: textTheme.caption,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: appLocalizations.search,
           hintText: searchHint,
-          hintStyle: AppTextStyles.input,
+          hintStyle: textTheme.caption,
           contentPadding: EdgeInsets.zero,
           border: OutlineInputBorder(),
           prefixIcon: Padding(
@@ -58,29 +60,30 @@ class CustomDropdown extends StatelessWidget {
       dropdownBuilder: (_, item, value) => _dropdownBuilder(
         value: value,
         hint: value.isEmpty ? hint : value,
+        textTheme: textTheme,
       ),
       dropdownButtonBuilder: (_) => _dropdownButtonBuilder(),
-      emptyBuilder: (_, message) => _dropdownEmptyBuilder(appLocalizations),
+      emptyBuilder: (_, message) => _dropdownEmptyBuilder(appLocalizations, textTheme),
     );
   }
 
-  Widget _dropdownBuilder({String? value, String hint = ''}) => Padding(
+  Widget _dropdownBuilder({String? value, String hint = '', required TextTheme textTheme}) => Padding(
         padding: EdgeInsets.symmetric(horizontal: 8),
         child: Container(
           child: Text(
             value == null || value == '' ? hint : value,
-            style: AppTextStyles.input,
+            style: textTheme.caption,
           ),
         ),
       );
 
   // !There is a bug that put a yellow undeline on message
-  Widget _dropdownEmptyBuilder(AppLocalizations appLocalizations) => Padding(
+  Widget _dropdownEmptyBuilder(AppLocalizations appLocalizations, TextTheme textTheme) => Padding(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: Container(
           child: Text(
             appLocalizations.noResults,
-            style: AppTextStyles.body.copyWith(fontSize: 20),
+            style: textTheme.bodyText2!.copyWith(fontSize: 20),
           ),
         ),
       );
@@ -89,8 +92,7 @@ class CustomDropdown extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: Icon(
           Icons.arrow_drop_down,
-          size: 24,
-          color: AppColors.text,
+          size: 24
         ),
       );
 }

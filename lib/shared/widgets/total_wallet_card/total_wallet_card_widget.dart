@@ -12,6 +12,7 @@ class TotalWalletCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
@@ -20,7 +21,7 @@ class TotalWalletCard extends StatelessWidget {
         children: [
           Text(
             NumberFormat.currency(symbol: '\$').format(walletData.totalNow),
-            style: AppTextStyles.logo,
+            style: textTheme.headline1,
           ),
           SizedBox(height: 10),
           Row(
@@ -28,7 +29,7 @@ class TotalWalletCard extends StatelessWidget {
             children: [
               Text(
                 '${walletData.variation.isNegative ? '' : '+'} ${NumberFormat.currency(symbol: '\$').format(walletData.variation)} (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(walletData.percentVariation / 100)})',
-                style: AppTextStyles.title,
+                style: textTheme.headline2,
               ),
               Icon(
                   walletData.variation.isNegative
@@ -47,12 +48,12 @@ class TotalWalletCard extends StatelessWidget {
               children: [
                 Text(
                   '${appLocalizations.totalInvested}',
-                  style: AppTextStyles.title.copyWith(fontSize: 17),
+                  style: textTheme.headline2!.copyWith(fontSize: 17),
                 ),
                 Text(
                   NumberFormat.currency(symbol: '\$')
                       .format(walletData.totalInvested),
-                  style: AppTextStyles.title.copyWith(fontSize: 17),
+                  style: textTheme.headline2!.copyWith(fontSize: 17),
                 ),
               ],
             ),
