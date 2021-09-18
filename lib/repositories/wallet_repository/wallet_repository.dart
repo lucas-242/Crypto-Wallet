@@ -123,7 +123,12 @@ class WalletRepository {
           trade,
         );
 
-        _updateCryptoInTransaction(transaction, crypto);
+        // Delete it from wallet if the user no longer has the crypto
+        if (crypto.amount == 0) {
+          _deleteCryptoInTransaction(transaction, crypto);
+        } else {
+          _updateCryptoInTransaction(transaction, crypto);
+        }
 
         transaction.delete(tradesReference);
       });
@@ -251,11 +256,13 @@ class WalletRepository {
     return crypto;
   }
 
-  /// Calculate the average price considering all [trades] and the [totalAmount] on wallet
+  /// Calculate the average price considering all buying [trades] and the [totalAmount] on wallet
   double _calculateAveragePrice(List<TradeModel> trades, double totalAmount) {
     var sum = 0.0;
-    trades.forEach((element) => sum = sum +
-        ((element.price * element.amount) + (element.price * element.fee)));
+    trades.forEach((trade) {
+      if (trade.operationType == TradeType.buy)
+        sum = sum + ((trade.price * trade.amount) + (trade.price * trade.fee));
+    });
     var averagePrice = sum / totalAmount;
     return averagePrice;
   }

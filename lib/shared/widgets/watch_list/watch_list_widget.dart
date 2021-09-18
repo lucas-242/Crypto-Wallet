@@ -59,11 +59,11 @@ class WatchList extends StatelessWidget {
                       children: [
                         Text(
                           toBeginningOfSentenceCase(cryptos[index].name)!,
-                          style: AppTextStyles.captionBoldBody,
+                          style: AppTextStyles.bodyBold,
                         ),
                         Text(
                           cryptos[index].symbol,
-                          style: AppTextStyles.captionBody,
+                          style: AppTextStyles.body,
                         ),
                       ],
                     ),
@@ -72,13 +72,13 @@ class WatchList extends StatelessWidget {
                       children: [
                         Text(
                           '${NumberFormat.currency(symbol: '\$').format(cryptos[index].price)}',
-                          style: AppTextStyles.captionBody,
+                          style: AppTextStyles.body,
                         ),
                         Row(
                           children: [
                             Text(
                                 '${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(cryptoPercentage / 100)}',
-                                style: AppTextStyles.captionBody),
+                                style: AppTextStyles.body),
                             Icon(
                               cryptoPercentage.isNegative
                                   ? Icons.arrow_downward

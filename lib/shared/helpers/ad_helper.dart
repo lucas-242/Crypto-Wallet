@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:crypto_wallet/shared/constants/keys.dart';
 
+/// Helper that get the ad keys according to the plataforms
 abstract class AdHelper {
-
-   static String get interstitialAdUnitId {
+  static String get interstitialAdUnitId {
     if (Platform.isAndroid) {
       return admob_unit_trade_operation;
     } else if (Platform.isIOS) {
@@ -13,7 +13,6 @@ abstract class AdHelper {
       throw new UnsupportedError("Unsupported platform");
     }
   }
-
 
   // static String get bannerAdUnitId {
   //   if (Platform.isAndroid) {

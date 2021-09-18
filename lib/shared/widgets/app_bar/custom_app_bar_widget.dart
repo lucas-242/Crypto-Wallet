@@ -5,7 +5,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
   final Widget? leading;
-  const CustomAppBar({Key? key, required this.title, this.leading, this.actions})
+  const CustomAppBar(
+      {Key? key, required this.title, this.leading, this.actions})
       : super(key: key);
 
   @override
@@ -13,6 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: Size(SizeConfig.width, SizeConfig.height * 0.07),
       child: Container(
+        height: SizeConfig.height * 0.1,
         child: Padding(
           padding: EdgeInsets.only(top: 35),
           child: Row(
@@ -21,9 +23,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               leading != null ? leading! : Container(width: 50),
               Text(title,
-                  style: AppTextStyles.titleRegular
+                  style: AppTextStyles.title
                       .copyWith(color: AppColors.primary)),
-              actions != null ? Row(children: actions!) : Container(width: 50),
+              Row(children: actions != null ? actions! : [Container(width: 50)])
+              // actions != null ? Row(children: actions!) : Container(width: 50),
             ],
           ),
         ),

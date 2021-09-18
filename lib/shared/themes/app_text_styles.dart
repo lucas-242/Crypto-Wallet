@@ -4,27 +4,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 abstract class AppTextStyles {
-  static final titleHome = GoogleFonts.lexendDeca(
+  static final logo = GoogleFonts.inter(
     fontSize: 32,
     fontWeight: FontWeight.w600,
     color: AppColors.text,
   );
-  static final titleRegular = GoogleFonts.lexendDeca(
+  static final title = GoogleFonts.inter(
     fontSize: 20,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
   );
-  static final titleBold = GoogleFonts.lexendDeca(
+  static final titleBold = GoogleFonts.inter(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.text,
   );
-  static final cryptoTitle = GoogleFonts.lexendDeca(
+  static final cryptoTitle = GoogleFonts.inter(
     fontSize: 18,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
   );
-  static final cryptoTitleBold = GoogleFonts.lexendDeca(
+  static final cryptoTitleBold = GoogleFonts.inter(
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.text,
@@ -44,24 +44,24 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w400,
     color: AppColors.input,
   );
-  static final captionBody = GoogleFonts.inter(
+  static final body = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
   );
-  static final captionBoldBody = GoogleFonts.inter(
+  static final bodyBold = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w600,
     color: AppColors.text,
   );
-  static final captionBodyBackground = GoogleFonts.inter(
+  static final bodyWhite = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w400,
-    color: AppColors.background,
+    color: Colors.white,
   );
-  static final captionBoldBodyBackground = GoogleFonts.inter(
+  static final bodyBoldWhite = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w600,
-    color: AppColors.background,
+    color: Colors.white,
   );
 }

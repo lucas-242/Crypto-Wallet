@@ -11,13 +11,13 @@ import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:crypto_wallet/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
+import 'package:crypto_wallet/shared/widgets/custom_dropdown/custom_dropdown_widget.dart';
 import 'package:crypto_wallet/shared/widgets/custom_text_form_field/custom_text_form_field_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 
 import '/modules/trades/trades.dart';
 
@@ -131,24 +131,15 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          DropdownSearch<DropdownItem>(
+                          CustomDropdown(
                             label: bloc.appLocalizations.operationType,
-                            mode: Mode.BOTTOM_SHEET,
-                            maxHeight: SizeConfig.height * 0.22,
-                            selectedItem: bloc.trade.operationType.isNotEmpty
-                                ? DropdownItem(
-                                    value: bloc.trade.operationType,
-                                    text: TradeTypeHelper.getTradeLabel(
-                                        bloc.trade.operationType,
-                                        bloc.appLocalizations))
-                                : null,
+                            hint: bloc.appLocalizations.hintFieldOperationType,
                             items: TradeType.list
                                 .map((e) => DropdownItem(
                                     value: e,
                                     text: TradeTypeHelper.getTradeLabel(
                                         e, bloc.appLocalizations)))
                                 .toList(),
-                            itemAsString: (DropdownItem u) => u.text,
                             onChanged: (DropdownItem? data) {
                               if (data != null) {
                                 bloc.onChange(operationType: data.value);
@@ -156,64 +147,30 @@ class _InsertTradePageState extends State<InsertTradePage> {
                               }
                             },
                             validator: (item) => bloc.validateCrypto(item),
-                            dropdownBuilder: (_, item, value) =>
-                                _dropdownBuilder(
-                              value: value,
-                              hint:
-                                  bloc.appLocalizations.hintFieldOperationType,
-                            ),
-                            dropdownButtonBuilder: (_) =>
-                                _dropdownButtonBuilder(),
                           ),
                           SizedBox(height: 25),
-                          DropdownSearch<DropdownItem>(
-                              label: bloc.appLocalizations.crypto,
-                              mode: Mode.BOTTOM_SHEET,
-                              selectedItem: getSelectedItem(bloc.trade),
-                              items: CryptoHelper.coinsList
-                                  .map((e) => DropdownItem(
-                                      text: '${e.symbol} - ${e.name}',
-                                      auxValue: e.symbol,
-                                      value: e.id))
-                                  .toList(),
-                              itemAsString: (DropdownItem u) => u.text,
-                              onChanged: (DropdownItem? data) {
-                                if (data != null) {
-                                  bloc.onChange(
-                                      cryptoId: data.value,
-                                      cryptoSymbol: data.auxValue);
-                                  setState(() {});
-                                }
-                              },
-                              showSearchBox: true,
-                              searchFieldProps: TextFieldProps(
-                                style: AppTextStyles.input,
-                                decoration: InputDecoration(
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.always,
-                                  labelText: bloc.appLocalizations.search,
-                                  hintText: 'BTC, ETH, ADA ...',
-                                  hintStyle: AppTextStyles.input,
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 18),
-                                    child: Icon(Icons.search,
-                                        color: AppColors.primary),
-                                  ),
-                                ),
-                              ),
-                              validator: (item) => bloc.validateCrypto(item),
-                              dropdownBuilder: (_, item, value) =>
-                                  _dropdownBuilder(
-                                      value: value,
-                                      hint: bloc
-                                          .appLocalizations.hintFieldCrypto),
-                              dropdownButtonBuilder: (_) =>
-                                  _dropdownButtonBuilder(),
-                              emptyBuilder: (_, message) =>
-                                  _dropdownEmptyBuilder()),
+                          CustomDropdown(
+                            label: bloc.appLocalizations.crypto,
+                            hint: bloc.appLocalizations.hintFieldCrypto,
+                            items: CryptoHelper.coinsList
+                                .map((e) => DropdownItem(
+                                    text: '${e.symbol} - ${e.name}',
+                                    auxValue: e.symbol,
+                                    value: e.id))
+                                .toList(),
+                            selectedItem: getSelectedItem(bloc.trade),
+                            onChanged: (DropdownItem? data) {
+                              if (data != null) {
+                                bloc.onChange(
+                                    cryptoId: data.value,
+                                    cryptoSymbol: data.auxValue);
+                                setState(() {});
+                              }
+                            },
+                            validator: (item) => bloc.validateCrypto(item),
+                            showSeach: true,
+                            searchHint: 'BTC, ETH, ADA ...',
+                          ),
                           SizedBox(height: 25),
                           CustomTextFormField(
                             labelText: bloc.appLocalizations.cryptoAmount,
@@ -303,34 +260,4 @@ class _InsertTradePageState extends State<InsertTradePage> {
       ),
     );
   }
-
-  Widget _dropdownBuilder({String? value, String hint = ''}) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        child: Container(
-          child: Text(
-            value == null || value == '' ? hint : value,
-            style: AppTextStyles.input,
-          ),
-        ),
-      );
-
-  // * There is a bug that put a yellow undeline on message
-  Widget _dropdownEmptyBuilder() => Padding(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        child: Container(
-          child: Text(
-            bloc.appLocalizations.noResults,
-            style: AppTextStyles.captionBody.copyWith(fontSize: 20),
-          ),
-        ),
-      );
-
-  Widget _dropdownButtonBuilder() => Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        child: Icon(
-          Icons.arrow_drop_down,
-          size: 24,
-          color: AppColors.text,
-        ),
-      );
 }

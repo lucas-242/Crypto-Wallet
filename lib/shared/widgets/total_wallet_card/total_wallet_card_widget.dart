@@ -20,7 +20,7 @@ class TotalWalletCard extends StatelessWidget {
         children: [
           Text(
             NumberFormat.currency(symbol: '\$').format(walletData.totalNow),
-            style: AppTextStyles.titleHome,
+            style: AppTextStyles.logo,
           ),
           SizedBox(height: 10),
           Row(
@@ -28,7 +28,7 @@ class TotalWalletCard extends StatelessWidget {
             children: [
               Text(
                 '${walletData.variation.isNegative ? '' : '+'} ${NumberFormat.currency(symbol: '\$').format(walletData.variation)} (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(walletData.percentVariation / 100)})',
-                style: AppTextStyles.titleRegular,
+                style: AppTextStyles.title,
               ),
               Icon(
                   walletData.variation.isNegative
@@ -47,12 +47,12 @@ class TotalWalletCard extends StatelessWidget {
               children: [
                 Text(
                   '${appLocalizations.totalInvested}',
-                  style: AppTextStyles.titleRegular.copyWith(fontSize: 17),
+                  style: AppTextStyles.title.copyWith(fontSize: 17),
                 ),
                 Text(
                   NumberFormat.currency(symbol: '\$')
                       .format(walletData.totalInvested),
-                  style: AppTextStyles.titleRegular.copyWith(fontSize: 17),
+                  style: AppTextStyles.title.copyWith(fontSize: 17),
                 ),
               ],
             ),

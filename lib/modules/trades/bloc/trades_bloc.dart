@@ -129,6 +129,7 @@ class TradesBloc extends ChangeNotifier {
       }
 
       walletBloc.getCryptos(uid);
+      onFilter(filterSelected);
       status = TradesStatus();
     }).catchError((error) {
       status = TradesStatus.error(error.toString());

@@ -3,7 +3,7 @@ import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
-import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
+import 'package:crypto_wallet/shared/widgets/app_scaffold/app_scaffold_widget.dart';
 import 'package:crypto_wallet/shared/widgets/total_wallet_card/total_wallet_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +20,7 @@ class _WalletPageState extends State<WalletPage> {
   late final Auth auth;
   late final WalletBloc bloc;
   late AppLocalizations appLocalizations;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   void initState() {
@@ -37,9 +38,10 @@ class _WalletPageState extends State<WalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: appLocalizations.wallet),
-      backgroundColor: AppColors.background,
+    return AppScaffold(
+      title: appLocalizations.wallet,
+      scaffoldKey: _scaffoldKey,
+      auth: auth,
       body: Padding(
         padding: EdgeInsets.only(left: 25, right: 25, bottom: 5),
         child: ValueListenableBuilder<WalletStatus>(
