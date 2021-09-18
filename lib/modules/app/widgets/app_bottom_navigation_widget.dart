@@ -41,8 +41,8 @@ class AppBottomNavigationBar extends StatelessWidget {
         selectedItemColor: AppColors.primary,
         unselectedItemColor:
             AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
-                ? AppColors.text
-                : AppColors.white,
+                ? AppColors.white
+                : AppColors.text,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
