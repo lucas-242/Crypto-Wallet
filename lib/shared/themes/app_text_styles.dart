@@ -20,21 +20,16 @@ abstract class AppTextStyles {
     color: AppColors.text,
   );
   static final cryptoTitle = GoogleFonts.inter(
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
   );
   static final cryptoTitleBold = GoogleFonts.inter(
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: FontWeight.w600,
     color: AppColors.text,
   );
-  static final buttonPrimary = GoogleFonts.inter(
-    fontSize: 15,
-    fontWeight: FontWeight.w400,
-    color: AppColors.primary,
-  );
-  static final buttonGrey = GoogleFonts.inter(
+  static final button = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
@@ -57,11 +52,11 @@ abstract class AppTextStyles {
   static final bodyWhite = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w400,
-    color: Colors.white,
+    color: AppColors.white,
   );
   static final bodyBoldWhite = GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.white,
   );
 }

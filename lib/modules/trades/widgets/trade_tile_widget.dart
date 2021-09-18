@@ -19,6 +19,7 @@ class TradeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
@@ -33,7 +34,7 @@ class TradeTile extends StatelessWidget {
               children: [
                 TradeDetailsRow(
                   leftText: trade.cryptoSymbol,
-                  leftTextStyle: AppTextStyles.bodyBold
+                  leftTextStyle: theme.textTheme.subtitle2!
                       .copyWith(color: AppColors.primary),
                   rightText: toBeginningOfSentenceCase(
                       TradeTypeHelper.getTradeLabel(
@@ -75,7 +76,7 @@ class TradeTile extends StatelessWidget {
             icon: Icons.close,
             onTap: () => onDelete!(trade),
             foregroundColor: AppColors.text,
-            color: AppColors.background,
+            color: theme.accentColor,
           ),
         ),
       ],

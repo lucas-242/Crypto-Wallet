@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 
 abstract class AppColors {
   static final primary = Color(0xFFFFAF2F);
-  static final secondary = Color(0xFF294563);
   static final grey = Color(0xFF424A57);
-  static final text = grey;
-  static final background = Color(0xFFFAFAFA);
-  static final backgroundAccent = Color(0xFFF5F5F5);
   static final green = Color(0xFF00CC14);
   static final red = Color(0xFFCC0000);
   static final blue = Color(0xFF5384A2);
+  static final white = Color(0xFFFFFFFF);
 
+  static final text = grey;
   static final input = Color(0xFFB1B0B8);
   static final stroke = Color(0xFFE3E3E6);
   static final shape = Color(0xFFFAFAFC);

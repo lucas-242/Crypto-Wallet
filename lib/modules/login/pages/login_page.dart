@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig(context, kBottomNavigationBarHeight);
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       body: Container(
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Text(
                       'Crypto',
-                      style: AppTextStyles.logo
+                      style: textTheme.headline1!
                           .copyWith(color: AppColors.primary),
                       textAlign: TextAlign.center,
                     ),
@@ -60,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Text(
                       'Wallet',
-                      style: AppTextStyles.logo,
+                      style: textTheme.headline1,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -69,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       appLocalizations.logo,
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.titleBold,
+                      style: textTheme.headline3,
                     ),
                   ),
                 ],

@@ -11,6 +11,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return PreferredSize(
       preferredSize: Size(SizeConfig.width, SizeConfig.height * 0.07),
       child: Container(
@@ -23,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               leading != null ? leading! : Container(width: 50),
               Text(title,
-                  style: AppTextStyles.title
+                  style: textTheme.headline2!
                       .copyWith(color: AppColors.primary)),
               Row(children: actions != null ? actions! : [Container(width: 50)])
               // actions != null ? Row(children: actions!) : Container(width: 50),

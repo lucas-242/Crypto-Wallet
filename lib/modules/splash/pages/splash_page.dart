@@ -43,22 +43,22 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
             child: Text(
               'Crypto',
-              style: AppTextStyles.logo.copyWith(color: AppColors.primary),
+              style: textTheme.headline1!.copyWith(color: AppColors.primary),
               textAlign: TextAlign.center,
             ),
           ),
           Center(
             child: Text(
               'Wallet',
-              style: AppTextStyles.logo,
+              style: textTheme.headline1,
               textAlign: TextAlign.center,
             ),
           ),

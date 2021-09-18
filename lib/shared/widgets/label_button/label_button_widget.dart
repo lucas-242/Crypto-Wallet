@@ -1,4 +1,3 @@
-import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 
 class LabelButton extends StatelessWidget {
@@ -11,6 +10,7 @@ class LabelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final textTheme = Theme.of(context).textTheme;
 
     return Container(
       height: size.height * 0.08,
@@ -18,7 +18,7 @@ class LabelButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: style ?? AppTextStyles.buttonGrey,
+          style: style ?? textTheme.button,
         ),
       ),
     );

@@ -1,9 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:crypto_wallet/shared/themes/app_themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-enum ThemeType { Light, Dark }
 
 class AppBloc extends ChangeNotifier {
   List<String> _pages = ['Home', 'Wallet', 'Trades'];
@@ -14,15 +11,17 @@ class AppBloc extends ChangeNotifier {
   int get currentPageIndex => _currentPageIndex;
   String get currentPageName => _currentPageName;
 
-  ThemeData _currentTheme = AppThemes.lightTheme;
-  ThemeType _themeType = ThemeType.Light;
-
-  ThemeData get currentTheme => _currentTheme;
-
   final bottomNavigationKey = GlobalKey();
 
   AppBloc() {
     _currentPageName = _pages[_currentPageIndex];
+  }
+
+  setInitialTheme(AdaptiveThemeMode themeMode) {
+    // _currentTheme = themeData;
+    // if (themeData == AppThemes.lightTheme)
+    //   _themeType = ThemeType.Light;
+    // else if (themeData == AppThemes.darkTheme) _themeType = ThemeType.Dark;
   }
 
   /// Change between the main app pages
@@ -34,13 +33,9 @@ class AppBloc extends ChangeNotifier {
 
   /// Change the app theme
   void changeTheme(AdaptiveThemeManager adaptiveTheme) {
-    if (_themeType == ThemeType.Dark) {
-      _currentTheme = AppThemes.lightTheme;
-      _themeType = ThemeType.Light;
+    if (adaptiveTheme.mode == AdaptiveThemeMode.dark) {
       adaptiveTheme.setLight();
     } else {
-      _currentTheme = AppThemes.darkTheme;
-      _themeType = ThemeType.Dark;
       adaptiveTheme.setDark();
     }
     notifyListeners();

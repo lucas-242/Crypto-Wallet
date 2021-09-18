@@ -9,6 +9,7 @@ class SocialLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -42,7 +43,7 @@ class SocialLoginButton extends StatelessWidget {
                 children: [
                   Text(
                     appLocalizations.googleButton,
-                    style: AppTextStyles.buttonGrey,
+                    style: textTheme.button,
                   ),
                 ],
               ),

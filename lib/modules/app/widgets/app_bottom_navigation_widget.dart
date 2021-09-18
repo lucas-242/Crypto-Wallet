@@ -1,29 +1,20 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-class AppBottomNavigationBar extends StatefulWidget {
+class AppBottomNavigationBar extends StatelessWidget {
   final int currentPage;
   final Function(int) onTap;
-  const AppBottomNavigationBar(
-      {Key? key, this.currentPage = 0, required this.onTap})
-      : super(key: key);
-
-  @override
-  _AppBottomNavigationBarState createState() => _AppBottomNavigationBarState();
-}
-
-class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
-    late AppLocalizations appLocalizations;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    appLocalizations = AppLocalizations.of(context)!;
-  }
+  const AppBottomNavigationBar({
+    Key? key,
+    this.currentPage = 0,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         boxShadow: <BoxShadow>[
@@ -45,10 +36,13 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
         ],
       ),
       child: BottomNavigationBar(
-        currentIndex: widget.currentPage,
-        onTap: (index) => widget.onTap(index),
+        currentIndex: currentPage,
+        onTap: (index) => onTap(index),
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.grey,
+        unselectedItemColor:
+            AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+                ? AppColors.text
+                : AppColors.white,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
@@ -58,10 +52,9 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
             label: appLocalizations.dashboard,
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.account_balance_wallet),
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            label: appLocalizations.wallet
-          ),
+              activeIcon: Icon(Icons.account_balance_wallet),
+              icon: Icon(Icons.account_balance_wallet_outlined),
+              label: appLocalizations.wallet),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
             label: appLocalizations.trades,

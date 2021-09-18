@@ -13,6 +13,7 @@ class CoinsSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,7 +21,7 @@ class CoinsSlide extends StatelessWidget {
         SizedBox(height: 20),
         Text(
           appLocalizations.inYourWallet,
-          style: AppTextStyles.title,
+          style: textTheme.headline2,
         ),
         SizedBox(height: 15),
         Container(
@@ -55,14 +56,12 @@ class CoinsSlide extends StatelessWidget {
                                     Text.rich(
                                       TextSpan(
                                         text: cryptoSummary.crypto,
-                                        style: AppTextStyles
-                                            .bodyBoldWhite,
+                                        style: textTheme.subtitle1,
                                         children: [
                                           TextSpan(
                                             text:
                                                 ' - ${toBeginningOfSentenceCase(cryptoSummary.name)}',
-                                            style: AppTextStyles
-                                                .bodyWhite,
+                                            style: textTheme.bodyText1,
                                           ),
                                         ],
                                       ),
@@ -72,14 +71,12 @@ class CoinsSlide extends StatelessWidget {
                                     SizedBox(height: 5),
                                     Text(
                                       '${cryptoSummary.amount.toStringAsFixed(8)} ',
-                                      style: AppTextStyles
-                                          .bodyBoldWhite,
+                                      style: textTheme.subtitle1,
                                     ),
                                     SizedBox(height: 5),
                                     Text(
                                       '${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(cryptoSummary.percent / 100)}',
-                                      style:
-                                          AppTextStyles.bodyWhite,
+                                      style: textTheme.bodyText2!.copyWith(color: AppColors.white)
                                     ),
                                   ],
                                 )
