@@ -75,6 +75,7 @@ class TradeTile extends StatelessWidget {
             icon: Icons.close,
             onTap: () => onDelete!(trade),
             foregroundColor: AppColors.text,
+            color: AppColors.background,
           ),
         ),
       ],
