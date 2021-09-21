@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -31,6 +32,7 @@ class CustomDropdown extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final maxHeight =
         items.length <= 3 ? SizeConfig.height * 0.22 : SizeConfig.height * 0.28;
+    final activeTheme = AdaptiveTheme.of(context).mode;
 
     return DropdownSearch<DropdownItem>(
       label: label,
@@ -57,17 +59,37 @@ class CustomDropdown extends StatelessWidget {
           ),
         ),
       ),
+      popupItemBuilder: (_, item, isSelected) => _popupItemBuilder(
+        item: item,
+        textTheme: textTheme,
+        activeTheme: activeTheme,
+      ),
       dropdownBuilder: (_, item, value) => _dropdownBuilder(
         value: value,
         hint: value.isEmpty ? hint : value,
         textTheme: textTheme,
       ),
       dropdownButtonBuilder: (_) => _dropdownButtonBuilder(),
-      emptyBuilder: (_, message) => _dropdownEmptyBuilder(appLocalizations, textTheme),
+      emptyBuilder: (_, message) =>
+          _dropdownEmptyBuilder(appLocalizations, textTheme),
     );
   }
 
-  Widget _dropdownBuilder({String? value, String hint = '', required TextTheme textTheme}) => Padding(
+  Widget _popupItemBuilder({
+    required DropdownItem item,
+    required TextTheme textTheme,
+    required AdaptiveThemeMode activeTheme,
+  }) =>
+      ListTile(
+        title: Text(item.text,
+            style: activeTheme == AdaptiveThemeMode.dark
+                ? textTheme.caption
+                : textTheme.bodyText2),
+      );
+
+  Widget _dropdownBuilder(
+          {String? value, String hint = '', required TextTheme textTheme}) =>
+      Padding(
         padding: EdgeInsets.symmetric(horizontal: 8),
         child: Container(
           child: Text(
@@ -78,21 +100,20 @@ class CustomDropdown extends StatelessWidget {
       );
 
   // !There is a bug that put a yellow undeline on message
-  Widget _dropdownEmptyBuilder(AppLocalizations appLocalizations, TextTheme textTheme) => Padding(
+  Widget _dropdownEmptyBuilder(
+          AppLocalizations appLocalizations, TextTheme textTheme) =>
+      Padding(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: Container(
           child: Text(
             appLocalizations.noResults,
-            style: textTheme.bodyText2!.copyWith(fontSize: 20),
+            style: textTheme.bodyText2!.copyWith(fontSize: 18),
           ),
         ),
       );
 
   Widget _dropdownButtonBuilder() => Padding(
         padding: EdgeInsets.symmetric(horizontal: 15),
-        child: Icon(
-          Icons.arrow_drop_down,
-          size: 24
-        ),
+        child: Icon(Icons.arrow_drop_down, size: 24),
       );
 }
