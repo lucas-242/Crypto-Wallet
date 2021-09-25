@@ -5,15 +5,21 @@ class TradeModel {
   final String operationType;
   final String cryptoSymbol;
   final String cryptoId;
+
   ///Amount traded in coin Type
   final double amount;
+
   ///Amount traded in USD
   final double amountDollars;
+
   ///Coin price in USD
   final double price;
+
   ///Fee in the same coin type
   final double fee;
   final DateTime date;
+  /// If it is a sell trade, it can have a profit
+  final double profit;
   final String? user;
 
   TradeModel({
@@ -25,9 +31,10 @@ class TradeModel {
     this.amountDollars = 0,
     this.price = 0,
     this.fee = 0,
+    this.profit = 0,
     DateTime? date,
     this.user,
-  }): this.date = date != null ? date : DateTime.now();
+  }) : this.date = date != null ? date : DateTime.now();
 
   TradeModel copyWith({
     String? id,
@@ -39,6 +46,7 @@ class TradeModel {
     double? price,
     DateTime? date,
     double? fee,
+    double? profit,
     String? user,
   }) {
     return TradeModel(
@@ -51,6 +59,7 @@ class TradeModel {
       price: price ?? this.price,
       fee: fee ?? this.fee,
       date: date ?? this.date,
+      profit: profit ?? this.profit,
       user: user ?? this.user,
     );
   }
@@ -65,6 +74,7 @@ class TradeModel {
       'price': price,
       'fee': fee,
       'date': date,
+      'profit': profit,
       'user': user,
     };
   }
@@ -79,6 +89,7 @@ class TradeModel {
       amountDollars: map['amountDollars'].toDouble(),
       price: map['price'],
       fee: map['fee'].toDouble(),
+      profit:  map['profit'] != null ? map['profit'].toDouble() : 0,
       date: DateTime.parse(map['date'].toDate().toString()),
       user: map['user'],
     );
@@ -108,6 +119,7 @@ class TradeModel {
         other.price == price &&
         other.fee == fee &&
         other.date == date &&
+        other.profit == profit &&
         other.user == user;
   }
 
@@ -122,6 +134,7 @@ class TradeModel {
         price.hashCode ^
         fee.hashCode ^
         date.hashCode ^
+        profit.hashCode ^
         user.hashCode;
   }
 }

@@ -131,32 +131,18 @@ class InsertTradeBloc extends ChangeNotifier {
 
     status = InsertTradeStatus.loading();
 
-    var cryptos = await _walletRepository.getCryptos(uid);
-    _validateAmount(cryptos);
-
     if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
-    return await _walletRepository.addTrade(cryptos, trade).then((value) {
+    return await _walletRepository.addTrade1(trade).then((value) {
+      //TODO: Create methods to update trades and cryptos without call the api again
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
       trade = TradeModel(user: uid);
       status = InsertTradeStatus();
     }).catchError((error) {
+      //TODO: Use appLocalizations.errorInsufficientBalance message
       status = InsertTradeStatus.error(error.toString());
     });
-  }
-
-  ///Verify if the user has enough amount in [cryptos] to create a selling or transfer trade
-  void _validateAmount(List<CryptoModel> cryptos) {
-    if (trade.operationType == TradeType.sell ||
-        trade.operationType == TradeType.transfer) {
-      var found = cryptos.where((c) => c.cryptoId == trade.cryptoId);
-      if (found.isEmpty || found.first.amount < trade.amount) {
-        var error = appLocalizations.errorInsufficientBalance;
-        status = InsertTradeStatus.error(error);
-        throw Exception(error);
-      }
-    }
   }
 
   ///Load the InterstitialAd

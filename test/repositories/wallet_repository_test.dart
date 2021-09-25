@@ -2,12 +2,13 @@ import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.d
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Firebase.initializeApp();
-  final repository = new WalletRepository();
+  // Firebase.initializeApp();
+  final repository = new WalletRepository(firestore: FakeFirebaseFirestore());
   final uid = '2TcEz5BbigUWjJ1hNfyHnrDu4oq1';
   final cryptoId = 'elrond-erd-2';
 

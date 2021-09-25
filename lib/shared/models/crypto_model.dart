@@ -20,10 +20,13 @@ class CryptoModel {
 
   /// The newest Trade Date
   final DateTime lastTradeAt;
-  
-  /// Total fee in buy trades. Used to calculate average price more easily.
+
+  /// Total fee in dollars in buy trades. Used to calculate average price easily.
   final double totalFee;
-  
+
+  /// Total profit in dollars in sell trades. Used to show to the user easily.
+  final double totalProfit;
+
   final String user;
   final CryptoHistory? history;
 
@@ -97,6 +100,7 @@ class CryptoModel {
     this.price = 0,
     this.history,
     this.totalFee = 0,
+    this.totalProfit = 0,
     this.soldPositionAt,
     DateTime? lastTradeAt,
   })  : this.updatedAt = updatedAt ?? DateTime.now(),
@@ -116,6 +120,7 @@ class CryptoModel {
     String? user,
     CryptoHistory? history,
     double? totalFee,
+    double? totalProfit,
     DateTime? soldPositionAt,
     DateTime? lastTradeAt,
   }) {
@@ -133,6 +138,7 @@ class CryptoModel {
       user: user ?? this.user,
       history: history ?? this.history,
       totalFee: totalFee ?? this.totalFee,
+      totalProfit: totalProfit ?? this.totalProfit,
       soldPositionAt: soldPositionAt ?? this.soldPositionAt,
       lastTradeAt: lastTradeAt ?? this.lastTradeAt,
     );
@@ -149,12 +155,14 @@ class CryptoModel {
       'updatedAt': updatedAt,
       'user': user,
       'totalFee': totalFee,
+      'totalProfit': totalProfit,
       'soldPositionAt': soldPositionAt,
       'lastTradeAt': lastTradeAt,
     };
   }
 
   factory CryptoModel.fromMap(Map<String, dynamic> map) {
+    //TODO: Fazer update na base e remover os ternários
     return CryptoModel(
       id: map['id'],
       name: map['name'],
@@ -164,11 +172,20 @@ class CryptoModel {
       amount: double.tryParse(map['amount'].toString()) ?? 0,
       averagePrice: double.tryParse(map['averagePrice'].toString()) ?? 0,
       totalInvested: double.tryParse(map['totalInvested'].toString()) ?? 0,
-      totalFee: double.tryParse(map['totalFee'].toString()) ?? 0,
+      totalFee: map['totalFee'] != null
+          ? double.tryParse(map['totalFee'].toString()) ?? 0
+          : 0,
+      totalProfit: map['totalProfit'] != null
+          ? double.tryParse(map['totalProfit'].toString()) ?? 0
+          : 0,
       updatedAt: DateTime.parse(map['updatedAt'].toDate().toString()),
       user: map['user'],
-      soldPositionAt: DateTime.parse(map['soldPositionAt'].toDate().toString()),
-      lastTradeAt: DateTime.parse(map['lastTradeAt'].toDate().toString()),
+      soldPositionAt: map['soldPositionAt'] != null
+          ? DateTime.parse(map['soldPositionAt'].toDate().toString())
+          : null,
+      lastTradeAt: map['lastTradeAt'] != null
+          ? DateTime.parse(map['lastTradeAt'].toDate().toString())
+          : null,
     );
   }
 
@@ -196,6 +213,7 @@ class CryptoModel {
         other.totalInvested == totalInvested &&
         other.updatedAt == updatedAt &&
         other.totalFee == totalFee &&
+        other.totalProfit == totalProfit &&
         other.soldPositionAt == soldPositionAt &&
         other.lastTradeAt == lastTradeAt &&
         other.user == user;
@@ -212,6 +230,7 @@ class CryptoModel {
         totalInvested.hashCode ^
         updatedAt.hashCode ^
         totalFee.hashCode ^
+        totalProfit.hashCode ^
         soldPositionAt.hashCode ^
         lastTradeAt.hashCode ^
         user.hashCode;
