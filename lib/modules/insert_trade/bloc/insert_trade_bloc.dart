@@ -133,7 +133,7 @@ class InsertTradeBloc extends ChangeNotifier {
 
     if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
-    return await _walletRepository.addTrade1(trade).then((value) {
+    return await _walletRepository.addTrade(trade).then((value) {
       //TODO: Create methods to update trades and cryptos without call the api again
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
