@@ -33,7 +33,7 @@ class TradesBloc extends ChangeNotifier {
   Future<void> getTrades(String uid) async {
     status = TradesStatus.loading();
 
-    await _walletRepository.getTrades(uid: uid).then((value) {
+    await _walletRepository.getTrades(uid).then((value) {
       trades = value;
       trades.sort((a, b) => b.date.compareTo(a.date));
       setCryptoList(trades);
@@ -100,25 +100,10 @@ class TradesBloc extends ChangeNotifier {
   }) async {
     status = TradesStatus.loading();
 
-    var cryptos = await _walletRepository.getCryptos(uid);
-    var found = cryptos
-        .where((element) => element.cryptoId.compareTo(trade.cryptoId) == 0);
-
-    if (found.isEmpty) {
-      status =
-          TradesStatus.error('Something is wrong. Please, restart the app');
-      return;
-    }
-
     if (_interstitialAd.responseInfo != null) _interstitialAd.show();
-
-    var crypto = found.first;
-    var tradesFiltered = trades
-        .where(
-            (element) => element.cryptoId == trade.cryptoId && element != trade)
-        .toList();
+    
     await _walletRepository
-        .deleteTrade(crypto, tradesFiltered, trade)
+        .deleteTrade(trade)
         .then((value) {
       trades.removeWhere((element) => element.id == trade.id);
 
@@ -128,6 +113,7 @@ class TradesBloc extends ChangeNotifier {
         dates.removeWhere((element) => element.isSameDate(trade.date));
       }
 
+      //TODO: Create method to update cryptos without call the api again
       walletBloc.getCryptos(uid);
       onFilter(filterSelected);
       status = TradesStatus();

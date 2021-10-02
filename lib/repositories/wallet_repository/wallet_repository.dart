@@ -5,12 +5,10 @@ import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 
 class WalletRepository {
-  FirebaseFirestore _firestore;
-
-  WalletRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   ///Fetch for all user's cryptos
+  ///
+  ///[uid] refers to the user's identification
   Future<List<CryptoModel>> getCryptos(String uid) async {
     try {
       List<CryptoModel> result = [];
@@ -34,15 +32,19 @@ class WalletRepository {
     }
   }
 
-  ///Fetch for an user's crypto
-  Future<CryptoModel?> getCryptoById(String id, String uid) async {
+  ///Fetch for an user's crypto 
+  ///
+  ///[uid] refers to the user's identification
+  ///
+  ///[cryptoId] refers to the crypto's cryptoId property
+  Future<CryptoModel?> getCryptoById(String uid, String cryptoId) async {
     try {
       CryptoModel? result;
 
       await FirebaseFirestore.instance
           .collection('cryptos')
           .where('user', isEqualTo: uid)
-          .where('cryptoId', isEqualTo: id)
+          .where('cryptoId', isEqualTo: cryptoId)
           .get()
           .then((QuerySnapshot querySnapshot) {
         if (querySnapshot.docs.length >= 1) {
@@ -59,9 +61,10 @@ class WalletRepository {
     }
   }
 
-  ///Fetch for all user's trades
-  Future<List<TradeModel>> getTrades(
-      {required String uid, String? cryptoId}) async {
+  ///Fetch for all user's trades considering user's [uid]
+  ///
+  ///[cryptoId] refers to the Trade's cryptoId and can be used as a filter
+  Future<List<TradeModel>> getTrades(String uid, {String? cryptoId}) async {
     try {
       List<TradeModel> result = [];
       Query<Map<String, dynamic>> query;
@@ -95,9 +98,9 @@ class WalletRepository {
     }
   }
 
-  /// Add a [trade] considering [cryptos] to verify if need update or create a new Crypto on database
+  /// Add a [trade]
   Future<void> addTrade(TradeModel trade) async {
-    var crypto = await getCryptoById(trade.cryptoId, trade.user!);
+    var crypto = await getCryptoById(trade.user!, trade.cryptoId);
 
     // Adding crypto for the first time
     if (crypto == null) {
@@ -121,22 +124,14 @@ class WalletRepository {
       //Check if the type of trade to set some properties
       trade = _setTrade(trade, crypto.averagePrice);
 
-      //If this trade is before the last one or
-      //If this trade is the first trade after sold all position
+      //If this trade is before the last one or if it is the first trade after sold all position
       if ((trade.date.compareTo(crypto.lastTradeAt) < 0) ||
           (crypto.soldPositionAt != null && crypto.amount == 0)) {
         var otherTrades =
-            await getTrades(uid: trade.user!, cryptoId: trade.cryptoId);
+            await getTrades(trade.user!, cryptoId: trade.cryptoId);
         updatedCrypto =
             recalculatingCryptoProperties(crypto, trade, otherTrades);
-      }
-      // If this is the first trade after sold all position
-      // else if (crypto.soldPositionAt != null && crypto.amount == 0)
-      //   updatedCrypto = _setCrytoPropertiesRepurchase(trade);
-      //   // Trabalhar apenas com os trades dps da data que a carteira foi zerada, verificar novamente se tem saldo
-      //   // updatedCrypto = calculateCryptoProperties1(crypto, trade);
-      // }
-      else {
+      } else {
         updatedCrypto = calculateCryptoProperties(crypto, trade);
       }
 
@@ -152,39 +147,34 @@ class WalletRepository {
     }
   }
 
-  /// Delete a [trade] of a [crypto] considering the other [trades] to recalculate the Average Price
-  Future<void> deleteTrade(
-      CryptoModel crypto, List<TradeModel> trades, TradeModel trade) async {
-    try {
-      DocumentReference tradesReference =
-          FirebaseFirestore.instance.collection('trades').doc(trade.id);
+  /// Delete a [trade]
+  Future<void> deleteTrade(TradeModel trade) async {
+    DocumentReference tradesReference =
+        FirebaseFirestore.instance.collection('trades').doc(trade.id);
 
+    var crypto = await getCryptoById(trade.user!, trade.cryptoId);
+
+    if (crypto == null) return;
+
+    var allTrades = await getTrades(trade.user!, cryptoId: trade.cryptoId);
+
+    // Delete trade and crypto if this trade is the only one in the wallet
+    if (allTrades.length == 1) {
       return await FirebaseFirestore.instance
           .runTransaction((transaction) async {
-        if (trades.length == 0) {
-          // _deleteCryptoInTransaction(transaction, crypto);
-          transaction.delete(tradesReference);
-          return;
-        }
-        // crypto = _recalculateCryptoProperties(
-        //   crypto,
-        //   trades,
-        //   trade,
-        // );
-
-        // Delete it from wallet if the user no longer has the crypto
-        if (crypto.amount == 0) {
-          // _deleteCryptoInTransaction(transaction, crypto);
-        } else {
-          _updateCryptoInTransaction(transaction, crypto);
-        }
-
+        _deleteCryptoInTransaction(transaction, crypto);
         transaction.delete(tradesReference);
       });
-    } catch (error) {
-      print("Failed to delete trade: ${error.toString()}");
-      throw new Exception("Failed to delete trade: ${error.toString()}");
     }
+
+    var otherTrades = allTrades.where((element) => element != trade).toList();
+    var updatedCrypto =
+        recalculatingCryptoProperties(crypto, null, otherTrades);
+
+    return await FirebaseFirestore.instance.runTransaction((transaction) async {
+      _updateCryptoInTransaction(transaction, updatedCrypto);
+      transaction.delete(tradesReference);
+    });
   }
 
   /// Create a crypto inside a [transaction] using a [trade] as reference
@@ -221,12 +211,22 @@ class WalletRepository {
     print('transaction created:  $crypto');
   }
 
+  /// Update a [crypto] inside a [transaction]
   void _updateCryptoInTransaction(Transaction transaction, CryptoModel crypto) {
     DocumentReference cryptosReference =
         FirebaseFirestore.instance.collection('cryptos').doc(crypto.id);
 
     transaction.update(cryptosReference, crypto.toMap());
     print('transaction updated:  $crypto');
+  }
+
+  /// Delete a [crypto] inside a [transaction]
+  void _deleteCryptoInTransaction(Transaction transaction, CryptoModel crypto) {
+    DocumentReference cryptosReference =
+        FirebaseFirestore.instance.collection('cryptos').doc(crypto.id);
+
+    transaction.delete(cryptosReference);
+    print('transaction deleted:  $crypto');
   }
 
   /// Calculate all [crypto] properties considering [trade] and all the [trades] before to calculate the Average Price.
@@ -282,14 +282,16 @@ class WalletRepository {
 
   /// Used to recalculate all the propreties of the [crypto] when deleting a [trade]
   /// considering all the [otherTrades]
+  ///
+  ///If [trade] would be null, only [otherTrades] will be consider to calculate properties
   CryptoModel recalculatingCryptoProperties(
     CryptoModel crypto,
-    TradeModel trade,
+    TradeModel? trade,
     List<TradeModel> otherTrades,
   ) {
     List<TradeModel> allTrades = [];
     allTrades.addAll(otherTrades);
-    allTrades.add(trade);
+    if (trade != null) allTrades.add(trade);
     allTrades.sort((a, b) => a.date.compareTo(b.date));
 
     TradeModel? soldPositionInThisTrade;
