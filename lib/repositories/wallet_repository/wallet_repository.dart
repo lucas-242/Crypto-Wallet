@@ -101,6 +101,9 @@ class WalletRepository {
 
     // Adding crypto for the first time
     if (crypto == null) {
+      if (trade.operationType != TradeType.buy)
+        throw Exception('Não há saldo suficiente');
+
       DocumentReference tradesReference =
           FirebaseFirestore.instance.collection('trades').doc();
 
@@ -243,6 +246,7 @@ class WalletRepository {
     }
     // !When selling the average price doesn't change
     else if (trade.operationType == TradeType.sell) {
+      _checkBalance(crypto, trade);
       amount -= trade.amount;
       totalInvested -= trade.amountDollars;
       totalInvested = totalInvested < 0 ? 0 : totalInvested;
@@ -251,6 +255,7 @@ class WalletRepository {
     }
     // !When transfering trades amount indicate the amount transfer to another wallet
     else {
+      _checkBalance(crypto, trade);
       amount -= trade.fee;
       totalInvested -= trade.amountDollars;
       totalInvested = totalInvested < 0 ? 0 : totalInvested;
@@ -299,12 +304,12 @@ class WalletRepository {
 
     double totalProfit = 0;
     double totalFee = 0;
+    double averagePrice = 0;
     DateTime? soldPositionAt = crypto.soldPositionAt;
 
     allTrades.forEach((element) {
       double amount = 0;
       double totalInvested = 0;
-      double averagePrice = 0;
 
       if (element.operationType == TradeType.buy) {
         // *First Operation after sold all position
@@ -329,36 +334,41 @@ class WalletRepository {
         totalInvested = totalInvested < 0 ? 0 : totalInvested;
         amount = crypto.amount - element.amount;
         totalProfit += element.amount * (element.price - crypto.averagePrice);
+
+        if (amount == 0) {
+          soldPositionAt = element.date;
+          averagePrice = 0;
+          totalFee = 0;
+          soldPositionInThisTrade = element;
+        }
+
         crypto = _setCrypto(
           crypto: crypto,
           amount: amount,
           averagePrice: averagePrice,
           totalInvested: totalInvested,
         );
-
-        if (amount == 0) {
-          soldPositionAt = element.date;
-          totalFee = 0;
-          soldPositionInThisTrade = element;
-        }
       }
       // *When transfering trades amount indicate the amount transfer to another wallet
       else {
         _checkBalance(crypto, element);
         totalInvested = crypto.totalInvested - element.amountDollars;
+        totalInvested = totalInvested < 0 ? 0 : totalInvested;
         amount = crypto.amount - element.fee;
+
+        if (amount == 0) {
+          soldPositionAt = element.date;
+          averagePrice = 0;
+          totalFee = 0;
+          soldPositionInThisTrade = element;
+        }
+
         crypto = _setCrypto(
           crypto: crypto,
           amount: amount,
           averagePrice: averagePrice,
           totalInvested: totalInvested,
         );
-
-        if (amount == 0) {
-          soldPositionAt = element.date;
-          totalFee = 0;
-          soldPositionInThisTrade = element;
-        }
       }
     });
 
@@ -397,7 +407,7 @@ class WalletRepository {
     );
   }
 
-  /// Check if the [trade] is a transfer to set the price and amount dollars based on crypto's [averagePrice]
+  /// Set [trade] profit, price and amount dollars according to the operation type and the crypto [averagePrice]
   ///
   /// When transfering, the trade price is the average price, and the Amount in Dollars is calculated using the fee
   TradeModel _setTrade(TradeModel trade, double averagePrice) {
@@ -414,9 +424,9 @@ class WalletRepository {
       );
 
       return trade;
-    } else {
-      return trade;
     }
+
+    return trade;
   }
 
   /// Check [crypto] balance based on [trade]
