@@ -41,7 +41,7 @@ class _TradesDetailsState extends State<TradesDetails> {
   void _deleteTrade() {
     final walletBloc = context.read<WalletBloc>();
     bloc
-        .deleteTrade(
+        .onDelete(
       trade: trade,
       uid: arguments['uid'],
       walletBloc: walletBloc,

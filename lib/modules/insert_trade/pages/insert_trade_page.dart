@@ -8,6 +8,7 @@ import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
+import 'package:crypto_wallet/shared/services/cryptos_service.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:crypto_wallet/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
@@ -23,8 +24,12 @@ import '/modules/trades/trades.dart';
 
 class InsertTradePage extends StatefulWidget {
   final WalletRepository walletRepository;
-  const InsertTradePage({Key? key, required this.walletRepository})
-      : super(key: key);
+  final CryptosService cryptosService;
+  const InsertTradePage({
+    Key? key,
+    required this.walletRepository,
+    required this.cryptosService,
+  }) : super(key: key);
 
   @override
   _InsertTradePageState createState() => _InsertTradePageState();
@@ -54,7 +59,10 @@ class _InsertTradePageState extends State<InsertTradePage> {
   @override
   void initState() {
     uid = FirebaseAuth.instance.currentUser!.uid;
-    bloc = InsertTradeBloc(walletRepository: widget.walletRepository);
+    bloc = InsertTradeBloc(
+      walletRepository: widget.walletRepository,
+      cryptosService: widget.cryptosService,
+    );
 
     bloc.checkCryptoList();
     bloc.loadAd();
@@ -90,7 +98,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
     final tradesBloc = context.read<TradesBloc>();
     final walletBloc = context.read<WalletBloc>();
     await bloc
-        .addTrade(tradesBloc: tradesBloc, walletBloc: walletBloc, uid: uid)
+        .onSave(tradesBloc: tradesBloc, walletBloc: walletBloc, uid: uid)
         .then((value) => Navigator.pop(context))
         .catchError((error) {
       if (error.message == bloc.appLocalizations.errorInsufficientBalance) {
@@ -252,7 +260,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
             return BottomButtons(
                 fisrtLabel: bloc.appLocalizations.cancel,
                 secondLabel: bloc.appLocalizations.save,
-                secondButtonStyle: textTheme.button!.copyWith(color: AppColors.primary),
+                secondButtonStyle:
+                    textTheme.button!.copyWith(color: AppColors.primary),
                 onPressedFirst: () => Navigator.of(context).pop(),
                 onPressedSecond: () => onSave());
           }

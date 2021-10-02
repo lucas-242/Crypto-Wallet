@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/shared/services/cryptos_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   final walletRepository = WalletRepository();
   final coinRepository = CoinRepository();
+  final cryptosService = CryptosService();
 
   @override
   void initState() {
@@ -36,17 +38,25 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => Auth()),
-      ChangeNotifierProvider(create: (_) => AppBloc()),
-      ChangeNotifierProvider(
-          create: (_) => TradesBloc(walletRepository: walletRepository)),
-      ChangeNotifierProvider(
-        create: (_) => WalletBloc(
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => Auth()),
+          ChangeNotifierProvider(create: (_) => AppBloc()),
+          ChangeNotifierProvider(
+              create: (_) => TradesBloc(
+                    walletRepository: walletRepository,
+                    cryptosService: cryptosService,
+                  )),
+          ChangeNotifierProvider(
+            create: (_) => WalletBloc(
+              walletRepository: walletRepository,
+              coinRepository: coinRepository,
+            ),
+          ),
+        ],
+        child: App(
           walletRepository: walletRepository,
-          coinRepository: coinRepository,
-        ),
-      ),
-    ], child: App(walletRepository: walletRepository));
+          cryptosService: cryptosService,
+        ));
   }
 }
