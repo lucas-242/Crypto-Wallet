@@ -3,7 +3,6 @@ import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
-import 'package:flutter/foundation.dart';
 
 class WalletRepository {
   FirebaseFirestore _firestore;
@@ -291,8 +290,16 @@ class WalletRepository {
     TradeModel? soldPositionInThisTrade;
     var firstTradeAfterSoldPosition = false;
 
+    crypto = _setCrypto(
+      crypto: crypto,
+      amount: 0,
+      averagePrice: 0,
+      totalInvested: 0,
+    );
+
     double totalProfit = 0;
     double totalFee = 0;
+    DateTime? soldPositionAt = crypto.soldPositionAt;
 
     allTrades.forEach((element) {
       double amount = 0;
@@ -330,7 +337,8 @@ class WalletRepository {
         );
 
         if (amount == 0) {
-          crypto = crypto.copyWith(soldPositionAt: element.date, totalFee: 0);
+          soldPositionAt = element.date;
+          totalFee = 0;
           soldPositionInThisTrade = element;
         }
       }
@@ -347,7 +355,8 @@ class WalletRepository {
         );
 
         if (amount == 0) {
-          crypto = crypto.copyWith(soldPositionAt: element.date, totalFee: 0);
+          soldPositionAt = element.date;
+          totalFee = 0;
           soldPositionInThisTrade = element;
         }
       }
@@ -356,6 +365,7 @@ class WalletRepository {
     crypto = crypto.copyWith(
       updatedAt: DateTime.now(),
       lastTradeAt: allTrades.last.date,
+      soldPositionAt: soldPositionAt,
       totalFee: totalFee,
       totalProfit: totalProfit,
     );
