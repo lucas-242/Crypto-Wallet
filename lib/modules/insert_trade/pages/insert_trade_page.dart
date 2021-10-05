@@ -1,26 +1,26 @@
-import 'package:crypto_wallet/blocs/wallet/wallet.dart';
-import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
-import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
-import 'package:crypto_wallet/shared/helpers/trade_helper.dart';
-import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
-import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
-import 'package:crypto_wallet/shared/models/enums/status_page.dart';
-import 'package:crypto_wallet/shared/constants/trade_type.dart';
-import 'package:crypto_wallet/shared/models/trade_model.dart';
-import 'package:crypto_wallet/shared/services/cryptos_service.dart';
-import 'package:crypto_wallet/shared/themes/themes.dart';
-import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
-import 'package:crypto_wallet/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
-import 'package:crypto_wallet/shared/widgets/custom_dropdown/custom_dropdown_widget.dart';
-import 'package:crypto_wallet/shared/widgets/custom_text_form_field/custom_text_form_field_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '/blocs/wallet/wallet.dart';
+import '/modules/insert_trade/insert_trade.dart';
 import '/modules/trades/trades.dart';
+import '/repositories/wallet_repository/wallet_repository.dart';
+import '/shared/constants/Config.dart';
+import '/shared/helpers/view_helper.dart';
+import '/shared/helpers/wallet_helper.dart';
+import '/shared/models/dropdown_item_model.dart';
+import '/shared/models/enums/status_page.dart';
+import '/shared/constants/trade_type.dart';
+import '/shared/models/trade_model.dart';
+import '/shared/services/cryptos_service.dart';
+import '/shared/themes/themes.dart';
+import '/shared/widgets/app_bar/custom_app_bar_widget.dart';
+import '/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
+import '/shared/widgets/custom_dropdown/custom_dropdown_widget.dart';
+import '/shared/widgets/custom_text_form_field/custom_text_form_field_widget.dart';
 
 class InsertTradePage extends StatefulWidget {
   final WalletRepository walletRepository;
@@ -42,12 +42,12 @@ class _InsertTradePageState extends State<InsertTradePage> {
   final priceController = MoneyMaskedTextController(
     leftSymbol: '\$',
     decimalSeparator: ',',
-    precision: WalletHelper.decimalDigitsToSmallCryptos,
+    precision: Config.decimalDigitsToSmallCryptos,
   );
   final tradedAmoutController = MoneyMaskedTextController(
     leftSymbol: '\$',
     decimalSeparator: ',',
-    precision: WalletHelper.decimalDigitsToSmallCryptos,
+    precision: Config.decimalDigitsToSmallCryptos,
   );
   final cryptoAmountController =
       MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
@@ -84,7 +84,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
 
   DropdownItem? getSelectedItem(TradeModel trade) {
     if (trade.cryptoId.isNotEmpty) {
-      var crypto = CryptoHelper.findCoin(bloc.trade.cryptoId);
+      var crypto = WalletHelper.findCoin(bloc.trade.cryptoId);
       DropdownItem(
         text: '${crypto.symbol} - ${crypto.name}',
         value: crypto.id,
@@ -146,7 +146,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             items: TradeType.list
                                 .map((e) => DropdownItem(
                                     value: e,
-                                    text: TradeTypeHelper.getTradeLabel(
+                                    text: ViewHelper.getTradeLabel(
                                         e, bloc.appLocalizations)))
                                 .toList(),
                             onChanged: (DropdownItem? data) {
@@ -161,7 +161,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                           CustomDropdown(
                             label: bloc.appLocalizations.crypto,
                             hint: bloc.appLocalizations.hintFieldCrypto,
-                            items: CryptoHelper.coinsList
+                            items: WalletHelper.coinsList
                                 .map((e) => DropdownItem(
                                     text: '${e.symbol} - ${e.name}',
                                     auxValue: e.symbol,

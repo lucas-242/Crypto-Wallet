@@ -1,7 +1,7 @@
-import 'package:crypto_wallet/shared/constants/trade_type.dart';
-import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
-import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/models/trade_model.dart';
+import '/shared/constants/trade_type.dart';
+import '/shared/helpers/wallet_helper.dart';
+import '/shared/models/crypto_model.dart';
+import '/shared/models/trade_model.dart';
 
 /// This service is responsible for calculate the Crypto properties when creating or removing a trade
 class CryptosService {
@@ -187,7 +187,7 @@ class CryptosService {
 
   /// Create a [CryptoModel] considering a [trade]
   CryptoModel setCryptoForTheFirstTime(TradeModel trade) {
-    var infos = CryptoHelper.findCoin(trade.cryptoId);
+    var infos = WalletHelper.findCoin(trade.cryptoId);
     var crypto = CryptoModel(
       cryptoId: trade.cryptoId,
       name: infos.name,

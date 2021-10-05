@@ -1,4 +1,3 @@
-import 'package:crypto_wallet/shared/services/cryptos_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +8,8 @@ import 'modules/trades/trades.dart';
 import 'repositories/coin_repository/coin_repository.dart';
 import 'repositories/wallet_repository/wallet_repository.dart';
 import 'shared/auth/auth.dart';
-import 'shared/helpers/crypto_helper.dart';
+import 'shared/services/cryptos_service.dart';
+import 'shared/helpers/wallet_helper.dart';
 
 class MainApp extends StatefulWidget {
   MainApp() {
@@ -31,7 +31,7 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     coinRepository.getAppCoins().then((value) {
-      CryptoHelper.setCoinsList(marketcapData: value);
+      WalletHelper.setCoinsList(marketcapData: value);
     });
     super.initState();
   }

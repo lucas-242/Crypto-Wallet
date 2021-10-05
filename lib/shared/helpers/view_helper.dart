@@ -1,10 +1,13 @@
-import 'package:crypto_wallet/shared/constants/trade_type.dart';
-import 'package:crypto_wallet/shared/models/trade_model.dart';
-import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-abstract class TradeTypeHelper {
+import './../constants/cryptos.dart';
+import './../constants/trade_type.dart';
+import './../models/trade_model.dart';
+import './../themes/themes.dart';
+import './wallet_helper.dart';
+
+abstract class ViewHelper {
   /// Get the trade color indicator according to the type
   static TextStyle getTradeColor(TradeModel trade) =>
       trade.operationType == TradeType.buy
@@ -21,4 +24,12 @@ abstract class TradeTypeHelper {
           : operationType == TradeType.transfer
               ? appLocalizations.transfer
               : appLocalizations.sell;
+
+  ///Get coin color by [id]
+  static Color getCoinColor(String id) {
+    var found = WalletHelper.findCoin(id);
+    return Cryptos.colors[found.id] != null
+        ? Color(Cryptos.colors[found.id]!)
+        : AppColors.text;
+  }
 }

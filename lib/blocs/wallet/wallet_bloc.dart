@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
 import 'package:crypto_wallet/repositories/coin_repository/models/marketcap_api_response_model.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/helpers/crypto_helper.dart';
+import 'package:crypto_wallet/shared/helpers/view_helper.dart';
+import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/models/wallet_model.dart';
@@ -67,13 +68,13 @@ class WalletBloc extends ChangeNotifier {
           .then((marketcap) {
         result = setCryptoHistory(coins, marketcap);
 
-        CryptoHelper.setCoinsList(marketcapData: marketcap, isUpdate: true);
+        WalletHelper.setCoinsList(marketcapData: marketcap, isUpdate: true);
         setTimerToRefreshMarketcap();
         return result;
       });
     }
 
-    result = setCryptoHistory(coins, CryptoHelper.coinsList);
+    result = setCryptoHistory(coins, WalletHelper.coinsList);
     setTimerToRefreshMarketcap();
     return result;
   }
@@ -161,7 +162,7 @@ class WalletBloc extends ChangeNotifier {
         value: crypto.totalNow,
         amount: crypto.amount,
         percent: (crypto.totalNow * 100) / totalNow,
-        color: CryptoHelper.getCoinColor(crypto.cryptoId),
+        color: ViewHelper.getCoinColor(crypto.cryptoId),
         image: crypto.image,
       ));
     });
