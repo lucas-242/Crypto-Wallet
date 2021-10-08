@@ -6,6 +6,11 @@ enum TradeCreateOption { create, update }
 enum TradeDeleteOption { update, delete }
 
 class WalletRepository {
+  FirebaseFirestore _firestore;
+
+  WalletRepository({FirebaseFirestore? firestore})
+      : _firestore = firestore != null ? firestore : FirebaseFirestore.instance;
+
   ///Fetch for all user's cryptos
   ///
   ///[uid] refers to the user's identification
@@ -13,7 +18,7 @@ class WalletRepository {
     try {
       List<CryptoModel> result = [];
 
-      await FirebaseFirestore.instance
+      await _firestore
           .collection('cryptos')
           .where('user', isEqualTo: uid)
           .get()
@@ -41,7 +46,7 @@ class WalletRepository {
     try {
       CryptoModel? result;
 
-      await FirebaseFirestore.instance
+      await _firestore
           .collection('cryptos')
           .where('user', isEqualTo: uid)
           .where('cryptoId', isEqualTo: cryptoId)
@@ -70,13 +75,13 @@ class WalletRepository {
       Query<Map<String, dynamic>> query;
 
       if (cryptoId != null) {
-        query = FirebaseFirestore.instance
+        query = _firestore
             .collection('trades')
             .where('user', isEqualTo: uid)
             .where('cryptoId', isEqualTo: cryptoId)
             .orderBy('date');
       } else {
-        query = FirebaseFirestore.instance
+        query = _firestore
             .collection('trades')
             .where('user', isEqualTo: uid)
             .orderBy('date');
@@ -101,19 +106,19 @@ class WalletRepository {
   /// Create a [trade] and create/update the related [crypto] considering [operation]
   Future<void> addTrade(
       TradeCreateOption operation, TradeModel trade, CryptoModel crypto) async {
-    return await FirebaseFirestore.instance.runTransaction((transaction) async {
+    return await _firestore.runTransaction((transaction) async {
       if (operation == TradeCreateOption.create) {
         DocumentReference cryptosReference =
-            FirebaseFirestore.instance.collection('cryptos').doc();
+            _firestore.collection('cryptos').doc();
         transaction.set(cryptosReference, crypto.toMap());
       } else {
         DocumentReference cryptosReference =
-            FirebaseFirestore.instance.collection('cryptos').doc(crypto.id);
+            _firestore.collection('cryptos').doc(crypto.id);
         transaction.update(cryptosReference, crypto.toMap());
       }
 
       DocumentReference tradesReference =
-          FirebaseFirestore.instance.collection('trades').doc();
+          _firestore.collection('trades').doc();
       transaction.set(tradesReference, trade.toMap());
       print('tradeId: ' + tradesReference.id);
     });
@@ -123,12 +128,12 @@ class WalletRepository {
   Future<void> deleteTrade(
       TradeDeleteOption operation, TradeModel trade, CryptoModel crypto) async {
     DocumentReference tradesReference =
-        FirebaseFirestore.instance.collection('trades').doc(trade.id);
+        _firestore.collection('trades').doc(trade.id);
 
     DocumentReference cryptosReference =
-        FirebaseFirestore.instance.collection('cryptos').doc(crypto.id);
+        _firestore.collection('cryptos').doc(crypto.id);
 
-    return await FirebaseFirestore.instance.runTransaction((transaction) async {
+    return await _firestore.runTransaction((transaction) async {
       if (operation == TradeDeleteOption.delete) {
         transaction.delete(cryptosReference);
       } else {
