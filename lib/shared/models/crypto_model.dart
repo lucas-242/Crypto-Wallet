@@ -162,7 +162,6 @@ class CryptoModel {
   }
 
   factory CryptoModel.fromMap(Map<String, dynamic> map) {
-    //TODO: Fazer update na base e remover os ternários
     return CryptoModel(
       id: map['id'],
       name: map['name'],

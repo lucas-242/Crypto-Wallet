@@ -8,7 +8,20 @@ abstract class AppThemes {
     primarySwatch: AppColors.primarySwatch,
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: Colors.grey[850],
-    accentColor: Colors.grey[900],
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.primary,
+      primaryVariant: AppColors.primary,
+      secondary: Color(0xFF212121),
+      secondaryVariant: Color(0xFF212121),
+      surface: Color(0xFF303030),
+      background: Color(0xFF303030),
+      onPrimary: AppColors.text,
+      onSecondary: AppColors.white,
+      onSurface: AppColors.white,
+      onBackground: AppColors.white,
+      onError: AppColors.text,
+      error: AppColors.red,
+    ),
     iconTheme: IconThemeData(color: AppColors.white),
     primaryIconTheme: IconThemeData(color: AppColors.input),
     textTheme: TextTheme(
@@ -32,7 +45,20 @@ abstract class AppThemes {
     primarySwatch: AppColors.primarySwatch,
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: Color(0xFFFAFAFA),
-    accentColor: Color(0xFFF5F5F5),
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primary,
+      primaryVariant: AppColors.primary,
+      secondary: Color(0xFF212121),
+      secondaryVariant: Color(0xFF212121),
+      surface: Color(0xFFF5F5F5),
+      background: Color(0xFFF5F5F5),
+      onPrimary: AppColors.text,
+      onSecondary: AppColors.text,
+      onSurface: AppColors.text,
+      onBackground: AppColors.text,
+      onError: AppColors.text,
+      error: AppColors.red,
+    ),
     iconTheme: IconThemeData(color: AppColors.text),
     primaryIconTheme: IconThemeData(color: AppColors.text),
     textTheme: TextTheme(
@@ -47,7 +73,6 @@ abstract class AppThemes {
       subtitle2: AppTextStyles.bodyBold,
       caption: AppTextStyles.input,
       button: AppTextStyles.button,
-
       // overline:
     ),
   );

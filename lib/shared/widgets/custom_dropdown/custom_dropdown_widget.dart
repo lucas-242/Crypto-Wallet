@@ -36,11 +36,15 @@ class CustomDropdown extends StatelessWidget {
 
     return DropdownSearch<DropdownItem>(
       label: label,
+      // * Breaking layout when trying use dropdownSearchDecoration
+      // dropdownSearchDecoration: InputDecoration(
+      //   labelText: label,
+      // ),
       mode: Mode.BOTTOM_SHEET,
       maxHeight: maxHeight,
       selectedItem: selectedItem,
       items: items,
-      itemAsString: (DropdownItem u) => u.text,
+      itemAsString: (DropdownItem? u) => u!.text,
       onChanged: onChanged,
       validator: validator,
       showSearchBox: showSeach,
@@ -64,9 +68,9 @@ class CustomDropdown extends StatelessWidget {
         textTheme: textTheme,
         activeTheme: activeTheme,
       ),
-      dropdownBuilder: (_, item, value) => _dropdownBuilder(
-        value: value,
-        hint: value.isEmpty ? hint : value,
+      dropdownBuilder: (_, item) => _dropdownBuilder(
+        item: item,
+        hint: hint,
         textTheme: textTheme,
       ),
       dropdownButtonBuilder: (_) => _dropdownButtonBuilder(),
@@ -88,12 +92,12 @@ class CustomDropdown extends StatelessWidget {
       );
 
   Widget _dropdownBuilder(
-          {String? value, String hint = '', required TextTheme textTheme}) =>
+          {DropdownItem? item, String hint = '', required TextTheme textTheme}) =>
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 8),
         child: Container(
           child: Text(
-            value == null || value == '' ? hint : value,
+            item == null || item.text == '' ? hint : item.text,
             style: textTheme.caption,
           ),
         ),

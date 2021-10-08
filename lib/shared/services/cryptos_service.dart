@@ -13,7 +13,6 @@ class CryptosService {
     double totalFee = crypto.totalFee;
     double totalProfit = crypto.totalProfit;
 
-    //TODO: Decidir se o fee será descontado do amount ou se o usuário já irá informar descontado
     if (trade.operationType == TradeType.buy) {
       amount += trade.amount;
       totalInvested += trade.amountDollars;
@@ -213,7 +212,6 @@ class CryptosService {
 
   /// Check [crypto] balance based on [trade]
   void checkBalance(CryptoModel crypto, TradeModel trade) {
-    //TODO: Decidir se o fee será descontado do amount ou se o usuário já irá informar descontado
     if (!crypto.hasBalace(
       trade.operationType,
       trade.operationType == TradeType.transfer
