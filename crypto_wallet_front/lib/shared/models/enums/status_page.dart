@@ -1,1 +1,0 @@
-enum StatusPage { loading, error, noData, success }
