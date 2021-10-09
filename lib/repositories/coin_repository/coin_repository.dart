@@ -1,9 +1,9 @@
 import 'dart:convert';
-
-import 'package:crypto_wallet/repositories/coin_repository/models/marketcap_api_response_model.dart';
-import 'package:crypto_wallet/shared/constants/cryptos.dart';
-import 'package:crypto_wallet/shared/constants/environment.dart';
 import 'package:http/http.dart' as http;
+
+import '/repositories/coin_repository/models/marketcap_api_response_model.dart';
+import '/shared/constants/config.dart';
+import '/shared/constants/cryptos.dart';
 
 class CoinRepository {
   ///Get the [coins] currency in the [currencies]
@@ -17,7 +17,7 @@ class CoinRepository {
       String formattedCoins = _formatToUrl(coins);
       String formattedCurrencies = _formatToUrl(currencies);
       var uri =
-          '${Environment.coingeckoApi}simple/price?ids=$formattedCoins&vs_currencies=$formattedCurrencies';
+          '${Config.coingeckoApi}simple/price?ids=$formattedCoins&vs_currencies=$formattedCurrencies';
       var response = await http.get(Uri.parse(uri));
       return json.decode(response.body);
     } catch (error) {
@@ -49,7 +49,7 @@ class CoinRepository {
   }) async {
     try {
       var uri =
-          '${Environment.coingeckoApi}coins/$coin/ohlc?vs_currency=$currency&days=$days';
+          '${Config.coingeckoApi}coins/$coin/ohlc?vs_currency=$currency&days=$days';
       var response = await http.get(Uri.parse(uri));
       return json.decode(response.body);
     } catch (error) {
@@ -74,7 +74,7 @@ class CoinRepository {
       if (formattedCoins == null) formattedCoins = _formatToUrl(coins);
 
       var uri =
-          '${Environment.coingeckoApi}coins/markets?ids=$formattedCoins&vs_currency=$currency&order=market_cap_desc&per_page=$limit&page=$page&sparkline=false&price_change_percentage=24h,7d,30d,1y';
+          '${Config.coingeckoApi}coins/markets?ids=$formattedCoins&vs_currency=$currency&order=market_cap_desc&per_page=$limit&page=$page&sparkline=false&price_change_percentage=24h,7d,30d,1y';
 
       var response = await http.get(Uri.parse(uri));
       Iterable body = json.decode(response.body);

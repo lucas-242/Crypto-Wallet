@@ -118,7 +118,7 @@ class _TradesListPageState extends State<TradesListPage> {
                               onDelete: (trade) {
                                 final walletBloc = context.read<WalletBloc>();
                                 bloc
-                                    .deleteTrade(
+                                    .onDelete(
                                       trade: trade,
                                       uid: auth.user!.uid,
                                       walletBloc: walletBloc,

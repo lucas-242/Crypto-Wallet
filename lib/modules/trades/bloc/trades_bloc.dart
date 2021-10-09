@@ -4,6 +4,7 @@ import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.d
 import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
+import 'package:crypto_wallet/shared/services/cryptos_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crypto_wallet/shared/extensions/date_time_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TradesBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
+  CryptosService _cryptosService;
   late InterstitialAd _interstitialAd;
 
   List<TradeModel> trades = [];
@@ -27,13 +29,13 @@ class TradesBloc extends ChangeNotifier {
   TradesStatus get status => statusNotifier.value;
   set status(TradesStatus status) => statusNotifier.value = status;
 
-  TradesBloc({required WalletRepository walletRepository})
-      : _walletRepository = walletRepository;
+  TradesBloc({required WalletRepository walletRepository, required CryptosService cryptosService})
+      : _walletRepository = walletRepository, _cryptosService = cryptosService;
 
   Future<void> getTrades(String uid) async {
     status = TradesStatus.loading();
 
-    await _walletRepository.getTrades(uid: uid).then((value) {
+    await _walletRepository.getTrades(uid).then((value) {
       trades = value;
       trades.sort((a, b) => b.date.compareTo(a.date));
       setCryptoList(trades);
@@ -93,33 +95,16 @@ class TradesBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteTrade({
+  Future<void> onDelete({
     required TradeModel trade,
     required String uid,
     required WalletBloc walletBloc,
   }) async {
     status = TradesStatus.loading();
 
-    var cryptos = await _walletRepository.getCryptos(uid);
-    var found = cryptos
-        .where((element) => element.cryptoId.compareTo(trade.cryptoId) == 0);
-
-    if (found.isEmpty) {
-      status =
-          TradesStatus.error('Something is wrong. Please, restart the app');
-      return;
-    }
-
     if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
-    var crypto = found.first;
-    var tradesFiltered = trades
-        .where(
-            (element) => element.cryptoId == trade.cryptoId && element != trade)
-        .toList();
-    await _walletRepository
-        .deleteTrade(crypto, tradesFiltered, trade)
-        .then((value) {
+    await deleteTrade(trade).then((value) {
       trades.removeWhere((element) => element.id == trade.id);
 
       var findTrades =
@@ -128,6 +113,7 @@ class TradesBloc extends ChangeNotifier {
         dates.removeWhere((element) => element.isSameDate(trade.date));
       }
 
+      //TODO: Create method to update cryptos without call the api again
       walletBloc.getCryptos(uid);
       onFilter(filterSelected);
       status = TradesStatus();
@@ -136,6 +122,29 @@ class TradesBloc extends ChangeNotifier {
     });
 
     notifyListeners();
+  }
+
+  Future<void> deleteTrade(TradeModel trade) async {
+    var crypto =
+        await _walletRepository.getCryptoById(trade.user!, trade.cryptoId);
+
+    if (crypto == null) return;
+
+    var allTrades = await _walletRepository.getTrades(trade.user!,
+        cryptoId: trade.cryptoId);
+
+    // Delete trade and crypto if this trade is the only one in the wallet
+    if (allTrades.length == 1) {
+      return _walletRepository.deleteTrade(
+          TradeDeleteOption.delete, trade, crypto);
+    }
+
+    var otherTrades = allTrades.where((element) => element != trade).toList();
+    var updatedCrypto =
+        _cryptosService.recalculatingCryptoProperties(crypto, null, otherTrades);
+
+    return _walletRepository.deleteTrade(
+        TradeDeleteOption.update, trade, updatedCrypto);
   }
 
   ///Load the InterstitialAd

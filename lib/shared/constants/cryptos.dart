@@ -1,7 +1,7 @@
 abstract class Cryptos {
 
   ///Map of coin colors in the app
-  static Map<String,int> get colors => {
+  static const Map<String,int> colors = {
     'bitcoin': 0xFFF79319,
     'ethereum': 0xFF686f95,
     'cardano': 0xFF26508C,
@@ -33,7 +33,7 @@ abstract class Cryptos {
   };
 
   ///List of ids of the coins in the app
-  static List<String> get list => [
+  static const List<String> list = [
         'bitcoin',
         'ethereum',
         'cardano',

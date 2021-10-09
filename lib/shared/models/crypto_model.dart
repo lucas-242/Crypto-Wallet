@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crypto_wallet/shared/constants/trade_type.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 
 class CryptoModel {
@@ -13,15 +14,77 @@ class CryptoModel {
   final double totalInvested;
   final double price;
   final DateTime updatedAt;
+
+  /// Date when the user sold all position in the crypto
+  final DateTime? soldPositionAt;
+
+  /// The newest Trade Date
+  final DateTime lastTradeAt;
+
+  /// Total fee in dollars in buy trades. Used to calculate average price easily.
+  final double totalFee;
+
+  /// Total profit in dollars in sell trades. Used to show to the user easily.
+  final double totalProfit;
+
   final String user;
   final CryptoHistory? history;
 
   /// Total amount at current quote of selected currency
   double get totalNow => price * amount;
 
-  double get gainLoss => totalNow - totalInvested;
+  double get gainLoss => totalNow - totalInvested - totalFee;
 
   double get gainLossPercent => (gainLoss * 100 / totalNow) / 100;
+
+  ///Verify if has enough balance to selling or transfer
+  bool hasBalace(
+    String operationType,
+    double amountToCheck,
+  ) {
+    if (operationType == TradeType.sell ||
+        operationType == TradeType.transfer) {
+      if (amount < amountToCheck) return false;
+    }
+    return true;
+  }
+
+  // void prepareToTrade(
+  //   String operationType,
+  //   double tradeAmount,
+  //   double tradeAmountDollars,
+  //   double tradeFee,
+  // ) {
+  //   double newAmount = amount;
+  //   double newTotalInvested = totalInvested;
+  //   double newAveragePrice = averagePrice;
+
+  //   if (operationType == TradeType.buy) {
+  //     newAmount = amount + tradeAmount;
+  //     newTotalInvested = totalInvested + tradeAmountDollars;
+  //     newAveragePrice = calculateAveragePrice1(trade, crypto);
+  //   }
+  //   // !When selling the average price doesn't change
+  //   else if (operationType == TradeType.sell) {
+  //     newAmount = amount - tradeAmount;
+  //     newTotalInvested = totalInvested - tradeAmountDollars;
+  //     newTotalInvested = totalInvested < 0 ? 0 : totalInvested;
+  //   }
+  //   // !When transfering trades amount indicate the amount transfer to another wallet
+  //   else {
+  //     newAmount = amount - tradeFee;
+  //     newTotalInvested = totalInvested - tradeAmountDollars;
+  //     newTotalInvested = totalInvested < 0 ? 0 : totalInvested;
+  //   }
+
+  //   copyWith(
+  //     amount: newAmount,
+  //     totalInvested: newTotalInvested,
+  //     averagePrice: newAveragePrice,
+  //     updatedAt: DateTime.now(),
+  //     user: user,
+  //   );
+  // }
 
   CryptoModel({
     DateTime? updatedAt,
@@ -36,7 +99,12 @@ class CryptoModel {
     this.user = '',
     this.price = 0,
     this.history,
-  }) : this.updatedAt = updatedAt ?? DateTime.now();
+    this.totalFee = 0,
+    this.totalProfit = 0,
+    this.soldPositionAt,
+    DateTime? lastTradeAt,
+  })  : this.updatedAt = updatedAt ?? DateTime.now(),
+        this.lastTradeAt = lastTradeAt ?? DateTime.now();
 
   CryptoModel copyWith({
     String? id,
@@ -51,6 +119,10 @@ class CryptoModel {
     DateTime? updatedAt,
     String? user,
     CryptoHistory? history,
+    double? totalFee,
+    double? totalProfit,
+    DateTime? soldPositionAt,
+    DateTime? lastTradeAt,
   }) {
     return CryptoModel(
       id: id ?? this.id,
@@ -65,6 +137,10 @@ class CryptoModel {
       updatedAt: updatedAt ?? this.updatedAt,
       user: user ?? this.user,
       history: history ?? this.history,
+      totalFee: totalFee ?? this.totalFee,
+      totalProfit: totalProfit ?? this.totalProfit,
+      soldPositionAt: soldPositionAt ?? this.soldPositionAt,
+      lastTradeAt: lastTradeAt ?? this.lastTradeAt,
     );
   }
 
@@ -78,6 +154,10 @@ class CryptoModel {
       'totalInvested': totalInvested,
       'updatedAt': updatedAt,
       'user': user,
+      'totalFee': totalFee,
+      'totalProfit': totalProfit,
+      'soldPositionAt': soldPositionAt,
+      'lastTradeAt': lastTradeAt,
     };
   }
 
@@ -91,8 +171,20 @@ class CryptoModel {
       amount: double.tryParse(map['amount'].toString()) ?? 0,
       averagePrice: double.tryParse(map['averagePrice'].toString()) ?? 0,
       totalInvested: double.tryParse(map['totalInvested'].toString()) ?? 0,
+      totalFee: map['totalFee'] != null
+          ? double.tryParse(map['totalFee'].toString()) ?? 0
+          : 0,
+      totalProfit: map['totalProfit'] != null
+          ? double.tryParse(map['totalProfit'].toString()) ?? 0
+          : 0,
       updatedAt: DateTime.parse(map['updatedAt'].toDate().toString()),
       user: map['user'],
+      soldPositionAt: map['soldPositionAt'] != null
+          ? DateTime.parse(map['soldPositionAt'].toDate().toString())
+          : null,
+      lastTradeAt: map['lastTradeAt'] != null
+          ? DateTime.parse(map['lastTradeAt'].toDate().toString())
+          : null,
     );
   }
 
@@ -119,6 +211,10 @@ class CryptoModel {
         other.averagePrice == averagePrice &&
         other.totalInvested == totalInvested &&
         other.updatedAt == updatedAt &&
+        other.totalFee == totalFee &&
+        other.totalProfit == totalProfit &&
+        other.soldPositionAt == soldPositionAt &&
+        other.lastTradeAt == lastTradeAt &&
         other.user == user;
   }
 
@@ -132,6 +228,10 @@ class CryptoModel {
         averagePrice.hashCode ^
         totalInvested.hashCode ^
         updatedAt.hashCode ^
+        totalFee.hashCode ^
+        totalProfit.hashCode ^
+        soldPositionAt.hashCode ^
+        lastTradeAt.hashCode ^
         user.hashCode;
   }
 }

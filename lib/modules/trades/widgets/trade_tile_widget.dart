@@ -1,4 +1,4 @@
-import 'package:crypto_wallet/shared/helpers/trade_helper.dart';
+import 'package:crypto_wallet/shared/helpers/view_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/constants/trade_type.dart';
@@ -37,9 +37,9 @@ class TradeTile extends StatelessWidget {
                   leftTextStyle: theme.textTheme.subtitle2!
                       .copyWith(color: AppColors.primary),
                   rightText: toBeginningOfSentenceCase(
-                      TradeTypeHelper.getTradeLabel(
+                      ViewHelper.getTradeLabel(
                           trade.operationType, appLocalizations))!,
-                  rightTextStyle: TradeTypeHelper.getTradeColor(trade),
+                  rightTextStyle: ViewHelper.getTradeColor(trade),
                 ),
                 SizedBox(height: 5),
                 TradeDetailsRow(

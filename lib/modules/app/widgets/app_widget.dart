@@ -1,4 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:crypto_wallet/shared/services/cryptos_service.dart';
 import 'package:crypto_wallet/shared/themes/app_themes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,12 @@ import 'app_scaffold_widget.dart';
 /// Widget that is the Material App
 class App extends StatefulWidget {
   final WalletRepository walletRepository;
+  final CryptosService cryptosService;
+
   const App({
     Key? key,
     required this.walletRepository,
+    required this.cryptosService,
   }) : super(key: key);
 
   @override
@@ -45,6 +49,7 @@ class _AppState extends State<App> {
           AppRoutes.tradesDetails: (context) => TradesDetails(),
           AppRoutes.tradesInsert: (context) => InsertTradePage(
                 walletRepository: widget.walletRepository,
+                cryptosService: widget.cryptosService,
               ),
         },
         localizationsDelegates: AppLocalizations.localizationsDelegates,

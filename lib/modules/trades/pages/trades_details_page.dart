@@ -1,6 +1,6 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/shared/helpers/trade_helper.dart';
+import 'package:crypto_wallet/shared/helpers/view_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
@@ -41,7 +41,7 @@ class _TradesDetailsState extends State<TradesDetails> {
   void _deleteTrade() {
     final walletBloc = context.read<WalletBloc>();
     bloc
-        .deleteTrade(
+        .onDelete(
       trade: trade,
       uid: arguments['uid'],
       walletBloc: walletBloc,
@@ -100,8 +100,8 @@ class _TradesDetailsState extends State<TradesDetails> {
                 TradeDetailsRow(
                   leftText: appLocalizations.operationType,
                   rightText: toBeginningOfSentenceCase(
-                      TradeTypeHelper.getTradeLabel(trade.operationType, appLocalizations))!,
-                  rightTextStyle: TradeTypeHelper.getTradeColor(trade),
+                      ViewHelper.getTradeLabel(trade.operationType, appLocalizations))!,
+                  rightTextStyle: ViewHelper.getTradeColor(trade),
                 ),
                 SizedBox(height: 10),
                 TradeDetailsRow(
