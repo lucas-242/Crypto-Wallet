@@ -113,7 +113,6 @@ class TradesBloc extends ChangeNotifier {
         dates.removeWhere((element) => element.isSameDate(trade.date));
       }
 
-      //TODO: Create method to update cryptos without call the api again
       walletBloc.getCryptos(uid);
       onFilter(filterSelected);
       status = TradesStatus();

@@ -1,5 +1,6 @@
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
@@ -8,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final String? initialValue;
+  final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final void Function(String value)? onChanged;
@@ -23,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.controller,
     this.onChanged,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -40,6 +43,7 @@ class CustomTextFormField extends StatelessWidget {
             textInputAction: textInputAction,
             onChanged: onChanged,
             style: textTheme.caption,
+            inputFormatters: inputFormatters,
             decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelText: labelText,

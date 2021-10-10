@@ -8,7 +8,6 @@ import '/blocs/wallet/wallet.dart';
 import '/modules/insert_trade/insert_trade.dart';
 import '/modules/trades/trades.dart';
 import '/repositories/wallet_repository/wallet_repository.dart';
-import '/shared/constants/Config.dart';
 import '/shared/helpers/view_helper.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/dropdown_item_model.dart';
@@ -39,20 +38,10 @@ class _InsertTradePageState extends State<InsertTradePage> {
   late final InsertTradeBloc bloc;
   late final String uid;
 
-  final priceController = MoneyMaskedTextController(
-    leftSymbol: '\$',
-    decimalSeparator: ',',
-    precision: Config.decimalDigitsToSmallCryptos,
-  );
-  final tradedAmoutController = MoneyMaskedTextController(
-    leftSymbol: '\$',
-    decimalSeparator: ',',
-    precision: Config.decimalDigitsToSmallCryptos,
-  );
-  final cryptoAmountController =
-      MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
-  final feeController =
-      MoneyMaskedTextController(decimalSeparator: ',', precision: 8);
+  final cryptoAmountController = TextEditingController();
+  final tradedAmoutController = TextEditingController();
+  final priceController = TextEditingController();
+  final feeController = TextEditingController();
   final dateController =
       MaskedTextController(text: 'dd/MM/yyyy', mask: '00/00/0000');
 
@@ -66,7 +55,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
 
     bloc.checkCryptoList();
     bloc.loadAd();
-    bloc.onChange(user: uid);
+    bloc.onChangeField(user: uid);
     super.initState();
   }
 
@@ -151,11 +140,11 @@ class _InsertTradePageState extends State<InsertTradePage> {
                                 .toList(),
                             onChanged: (DropdownItem? data) {
                               if (data != null) {
-                                bloc.onChange(operationType: data.value);
+                                bloc.onChangeField(operationType: data.value);
                                 setState(() {});
                               }
                             },
-                            validator: (item) => bloc.validateCrypto(item),
+                            validator: (item) => bloc.validateDropdown(item),
                           ),
                           SizedBox(height: 25),
                           CustomDropdown(
@@ -170,26 +159,55 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             selectedItem: getSelectedItem(bloc.trade),
                             onChanged: (DropdownItem? data) {
                               if (data != null) {
-                                bloc.onChange(
+                                bloc.onChangeField(
                                     cryptoId: data.value,
                                     cryptoSymbol: data.auxValue);
                                 setState(() {});
                               }
                             },
-                            validator: (item) => bloc.validateCrypto(item),
+                            validator: (item) => bloc.validateDropdown(item),
                             showSeach: true,
                             searchHint: 'BTC, ETH, ADA ...',
                           ),
                           SizedBox(height: 25),
                           CustomTextFormField(
                             labelText: bloc.appLocalizations.cryptoAmount,
+                            hintText: '0.00',
                             icon: Icons.account_balance_wallet_outlined,
                             keyboardType: TextInputType.number,
                             controller: cryptoAmountController,
                             validator: bloc.validateCryptoAmount,
-                            onChanged: (value) => bloc.onChange(
-                                amount: cryptoAmountController.numberValue),
+                            onChanged: (value) {
+                              var number =
+                                  double.tryParse(cryptoAmountController.text);
+                              tradedAmoutController.text =
+                                  bloc.onChangeCryptoAmountOrPrice(
+                                      amount: value.isEmpty
+                                          ? 0
+                                          : (number == null ? 0 : number));
+                            },
                           ),
+                          if (bloc.trade.operationType != TradeType.transfer)
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: CustomTextFormField(
+                                labelText: bloc.appLocalizations.tradePrice,
+                                hintText: '\$0.00',
+                                icon: Icons.attach_money_outlined,
+                                keyboardType: TextInputType.number,
+                                controller: priceController,
+                                validator: bloc.validateTradePrice,
+                                onChanged: (value) {
+                                  var number =
+                                      double.tryParse(priceController.text);
+                                  tradedAmoutController.text =
+                                      bloc.onChangeCryptoAmountOrPrice(
+                                          price: value.isEmpty
+                                              ? 0
+                                              : (number == null ? 0 : number));
+                                },
+                              ),
+                            ),
                           if (bloc.trade.operationType != TradeType.transfer)
                             Padding(
                               padding: EdgeInsets.only(top: 10),
@@ -198,28 +216,38 @@ class _InsertTradePageState extends State<InsertTradePage> {
                                     bloc.trade.operationType == TradeType.sell
                                         ? bloc.appLocalizations.soldAmount
                                         : bloc.appLocalizations.investedAmount,
+                                hintText: '\$0.00',
                                 icon: Icons.savings_outlined,
                                 keyboardType: TextInputType.number,
                                 controller: tradedAmoutController,
                                 validator: bloc.validateTradedAmount,
-                                onChanged: (value) => bloc.onChange(
-                                    amountDollars:
-                                        tradedAmoutController.numberValue),
+                                onChanged: (value) {
+                                  var number = double.tryParse(
+                                      tradedAmoutController.text);
+                                  bloc.onChangeField(
+                                      amountDollars: value.isEmpty
+                                          ? 0
+                                          : (number == null ? 0 : number));
+                                },
                               ),
                             ),
-                          if (bloc.trade.operationType != TradeType.transfer)
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: CustomTextFormField(
-                                labelText: bloc.appLocalizations.tradePrice,
-                                icon: Icons.attach_money_outlined,
-                                keyboardType: TextInputType.number,
-                                controller: priceController,
-                                validator: bloc.validateTradePrice,
-                                onChanged: (value) => bloc.onChange(
-                                    price: priceController.numberValue),
-                              ),
-                            ),
+                          SizedBox(height: 10),
+                          CustomTextFormField(
+                            labelText: bloc.appLocalizations.fee,
+                            hintText: '0.00',
+                            icon: Icons.money_off_sharp,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.done,
+                            controller: feeController,
+                            validator: bloc.validateFee,
+                            onChanged: (value) {
+                              var number = double.tryParse(feeController.text);
+                              bloc.onChangeField(
+                                  fee: value.isEmpty
+                                      ? 0
+                                      : (number == null ? 0 : number));
+                            },
+                          ),
                           SizedBox(height: 10),
                           CustomTextFormField(
                             labelText: bloc.appLocalizations.date,
@@ -228,17 +256,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
                             keyboardType: TextInputType.datetime,
                             controller: dateController,
                             validator: bloc.validateDate,
-                            onChanged: (value) => bloc.onChange(date: value),
-                          ),
-                          SizedBox(height: 10),
-                          CustomTextFormField(
-                            labelText: bloc.appLocalizations.fee,
-                            icon: Icons.money_off_sharp,
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.done,
-                            controller: feeController,
                             onChanged: (value) =>
-                                bloc.onChange(fee: feeController.numberValue),
+                                bloc.onChangeField(date: value),
                           ),
                         ],
                       ),

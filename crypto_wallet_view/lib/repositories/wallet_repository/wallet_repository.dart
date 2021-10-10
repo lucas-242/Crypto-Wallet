@@ -21,6 +21,7 @@ class WalletRepository {
       await _firestore
           .collection('cryptos')
           .where('user', isEqualTo: uid)
+          .where('amount', isGreaterThan: 0)
           .get()
           .then((QuerySnapshot querySnapshot) {
         result = querySnapshot.docs

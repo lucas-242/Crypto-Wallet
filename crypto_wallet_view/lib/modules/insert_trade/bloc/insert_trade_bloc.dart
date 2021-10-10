@@ -1,16 +1,17 @@
-import 'package:crypto_wallet/blocs/wallet/wallet.dart';
-import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/constants/trade_type.dart';
-import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
-import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
-import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
-import 'package:crypto_wallet/shared/models/trade_model.dart';
-import 'package:crypto_wallet/shared/services/cryptos_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '/blocs/wallet/wallet.dart';
+import '/modules/trades/trades.dart';
+import '/repositories/wallet_repository/wallet_repository.dart';
+import '/shared/constants/trade_type.dart';
+import '/shared/helpers/ad_helper.dart';
+import '/shared/helpers/wallet_helper.dart';
+import '/shared/models/crypto_model.dart';
+import '/shared/models/dropdown_item_model.dart';
+import '/shared/models/trade_model.dart';
+import '/shared/services/cryptos_service.dart';
 
 import 'insert_trade_status.dart';
 
@@ -35,51 +36,62 @@ class InsertTradeBloc extends ChangeNotifier {
       : _walletRepository = walletRepository,
         _cryptosService = cryptosService;
 
-  String? validateCrypto(DropdownItem? value) {
+  String? validateDropdown(DropdownItem? value) {
     return value == null ? appLocalizations.errorFieldNull : null;
   }
 
+  /// Validate [value], returns a message if there are any errors
+  String? _validateNumber(String? value) {
+    if (value == null || value.isEmpty) return appLocalizations.errorFieldNull;
+    var number = double.tryParse(value);
+    if (number == null) return appLocalizations.errorFieldNotNumber;
+    return null;
+  }
+
   String? validateCryptoAmount(String? value) {
-    return value == null ||
-            double.parse(value.replaceAll(RegExp(','), '.')) == 0
-        ? appLocalizations.errorFieldNull
-        : null;
+    var error = _validateNumber(value);
+    if (error == null) {
+      return double.parse(value!) <= 0
+          ? appLocalizations.errorFieldLessZeroOrZero
+          : null;
+    }
+    return error;
   }
 
   String? validateTradedAmount(String? value) {
-    if (value != null) {
-      //Remove $, . from the middle of the number and change , to .
-      value = value
-          .substring(1)
-          .replaceAll(RegExp(r'\.'), '')
-          .replaceAll(RegExp(','), '.');
-
-      return double.parse(value) < 0 ? appLocalizations.errorFieldNull : null;
+    var error = _validateNumber(value);
+    if (error == null) {
+      return double.parse(value!) < 0
+          ? appLocalizations.errorFieldLessZero
+          : null;
     }
+    return error;
+  }
 
-    return null;
+  String? validateTradePrice(String? value) {
+    var error = _validateNumber(value);
+    if (error == null) {
+      return double.parse(value!) < 0
+          ? appLocalizations.errorFieldLessZero
+          : null;
+    }
+    return error;
+  }
+
+  String? validateFee(String? value) {
+    var error = _validateNumber(value);
+    if (error == null) {
+      return double.parse(value!) < 0
+          ? appLocalizations.errorFieldLessZero
+          : null;
+    }
+    return error;
   }
 
   String? validateDate(String? value) {
     return value == null || value.length != 10
         ? appLocalizations.errorFieldWrongDate
         : null;
-  }
-
-  String? validateTradePrice(String? value) {
-    if (value != null) {
-      //Remove $, . from the middle of the number and change , to .
-      value = value
-          .substring(1)
-          .replaceAll(RegExp(r'\.'), '')
-          .replaceAll(RegExp(','), '.');
-
-      return double.parse(value) < 0
-          ? appLocalizations.errorFieldTradePrice
-          : null;
-    }
-
-    return null;
   }
 
   /// Check if app crypto list has been filled
@@ -93,13 +105,11 @@ class InsertTradeBloc extends ChangeNotifier {
   }
 
   /// Change the trade properties when the user changes a field
-  void onChange({
+  void onChangeField({
     String? operationType,
     String? cryptoId,
     String? cryptoSymbol,
-    double? amount,
     double? amountDollars,
-    double? price,
     double? fee,
     String? date,
     String? user,
@@ -114,15 +124,25 @@ class InsertTradeBloc extends ChangeNotifier {
 
     trade = trade.copyWith(
       operationType: operationType,
-      amount: amount,
       amountDollars: amountDollars,
       cryptoId: cryptoId,
       cryptoSymbol: cryptoSymbol,
       date: formattedDate,
-      price: price,
       fee: fee,
       user: user,
     );
+  }
+
+  /// Change the trade properties when the user changes crypto [amount] or [price]
+  String onChangeCryptoAmountOrPrice({double? amount, double? price}) {
+    var amountDollars = (amount ?? trade.amount) * (price ?? trade.price);
+
+    trade = trade.copyWith(
+      amount: amount,
+      amountDollars: amountDollars,
+      price: price,
+    );
+    return amountDollars.toString();
   }
 
   Future<void> onSave({
@@ -139,13 +159,11 @@ class InsertTradeBloc extends ChangeNotifier {
     if (_interstitialAd.responseInfo != null) _interstitialAd.show();
 
     return await addTrade(trade).then((value) {
-      //TODO: Create methods to update trades and cryptos without call the api again
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
       trade = TradeModel(user: uid);
       status = InsertTradeStatus();
     }).catchError((error) {
-      //TODO: Show error
       status = InsertTradeStatus.error(error.toString());
     });
   }
@@ -180,7 +198,8 @@ class InsertTradeBloc extends ChangeNotifier {
         updatedCrypto = _cryptosService.recalculatingCryptoProperties(
             crypto, trade, otherTrades);
       } else {
-        updatedCrypto = _cryptosService.calculateCryptoProperties(crypto, trade);
+        updatedCrypto =
+            _cryptosService.calculateCryptoProperties(crypto, trade);
       }
 
       _walletRepository.addTrade(
