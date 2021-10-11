@@ -79,13 +79,9 @@ class InsertTradeBloc extends ChangeNotifier {
   }
 
   String? validateFee(String? value) {
-    var error = _validateNumber(value);
-    if (error == null) {
-      return double.parse(value!) < 0
-          ? appLocalizations.errorFieldLessZero
-          : null;
-    }
-    return error;
+    var number = double.tryParse(value!);
+    if (number != null && number < 0) return appLocalizations.errorFieldLessZero;
+    return null;
   }
 
   String? validateDate(String? value) {
@@ -151,6 +147,7 @@ class InsertTradeBloc extends ChangeNotifier {
     required String uid,
   }) async {
     final form = formKey.currentState;
+    print(form);
 
     if (!form!.validate()) throw Exception('Invalid form');
 
