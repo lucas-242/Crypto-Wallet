@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "name": "Application",
+            "path": "./src"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "dirk-baeumer.eslint",
+        ]
+    }
+}
