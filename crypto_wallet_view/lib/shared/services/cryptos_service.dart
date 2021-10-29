@@ -16,7 +16,7 @@ class CryptosService {
     if (trade.operationType == TradeType.buy) {
       amount += trade.amount;
       totalInvested += trade.amountDollars;
-      totalFee += trade.fee * trade.price;
+      totalFee += trade.fee;
       averagePrice = calculateAveragePrice(trade, crypto);
     }
     // !When selling the average price doesn't change
@@ -96,7 +96,7 @@ class CryptosService {
         averagePrice = calculateAveragePrice(element, crypto);
         totalInvested = crypto.totalInvested + element.amountDollars;
         amount = crypto.amount + element.amount;
-        totalFee += (element.price * element.fee);
+        totalFee += element.fee;
         crypto = setCrypto(
           crypto: crypto,
           amount: amount,
@@ -163,7 +163,7 @@ class CryptosService {
   /// Calculate the average price considering all buying [trade] and the [totalAmount] on wallet
   double calculateAveragePrice(TradeModel trade, CryptoModel crypto) {
     var average = ((trade.price * trade.amount) +
-            (trade.price * trade.fee) +
+            trade.fee +
             crypto.totalInvested +
             crypto.totalFee) /
         (crypto.amount + trade.amount);
@@ -203,7 +203,7 @@ class CryptosService {
       amount: trade.amount,
       averagePrice: averagePrice,
       totalInvested: trade.amountDollars,
-      totalFee: trade.fee * trade.price,
+      totalFee: trade.fee,
       updatedAt: DateTime.now(),
     );
 

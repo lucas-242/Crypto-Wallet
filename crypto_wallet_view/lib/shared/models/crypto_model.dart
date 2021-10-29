@@ -49,43 +49,6 @@ class CryptoModel {
     return true;
   }
 
-  // void prepareToTrade(
-  //   String operationType,
-  //   double tradeAmount,
-  //   double tradeAmountDollars,
-  //   double tradeFee,
-  // ) {
-  //   double newAmount = amount;
-  //   double newTotalInvested = totalInvested;
-  //   double newAveragePrice = averagePrice;
-
-  //   if (operationType == TradeType.buy) {
-  //     newAmount = amount + tradeAmount;
-  //     newTotalInvested = totalInvested + tradeAmountDollars;
-  //     newAveragePrice = calculateAveragePrice1(trade, crypto);
-  //   }
-  //   // !When selling the average price doesn't change
-  //   else if (operationType == TradeType.sell) {
-  //     newAmount = amount - tradeAmount;
-  //     newTotalInvested = totalInvested - tradeAmountDollars;
-  //     newTotalInvested = totalInvested < 0 ? 0 : totalInvested;
-  //   }
-  //   // !When transfering trades amount indicate the amount transfer to another wallet
-  //   else {
-  //     newAmount = amount - tradeFee;
-  //     newTotalInvested = totalInvested - tradeAmountDollars;
-  //     newTotalInvested = totalInvested < 0 ? 0 : totalInvested;
-  //   }
-
-  //   copyWith(
-  //     amount: newAmount,
-  //     totalInvested: newTotalInvested,
-  //     averagePrice: newAveragePrice,
-  //     updatedAt: DateTime.now(),
-  //     user: user,
-  //   );
-  // }
-
   CryptoModel({
     DateTime? updatedAt,
     this.id,

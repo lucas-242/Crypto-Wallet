@@ -36,7 +36,7 @@ class CustomDropdown extends StatelessWidget {
 
     return DropdownSearch<DropdownItem>(
       label: label,
-      // * Breaking layout when trying use dropdownSearchDecoration
+      // * Breaking layout when trying use dropdownSearchDecoration, so I keeping label in use
       // dropdownSearchDecoration: InputDecoration(
       //   labelText: label,
       // ),

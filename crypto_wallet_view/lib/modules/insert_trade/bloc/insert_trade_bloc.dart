@@ -80,7 +80,8 @@ class InsertTradeBloc extends ChangeNotifier {
 
   String? validateFee(String? value) {
     var number = double.tryParse(value!);
-    if (number != null && number < 0) return appLocalizations.errorFieldLessZero;
+    if (number != null && number < 0)
+      return appLocalizations.errorFieldLessZero;
     return null;
   }
 
@@ -211,7 +212,7 @@ class InsertTradeBloc extends ChangeNotifier {
     if (trade.operationType == TradeType.transfer) {
       trade = trade.copyWith(
         price: averagePrice,
-        amountDollars: averagePrice * trade.fee,
+        amountDollars: trade.fee,
       );
 
       return trade;
