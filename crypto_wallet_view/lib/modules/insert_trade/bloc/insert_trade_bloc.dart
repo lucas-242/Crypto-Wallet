@@ -148,7 +148,6 @@ class InsertTradeBloc extends ChangeNotifier {
     required String uid,
   }) async {
     final form = formKey.currentState;
-    print(form);
 
     if (!form!.validate()) throw Exception('Invalid form');
 
