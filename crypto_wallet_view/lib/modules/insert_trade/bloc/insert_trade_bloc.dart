@@ -178,7 +178,7 @@ class InsertTradeBloc extends ChangeNotifier {
 
       var cryptoToCreate = _cryptosService.setCryptoForTheFirstTime(trade);
 
-      _walletRepository.addTrade(
+      await _walletRepository.addTrade(
           TradeCreateOption.create, trade, cryptoToCreate);
     }
     // Had crypto previously
@@ -200,7 +200,7 @@ class InsertTradeBloc extends ChangeNotifier {
             _cryptosService.calculateCryptoProperties(crypto, trade);
       }
 
-      _walletRepository.addTrade(
+      await _walletRepository.addTrade(
           TradeCreateOption.update, trade, updatedCrypto);
     }
   }

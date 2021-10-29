@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +7,7 @@ import '/blocs/wallet/wallet.dart';
 import '/modules/insert_trade/insert_trade.dart';
 import '/modules/trades/trades.dart';
 import '/repositories/wallet_repository/wallet_repository.dart';
+import '/shared/auth/auth.dart';
 import '/shared/helpers/view_helper.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/dropdown_item_model.dart';
@@ -47,7 +47,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
 
   @override
   void initState() {
-    uid = FirebaseAuth.instance.currentUser!.uid;
+    final auth = context.read<Auth>();
+    uid = auth.user!.uid;
     bloc = InsertTradeBloc(
       walletRepository: widget.walletRepository,
       cryptosService: widget.cryptosService,
