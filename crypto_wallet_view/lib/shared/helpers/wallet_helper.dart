@@ -18,7 +18,7 @@ abstract class WalletHelper {
     return _coinsList.firstWhere((e) => e.id == id);
   }
 
-  /// Set the coinsList with the new [marketcapData] using [isUpdate] flag to consider if it's an update of the data
+  /// Set the coinsList with the new [marketcapData] using [isUpdate] flag to consider if it's data update
   static void setCoinsList(
       {required List<MarketcapApiResponse> marketcapData,
       bool isUpdate = false}) {

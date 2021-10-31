@@ -91,14 +91,13 @@ class CoinRepository {
   Future<List<MarketcapApiResponse>> getAppCoins() async {
     List<MarketcapApiResponse> response = [];
     var formattedCoins = _formatToUrl(Cryptos.list);
-    var apiLimit = 50;
 
-    var pages = (Cryptos.list.length / apiLimit).ceil();
+    var pages = (Cryptos.list.length / Config.apiResultLimit).ceil();
 
     for (var i = 0; i < pages; i++) {
       var coins = await getCoins(
         coins: Cryptos.list,
-        limit: apiLimit,
+        limit: Config.apiResultLimit,
         page: i + 1,
         formattedCoins: formattedCoins,
       );
@@ -107,22 +106,6 @@ class CoinRepository {
 
     return response;
   }
-  // Future<List<MarketcapApiResponse>> getFirst500Coins() async {
-  //   var response = await getCoins(limit: 250);
-  //   var secondPage = await getCoins(limit: 250, page: 2);
-  //   response.addAll(secondPage);
-
-  //   var otherCoinsList = ['lbry-credits'];
-  //   List<String> finalOtherCoinsList = [];
-  //   otherCoinsList.asMap().forEach((index, element) {
-  //     if (!response.any((e) => e.id == element)) finalOtherCoinsList.add(element);
-  //   });
-
-  //   var other = await getCoins(coins: finalOtherCoinsList);
-  //   response.addAll(other);
-
-  //   return response;
-  // }
 
   /// Format [urlParameter] to a string to use in URL
   String _formatToUrl(List<String> urlParameter) {

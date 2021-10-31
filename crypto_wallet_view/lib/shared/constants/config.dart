@@ -11,4 +11,7 @@ abstract class Config {
 
   /// Coin api URL
   static const coingeckoApi = 'https://api.coingecko.com/api/v3/';
+
+  /// Coin api limit number of items inside array
+  static const apiResultLimit = 50;
 }
