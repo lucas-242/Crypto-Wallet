@@ -108,23 +108,15 @@ class InsertTradeBloc extends ChangeNotifier {
     String? cryptoSymbol,
     double? amountDollars,
     double? fee,
-    String? date,
+    DateTime? date,
     String? user,
   }) {
-    DateTime? formattedDate;
-
-    if (date != null && date.length == 10) {
-      var split = date.split(RegExp(r'[^\w\s]+'));
-      formattedDate = DateTime(
-          int.parse(split[2]), int.parse(split[1]), int.parse(split[0]));
-    }
-
     trade = trade.copyWith(
       operationType: operationType,
       amountDollars: amountDollars,
       cryptoId: cryptoId,
       cryptoSymbol: cryptoSymbol,
-      date: formattedDate,
+      date: date,
       fee: fee,
       user: user,
     );

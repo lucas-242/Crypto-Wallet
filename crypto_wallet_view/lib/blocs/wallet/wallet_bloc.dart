@@ -1,15 +1,16 @@
 import 'dart:async';
 
-import 'package:crypto_wallet/repositories/coin_repository/coin_repository.dart';
-import 'package:crypto_wallet/repositories/coin_repository/models/marketcap_api_response_model.dart';
-import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/helpers/view_helper.dart';
-import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
-import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
-import 'package:crypto_wallet/shared/models/crypto_model.dart';
-import 'package:crypto_wallet/shared/models/wallet_model.dart';
 import 'package:flutter/foundation.dart';
 
+import '/repositories/coin_repository/coin_repository.dart';
+import '/repositories/coin_repository/models/marketcap_api_response_model.dart';
+import '/repositories/wallet_repository/wallet_repository.dart';
+import '/shared/constants/config.dart';
+import '/shared/helpers/view_helper.dart';
+import '/shared/helpers/wallet_helper.dart';
+import '/shared/models/crypto_history_model.dart';
+import '/shared/models/crypto_model.dart';
+import '/shared/models/wallet_model.dart';
 import 'wallet_status.dart';
 
 class WalletBloc extends ChangeNotifier {
@@ -40,7 +41,6 @@ class WalletBloc extends ChangeNotifier {
 
     await _walletRepository.getCryptos(uid).then((result) async {
       if (result.isNotEmpty) {
-        //TODO: API limits to 50 results. Need to check if the user has more than 50 coins in wallet
         cryptos = await getCryptosMarketData(result);
         setWalletData();
       }
@@ -62,19 +62,23 @@ class WalletBloc extends ChangeNotifier {
       List<CryptoModel> coins) async {
     var result = <CryptoModel>[];
 
+    var pages = (coins.length / Config.apiResultLimit).ceil();
+    pages = pages < 0 ? 0 : pages;
     if (canRefresh) {
-      return await _coinRepository
-          .getCoins(coins: coins.map((e) => e.cryptoId).toList())
-          .then((marketcap) {
-        result = setCryptoHistory(coins, marketcap);
+      for (var i = 0; i < pages; i++) {
+        await _coinRepository
+            .getCoins(coins: coins.map((e) => e.cryptoId).toList())
+            .then((marketcap) {
+          result.addAll(setCryptoHistory(coins, marketcap));
 
-        WalletHelper.setCoinsList(marketcapData: marketcap, isUpdate: true);
-        setTimerToRefreshMarketcap();
-        return result;
-      });
+          WalletHelper.setCoinsList(marketcapData: marketcap, isUpdate: true);
+        });
+      }
+    } else {
+      for (var i = 0; i < pages; i++) {
+        result.addAll(setCryptoHistory(coins, WalletHelper.coinsList));
+      }
     }
-
-    result = setCryptoHistory(coins, WalletHelper.coinsList);
     setTimerToRefreshMarketcap();
     return result;
   }
@@ -175,22 +179,6 @@ class WalletBloc extends ChangeNotifier {
       cryptosSummary: cryptosSummary,
     );
   }
-
-  // List<Color> get chartColors {
-  //   Color? lastColor;
-  //   return List.generate(cryptos.length, (index) {
-  //     if (lastColor == AppColors.primary)
-  //       lastColor = AppColors.secondary;
-  //     else if (lastColor == AppColors.secondary)
-  //       lastColor = AppColors.tertiary;
-  //     else if (lastColor == AppColors.tertiary)
-  //       lastColor = AppColors.grey;
-  //     else
-  //       lastColor = AppColors.primary;
-
-  //     return lastColor!;
-  //   });
-  // }
 
   void eraseData() {
     cryptos = [];
