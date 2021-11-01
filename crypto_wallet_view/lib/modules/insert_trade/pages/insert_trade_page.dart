@@ -84,6 +84,18 @@ class _InsertTradePageState extends State<InsertTradePage> {
     return null;
   }
 
+  void onChangeDatePicker(DateTime? date) {
+    bloc.onChangeField(date: date);
+    if (date != null) {
+      final day =
+          date.day < 10 ? '0' + date.day.toString() : date.day.toString();
+      final month =
+          date.month < 10 ? '0' + date.month.toString() : date.month.toString();
+      final formattedDate = '$day$month${date.year}';
+      dateController.text = formattedDate;
+    }
+  }
+
   void onSave() async {
     final tradesBloc = context.read<TradesBloc>();
     final walletBloc = context.read<WalletBloc>();
@@ -251,15 +263,21 @@ class _InsertTradePageState extends State<InsertTradePage> {
                           ),
                           SizedBox(height: 10),
                           CustomTextFormField(
-                            labelText: bloc.appLocalizations.date,
-                            hintText: bloc.appLocalizations.hintFieldDate,
-                            icon: Icons.calendar_today,
-                            keyboardType: TextInputType.datetime,
-                            controller: dateController,
-                            validator: bloc.validateDate,
-                            onChanged: (value) =>
-                                bloc.onChangeField(date: value),
-                          ),
+                              labelText: bloc.appLocalizations.date,
+                              hintText: bloc.appLocalizations.hintFieldDate,
+                              icon: Icons.calendar_today,
+                              keyboardType: TextInputType.datetime,
+                              controller: dateController,
+                              validator: bloc.validateDate,
+                              readOnly: true,
+                              onTap: () {
+                                showDatePicker(
+                                  context: context,
+                                  initialDate: dateController.text != '' ? bloc.trade.date : DateTime.now(),
+                                  firstDate: DateTime(2008),
+                                  lastDate: DateTime.now(),
+                                ).then((value) => onChangeDatePicker(value));
+                              }),
                         ],
                       ),
                     ),
