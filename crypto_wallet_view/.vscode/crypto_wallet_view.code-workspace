@@ -1,0 +1,19 @@
+{
+    "folders": [
+        {
+            "name": "Application",
+            "path": "./lib"
+        }
+    ],
+    "launchPath": "./launch.json",
+    "extensions": {
+        "recommendations": [
+            "dart-code.dart-code",
+            "dart-code.flutter",
+            "CoenraadS.bracket-pair-colorizer-2",
+            "BendixMa.dart-data-class-generator",
+            "usernamehw.errorlens",
+            "aaron-bond.better-comments",
+        ]
+    }
+}

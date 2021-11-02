@@ -1,5 +1,5 @@
 import '/repositories/coin_repository/models/marketcap_api_response_model.dart';
-import '/shared/constants/config.dart';
+import '/shared/core/build_configs.dart';
 
 abstract class WalletHelper {
  

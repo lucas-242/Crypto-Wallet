@@ -12,7 +12,7 @@ import '/shared/helpers/view_helper.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/dropdown_item_model.dart';
 import '/shared/models/enums/status_page.dart';
-import '/shared/constants/trade_type.dart';
+import '../../../shared/core/trade_type.dart';
 import '/shared/models/trade_model.dart';
 import '/shared/services/cryptos_service.dart';
 import '/shared/themes/themes.dart';

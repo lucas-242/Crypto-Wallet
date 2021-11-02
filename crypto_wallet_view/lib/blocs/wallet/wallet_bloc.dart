@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import '/repositories/coin_repository/coin_repository.dart';
 import '/repositories/coin_repository/models/marketcap_api_response_model.dart';
 import '/repositories/wallet_repository/wallet_repository.dart';
-import '/shared/constants/config.dart';
+import '/shared/core/build_configs.dart';
 import '/shared/helpers/view_helper.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/crypto_history_model.dart';

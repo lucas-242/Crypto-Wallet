@@ -1,4 +1,4 @@
-import '/shared/constants/trade_type.dart';
+import '../core/trade_type.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/crypto_model.dart';
 import '/shared/models/trade_model.dart';
