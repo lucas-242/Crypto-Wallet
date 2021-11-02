@@ -1,3 +1,4 @@
+/// List all cryptos that are supported by the system
 abstract class Cryptos {
   ///Map of coin colors in the app
   static const Map<String, int> colors = {

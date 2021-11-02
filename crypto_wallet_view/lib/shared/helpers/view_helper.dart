@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import './../constants/cryptos.dart';
-import './../constants/trade_type.dart';
+import '../core/cryptos.dart';
+import '../core/trade_type.dart';
 import './../models/trade_model.dart';
 import './../themes/themes.dart';
 import './wallet_helper.dart';

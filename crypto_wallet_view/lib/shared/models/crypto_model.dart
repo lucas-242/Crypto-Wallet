@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:crypto_wallet/shared/constants/trade_type.dart';
+import 'package:crypto_wallet/shared/core/trade_type.dart';
 import 'package:crypto_wallet/shared/models/crypto_history_model.dart';
 
 class CryptoModel {

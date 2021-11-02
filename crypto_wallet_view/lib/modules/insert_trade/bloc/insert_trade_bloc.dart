@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '/blocs/wallet/wallet.dart';
 import '/modules/trades/trades.dart';
 import '/repositories/wallet_repository/wallet_repository.dart';
-import '/shared/constants/trade_type.dart';
+import '../../../shared/core/trade_type.dart';
 import '/shared/helpers/ad_helper.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/crypto_model.dart';

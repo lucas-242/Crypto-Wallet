@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '/repositories/coin_repository/models/marketcap_api_response_model.dart';
-import '/shared/constants/config.dart';
-import '/shared/constants/cryptos.dart';
+import '/shared/core/build_configs.dart';
+import '../../shared/core/cryptos.dart';
 
 class CoinRepository {
   ///Get the [coins] currency in the [currencies]

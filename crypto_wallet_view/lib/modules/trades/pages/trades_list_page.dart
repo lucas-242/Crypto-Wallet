@@ -2,7 +2,7 @@ import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/modules/trades/widgets/trade_tile_list_widget.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
-import 'package:crypto_wallet/shared/constants/routes.dart';
+import 'package:crypto_wallet/shared/core/routes.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';

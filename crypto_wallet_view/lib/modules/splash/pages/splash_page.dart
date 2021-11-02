@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:crypto_wallet/shared/auth/auth.dart';
-import 'package:crypto_wallet/shared/constants/routes.dart';
+import 'package:crypto_wallet/shared/core/routes.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 
 final _auth = FirebaseAuth.instance;

@@ -10,7 +10,7 @@ import 'package:crypto_wallet/modules/login/login.dart';
 import 'package:crypto_wallet/modules/splash/splash.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
-import 'package:crypto_wallet/shared/constants/routes.dart';
+import 'package:crypto_wallet/shared/core/routes.dart';
 
 import 'app_scaffold_widget.dart';
 
