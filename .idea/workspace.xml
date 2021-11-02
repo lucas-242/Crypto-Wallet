@@ -1,30 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="5299a819-fbca-4973-b6f1-b68f81b8607c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/crypto_wallet_view/lib/modules/insert_trade/bloc/insert_trade_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/crypto_wallet_view/lib/modules/insert_trade/bloc/insert_trade_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crypto_wallet_view/lib/shared/auth/auth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/crypto_wallet_view/lib/shared/auth/auth.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crypto_wallet_view/lib/shared/services/cryptos_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/crypto_wallet_view/lib/shared/services/cryptos_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crypto_wallet_view/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/crypto_wallet_view/pubspec.yaml" afterDir="false" />
+    <list default="true" id="12c43a6d-c1c1-4a2e-8237-e80028b64cba" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/lib/repositories/wallet_repository/wallet_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/repositories/wallet_repository/wallet_repository.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1zq5C4SyIbQSIOYHhRZKMPnoANB" />
+  <component name="ProjectId" id="1wuhWrzW0jUPFme6GIg0pE7ro8q" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="dart.analysis.tool.window.force.activate" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="SvnConfiguration">
@@ -32,18 +47,30 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5299a819-fbca-4973-b6f1-b68f81b8607c" name="Default Changelist" comment="" />
-      <created>1634862648904</created>
+      <changelist id="12c43a6d-c1c1-4a2e-8237-e80028b64cba" name="Default Changelist" comment="" />
+      <created>1629314415583</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1634862648904</updated>
+      <updated>1629314415583</updated>
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="461" y="165" key="SettingsEditor" timestamp="1634905495330">
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1633479748529">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="165" key="SettingsEditor/1920.157.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1634905495330" />
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.157.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1633479748529" />
   </component>
 </project>

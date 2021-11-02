@@ -38,13 +38,13 @@ This project has been develop for personal use at first moment, but feel free to
    $ git clone https://github.com/lucas-242/Crypto-Wallet.git
 
    - Enter in the directory:
-   $ cd Crypto-Wallet/crypto_wallet_view
+   $ cd Crypto-Wallet
 
    - Create the file apikey.properties with ADMOB_APPID test key:
    $ echo ADMOB_APPID = "ca-app-pub-3940256099942544~3347511713" > apikey.properties
 
    - Create the file keys.dart with ad mob units test keys:
-   $ echo "const admob_unit_trade_operation = 'ca-app-pub-3940256099942544/1033173712';" > lib/shared/core/keys.dart
+   $ echo "const admob_unit_trade_operation_dev = 'ca-app-pub-3940256099942544/1033173712';" > lib/shared/core/keys.dart
 
    - Install the dependencies:
    $ flutter pub get
