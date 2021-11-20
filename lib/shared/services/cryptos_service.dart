@@ -214,9 +214,7 @@ class CryptosService {
   void checkBalance(CryptoModel crypto, TradeModel trade) {
     if (!crypto.hasBalace(
       trade.operationType,
-      trade.operationType == TradeType.transfer
-          ? trade.fee + trade.amount
-          : trade.amount,
+      trade.amount,
     )) {
       throw Exception('Não há saldo suficiente');
     }

@@ -15,7 +15,7 @@ class TradeModel {
   ///Coin price in USD
   final double price;
 
-  ///Fee in the same coin type
+  ///Fee in USD
   final double fee;
   final DateTime date;
   /// If it is a sell trade, it can have a profit

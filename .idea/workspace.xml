@@ -20,14 +20,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="12c43a6d-c1c1-4a2e-8237-e80028b64cba" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/lib/repositories/wallet_repository/wallet_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/repositories/wallet_repository/wallet_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ci_cd.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci_cd.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -37,9 +40,11 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/android" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="SvnConfiguration">
@@ -72,5 +77,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.157.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1633479748529" />
+    <state x="740" y="261" key="FileChooserDialogImpl" timestamp="1636321856815">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="261" key="FileChooserDialogImpl/1920.157.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1636321856815" />
+    <state x="633" y="224" key="NewModule_or_Project.wizard" timestamp="1636320901604">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="633" y="224" key="NewModule_or_Project.wizard/1920.157.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1636320901604" />
   </component>
 </project>
