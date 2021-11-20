@@ -70,6 +70,9 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter clean
+      # TODO: Load file apikey.properties
+      # TODO: Load file google-services
+      # TODO: Load file keys.dart
       - run: flutter build apk -t lib/main_dev.dart --build-number=0 --build-name=1.0.0
 
       # Upload generated apk to the artifacts.

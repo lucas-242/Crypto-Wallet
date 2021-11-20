@@ -145,13 +145,12 @@ class InsertTradeBloc extends ChangeNotifier {
 
     status = InsertTradeStatus.loading();
 
-    if (_interstitialAd.responseInfo != null) _interstitialAd.show();
-
     return await addTrade(trade).then((value) {
       tradesBloc.getTrades(uid);
       walletBloc.getCryptos(uid);
       trade = TradeModel(user: uid);
       status = InsertTradeStatus();
+      if (_interstitialAd.responseInfo != null) _interstitialAd.show();
     }).catchError((error) {
       status = InsertTradeStatus.error(error.toString());
     });
