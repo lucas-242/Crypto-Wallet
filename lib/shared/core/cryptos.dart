@@ -30,6 +30,7 @@ abstract class Cryptos {
     'coti': 0xFF2D65B0,
     'avalanche-2': 0xFFE84142,
     'cosmos': 0xFF2B2E46,
+    'bsc-mithril': 0xFF3A9E93
   };
 
   ///List of ids of the coins in the app
@@ -535,6 +536,7 @@ abstract class Cryptos {
     'alchemist',
     'polkadex',
     'lbry-credits',
+    'bsc-mithril',
   ];
 
 // * The code above will be used if change the app to use the Messari API or another one which doesn't have image
