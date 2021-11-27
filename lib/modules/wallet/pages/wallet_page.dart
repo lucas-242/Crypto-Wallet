@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
+import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
@@ -38,7 +39,7 @@ class _WalletPageState extends State<WalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return CustomScaffold(
       title: appLocalizations.wallet,
       scaffoldKey: _scaffoldKey,
       auth: auth,
@@ -66,9 +67,14 @@ class _WalletPageState extends State<WalletPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TotalWalletCard(
-                    walletData: bloc.walletData,
-                    showTotalInvested: true,
+                  Consumer<AppBloc>(
+                    builder: (context, appBloc, child) {
+                      return TotalWalletCard(
+                        walletData: bloc.walletData,
+                        showTotalInvested: true,
+                        showUserTotal: appBloc.showUserTotalOption,
+                      );
+                    },
                   ),
                   Expanded(
                     child: RefreshIndicator(

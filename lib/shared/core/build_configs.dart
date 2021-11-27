@@ -18,7 +18,8 @@ class Config {
         _config = {
           _admobInterstitialTradeOperationAndroid:
               admob_interstitial_trade_operation_dev,
-          _admobBannerTradeRegisterAndroid: admob_banner_trade_register_details_dev,
+          _admobBannerTradeRegisterAndroid:
+              admob_banner_trade_register_details_dev,
           _admobBannerTradesListAndroid: admob_banner_trades_list_dev,
         };
         break;
@@ -26,7 +27,8 @@ class Config {
         _config = {
           _admobInterstitialTradeOperationAndroid:
               admob_interstitial_trade_operation_prod,
-          _admobBannerTradeRegisterAndroid: admob_banner_trade_register_details_prod,
+          _admobBannerTradeRegisterAndroid:
+              admob_banner_trade_register_details_prod,
           _admobBannerTradesListAndroid: admob_banner_trades_list_prod,
         };
         break;
@@ -59,4 +61,7 @@ class Config {
 
   /// Coin api limit number of items inside array
   static const apiResultLimit = 50;
+
+  /// Name of the property to set the option to show User total
+  static const showUserTotalOption = 'showUserTotal';
 }

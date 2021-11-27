@@ -47,7 +47,7 @@ class _TradesListPageState extends State<TradesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return CustomScaffold(
       title: bloc.appLocalizations.trades,
       scaffoldKey: _scaffoldKey,
       auth: auth,

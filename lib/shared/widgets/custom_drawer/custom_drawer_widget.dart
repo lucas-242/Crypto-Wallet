@@ -1,3 +1,5 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/themes/app_colors.dart';
 import 'package:crypto_wallet/shared/themes/size_config.dart';
@@ -7,8 +9,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback? onPressedDarkMode;
+  final VoidCallback? onPressedShowTotal;
   final VoidCallback? onPressedLogout;
-  const CustomDrawer({Key? key, this.onPressedDarkMode, this.onPressedLogout})
+  const CustomDrawer(
+      {Key? key,
+      this.onPressedDarkMode,
+      this.onPressedLogout,
+      this.onPressedShowTotal})
       : super(key: key);
 
   @override
@@ -53,13 +60,57 @@ class CustomDrawer extends StatelessWidget {
                         AppColors.grey.withAlpha(15)),
                   ),
                   onPressed: onPressedDarkMode,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.mode_night_outlined),
-                      SizedBox(width: 15),
-                      Text(appLocalizations.darkMode, style: textTheme.button),
-                    ],
+                  child:
+                      AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(Icons.wb_sunny_outlined),
+                                SizedBox(width: 15),
+                                Text(appLocalizations.lightMode,
+                                    style: textTheme.button),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(Icons.mode_night_outlined),
+                                SizedBox(width: 15),
+                                Text(appLocalizations.darkMode,
+                                    style: textTheme.button),
+                              ],
+                            ),
+                ),
+                TextButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(
+                        AppColors.grey.withAlpha(15)),
+                  ),
+                  onPressed: onPressedShowTotal,
+                  child: Consumer<AppBloc>(
+                    builder: (context, appBloc, child) {
+                      if (appBloc.showUserTotalOption) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.visibility_off_outlined),
+                            SizedBox(width: 15),
+                            Text(appLocalizations.hideTotal,
+                                style: textTheme.button),
+                          ],
+                        );
+                      } else {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.visibility_outlined),
+                            SizedBox(width: 15),
+                            Text(appLocalizations.showTotal,
+                                style: textTheme.button),
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ),
                 Expanded(
