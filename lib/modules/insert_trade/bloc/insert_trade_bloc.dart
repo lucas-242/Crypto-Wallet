@@ -19,16 +19,22 @@ class InsertTradeBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
   CryptosService _cryptosService;
   late InterstitialAd _interstitialAd;
+  late BannerAd _bannerAd;
+  BannerAd get bannerAd => _bannerAd;
 
   final formKey = GlobalKey<FormState>();
   TradeModel trade = TradeModel();
 
-  final statusNotifier = ValueNotifier<InsertTradeStatus>(InsertTradeStatus());
-
   late AppLocalizations appLocalizations;
 
+  final statusNotifier = ValueNotifier<InsertTradeStatus>(InsertTradeStatus());
   InsertTradeStatus get status => statusNotifier.value;
   set status(InsertTradeStatus status) => statusNotifier.value = status;
+
+  final bannerAdNotifier =
+      ValueNotifier<InsertTradeStatus>(InsertTradeStatus());
+  InsertTradeStatus get bannerStatus => statusNotifier.value;
+  set bannerStatus(InsertTradeStatus status) => statusNotifier.value = status;
 
   InsertTradeBloc(
       {required WalletRepository walletRepository,
@@ -217,8 +223,25 @@ class InsertTradeBloc extends ChangeNotifier {
     return trade;
   }
 
-  ///Load the InterstitialAd
+  ///Load ads
   loadAd() {
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          bannerStatus = InsertTradeStatus();
+        },
+        onAdFailedToLoad: (ad, err) {
+          bannerStatus = InsertTradeStatus.error(err.message);
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd.load();
+
     InterstitialAd.load(
         adUnitId: AdHelper.interstitialAdUnitId,
         request: AdRequest(),
@@ -248,6 +271,7 @@ class InsertTradeBloc extends ChangeNotifier {
   void dispose() {
     statusNotifier.dispose();
     _interstitialAd.dispose();
+    _bannerAd.dispose();
     super.dispose();
   }
 }

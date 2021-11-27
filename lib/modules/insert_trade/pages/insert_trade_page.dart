@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -273,7 +274,9 @@ class _InsertTradePageState extends State<InsertTradePage> {
                               onTap: () {
                                 showDatePicker(
                                   context: context,
-                                  initialDate: dateController.text != '' ? bloc.trade.date : DateTime.now(),
+                                  initialDate: dateController.text != ''
+                                      ? bloc.trade.date
+                                      : DateTime.now(),
                                   firstDate: DateTime(2008),
                                   lastDate: DateTime.now(),
                                 ).then((value) => onChangeDatePicker(value));
@@ -285,6 +288,17 @@ class _InsertTradePageState extends State<InsertTradePage> {
                     Text(
                       bloc.appLocalizations.hintTrade,
                       style: textTheme.caption,
+                    ),
+                    SizedBox(height: 20),
+                    ValueListenableBuilder(
+                      valueListenable: bloc.bannerAdNotifier,
+                      builder: (context, status, child) {
+                        return Container(
+                          width: bloc.bannerAd.size.width.toDouble(),
+                          height: bloc.bannerAd.size.height.toDouble(),
+                          child: AdWidget(ad: bloc.bannerAd),
+                        );
+                      },
                     ),
                   ],
                 ),
