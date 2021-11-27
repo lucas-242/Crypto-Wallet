@@ -51,7 +51,7 @@ class _TradesDetailsState extends State<TradesDetails> {
       //     message: 'Trade deleted successfully',
       //     type: SnackBarType.success,
       //     onClose: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()));
-      bloc.loadAd();
+      bloc.loadInterstitialAd();
       Navigator.of(context).pop();
     });
   }

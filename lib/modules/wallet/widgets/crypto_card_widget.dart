@@ -68,7 +68,7 @@ class _CryptoCardState extends State<CryptoCard> {
                       Row(
                         children: [
                           ImageFade(image: widget.crypto.image),
-                          SizedBox(width: 15),
+                          SizedBox(width: 14),
                           Container(
                             width: SizeConfig.width * 0.32,
                             height: SizeConfig.height * 0.065,

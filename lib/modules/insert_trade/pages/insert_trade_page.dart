@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -56,7 +57,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
     );
 
     bloc.checkCryptoList();
-    bloc.loadAd();
+    bloc.loadInterstitialAd();
     bloc.onChangeField(user: uid);
     super.initState();
   }
@@ -290,15 +291,9 @@ class _InsertTradePageState extends State<InsertTradePage> {
                       style: textTheme.caption,
                     ),
                     SizedBox(height: 20),
-                    ValueListenableBuilder(
-                      valueListenable: bloc.bannerAdNotifier,
-                      builder: (context, status, child) {
-                        return Container(
-                          width: bloc.bannerAd.size.width.toDouble(),
-                          height: bloc.bannerAd.size.height.toDouble(),
-                          child: AdWidget(ad: bloc.bannerAd),
-                        );
-                      },
+                    Container(
+                      height: 50,
+                      child: AdWidget(ad: AdHelper.bannerTradeRegister..load()),
                     ),
                   ],
                 ),

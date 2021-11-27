@@ -29,7 +29,7 @@ class _TradesListPageState extends State<TradesListPage> {
     auth = context.read<Auth>();
     bloc = context.read<TradesBloc>();
     if (bloc.trades.isEmpty) bloc.getTrades(auth.user!.uid);
-    bloc.loadAd();
+    bloc.loadInterstitialAd();
     super.initState();
   }
 
@@ -123,7 +123,7 @@ class _TradesListPageState extends State<TradesListPage> {
                                       uid: auth.user!.uid,
                                       walletBloc: walletBloc,
                                     )
-                                    .then((value) => bloc.loadAd());
+                                    .then((value) => bloc.loadInterstitialAd());
                               },
                             );
                           }),

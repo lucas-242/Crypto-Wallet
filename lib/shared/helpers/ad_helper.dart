@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import '/shared/core/build_configs.dart';
 
 /// Helper that get the ad keys according to the plataforms
 abstract class AdHelper {
-  static String get interstitialAdUnitId {
+  /// Admob Trade Operation
+  static String get interstitialTradeOperation {
     if (Platform.isAndroid) {
-      return Config.admobTradeOperationAndroid;
+      return Config.admobInterstitialTradeOperationAndroid;
     } else if (Platform.isIOS) {
       return "ca-app-pub-3940256099942544/4411468910";
     } else {
@@ -14,14 +17,58 @@ abstract class AdHelper {
     }
   }
 
-  static String get bannerAdUnitId {
+  /// Admob Trade Register
+  static BannerAd get bannerTradeRegister {
+    String adUnitId;
     if (Platform.isAndroid) {
-      return Config.admobBannerTradeRegisterAndroid;
+      adUnitId = Config.admobBannerTradeRegisterAndroid;
     } else if (Platform.isIOS) {
-      return 'ca-app-pub-3940256099942544/2934735716';
+      adUnitId = 'ca-app-pub-3940256099942544/2934735716';
     } else {
       throw new UnsupportedError('Unsupported platform');
     }
+
+    return BannerAd(
+      adUnitId: adUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {},
+        onAdClosed: (ad) {
+          ad.dispose();
+        },
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose();
+        },
+      ),
+    );
+  }
+
+  /// Admob Trade List key
+  static BannerAd get bannerTradesList {
+    String adUnitId;
+    if (Platform.isAndroid) {
+      adUnitId = Config.admobBannerTradeRegisterAndroid;
+    } else if (Platform.isIOS) {
+      adUnitId = 'ca-app-pub-3940256099942544/2934735716';
+    } else {
+      throw new UnsupportedError('Unsupported platform');
+    }
+
+    return BannerAd(
+      adUnitId: adUnitId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {},
+        onAdClosed: (ad) {
+          ad.dispose();
+        },
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose();
+        },
+      ),
+    );
   }
 
   // static String get interstitialAdUnitId {

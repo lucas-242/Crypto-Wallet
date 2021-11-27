@@ -2,9 +2,10 @@ import 'keys.dart';
 import '/shared/models/enums/environment.dart';
 
 // * Properties that will be used inside config
-const _admobIntersticialTradeOperationAndroid =
+const _admobInterstitialTradeOperationAndroid =
     "admobIntersticialTradeOperationAndroid";
 const _admobBannerTradeRegisterAndroid = "admobBannerTradeRegisterAndroid";
+const _admobBannerTradesListAndroid = "admobBannerTradesListAndroid";
 
 /// System configs which are defined according to the initialization type that can be dev or prod
 class Config {
@@ -15,28 +16,34 @@ class Config {
     switch (env) {
       case Environment.dev:
         _config = {
-          _admobIntersticialTradeOperationAndroid:
-              admob_intersticial_trade_operation_dev,
+          _admobInterstitialTradeOperationAndroid:
+              admob_interstitial_trade_operation_dev,
           _admobBannerTradeRegisterAndroid: admob_banner_trade_register_dev,
+          _admobBannerTradesListAndroid: admob_banner_trades_list_dev,
         };
         break;
       case Environment.prod:
         _config = {
-          _admobIntersticialTradeOperationAndroid:
-              admob_intersticial_trade_operation_prod,
+          _admobInterstitialTradeOperationAndroid:
+              admob_interstitial_trade_operation_prod,
           _admobBannerTradeRegisterAndroid: admob_banner_trade_register_prod,
+          _admobBannerTradesListAndroid: admob_banner_trades_list_prod,
         };
         break;
     }
   }
 
   /// Admob Trade Operation key on Android
-  static String get admobTradeOperationAndroid =>
-      _config[_admobIntersticialTradeOperationAndroid];
+  static String get admobInterstitialTradeOperationAndroid =>
+      _config[_admobInterstitialTradeOperationAndroid];
 
   /// Admob Trade Register key on Android
   static String get admobBannerTradeRegisterAndroid =>
       _config[_admobBannerTradeRegisterAndroid];
+
+  /// Admob Trade List key on Android
+  static String get admobBannerTradesListAndroid =>
+      _config[_admobBannerTradesListAndroid];
 
   /// Price that determines a small crypto
   static const smallCryptosPrice = 1.0;
