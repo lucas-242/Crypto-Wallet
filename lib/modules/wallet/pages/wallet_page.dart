@@ -2,11 +2,13 @@ import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
+import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_scaffold/app_scaffold_widget.dart';
 import 'package:crypto_wallet/shared/widgets/total_wallet_card/total_wallet_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -88,6 +90,15 @@ class _WalletPageState extends State<WalletPage> {
                             index: index,
                             onTap: (int? tappedIndex) =>
                                 setState(() => bloc.openedIndex = tappedIndex),
+                            ad: (index + 1) % 3 == 0
+                                ? Container(
+                                    height: 100,
+                                    child: AdWidget(
+                                        ad: AdHelper.bannerWalletCoinsList
+                                          ..load(),
+                                        key: UniqueKey()),
+                                  )
+                                : null,
                           );
                         },
                       ),

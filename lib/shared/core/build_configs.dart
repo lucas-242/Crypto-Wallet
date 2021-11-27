@@ -6,6 +6,7 @@ const _admobInterstitialTradeOperationAndroid =
     "admobIntersticialTradeOperationAndroid";
 const _admobBannerTradeRegisterAndroid = "admobBannerTradeRegisterAndroid";
 const _admobBannerTradesListAndroid = "admobBannerTradesListAndroid";
+const _admobBannerWalletCoinsListAndroid = "admobBannerWalletCoinsListAndroid";
 
 /// System configs which are defined according to the initialization type that can be dev or prod
 class Config {
@@ -21,6 +22,8 @@ class Config {
           _admobBannerTradeRegisterAndroid:
               admob_banner_trade_register_details_dev,
           _admobBannerTradesListAndroid: admob_banner_trades_list_dev,
+          _admobBannerWalletCoinsListAndroid:
+              admob_banner_wallet_coins_list_dev,
         };
         break;
       case Environment.prod:
@@ -30,6 +33,8 @@ class Config {
           _admobBannerTradeRegisterAndroid:
               admob_banner_trade_register_details_prod,
           _admobBannerTradesListAndroid: admob_banner_trades_list_prod,
+          _admobBannerWalletCoinsListAndroid:
+              admob_banner_wallet_coins_list_prod,
         };
         break;
     }
@@ -46,6 +51,10 @@ class Config {
   /// Admob Trade List key on Android
   static String get admobBannerTradesListAndroid =>
       _config[_admobBannerTradesListAndroid];
+
+  /// Admob Wallet Coins List key on Android
+  static String get admobBannerWalletCoinsListAndroid =>
+      _config[_admobBannerWalletCoinsListAndroid];
 
   /// Price that determines a small crypto
   static const smallCryptosPrice = 1.0;

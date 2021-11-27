@@ -11,12 +11,15 @@ class CryptoCard extends StatefulWidget {
   final int index;
   final int? openedIndex;
   final Function(int?) onTap;
+  final Widget? ad;
+
   const CryptoCard({
     Key? key,
     required this.crypto,
     required this.index,
     this.openedIndex,
     required this.onTap,
+    this.ad,
   }) : super(key: key);
 
   @override
@@ -48,11 +51,10 @@ class _CryptoCardState extends State<CryptoCard> {
           width: double.infinity,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: widget.openedIndex == widget.index
-                  ? theme.colorScheme.secondary
-                  : theme.scaffoldBackgroundColor
-            ),
+                borderRadius: BorderRadius.circular(20),
+                color: widget.openedIndex == widget.index
+                    ? theme.colorScheme.secondary
+                    : theme.scaffoldBackgroundColor),
             child: Padding(
               padding: EdgeInsets.only(
                   top: 20,
@@ -189,6 +191,9 @@ class _CryptoCardState extends State<CryptoCard> {
                   widget.openedIndex == widget.index ||
                           widget.openedIndex == widget.index + 1
                       ? Container()
+                      : Divider(thickness: 1),
+                  widget.ad ?? Container(),
+                  widget.ad == null ? Container()
                       : Divider(thickness: 1),
                 ],
               ),
