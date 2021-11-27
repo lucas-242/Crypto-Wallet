@@ -18,7 +18,7 @@ class Config {
         _config = {
           _admobInterstitialTradeOperationAndroid:
               admob_interstitial_trade_operation_dev,
-          _admobBannerTradeRegisterAndroid: admob_banner_trade_register_dev,
+          _admobBannerTradeRegisterAndroid: admob_banner_trade_register_details_dev,
           _admobBannerTradesListAndroid: admob_banner_trades_list_dev,
         };
         break;
@@ -26,7 +26,7 @@ class Config {
         _config = {
           _admobInterstitialTradeOperationAndroid:
               admob_interstitial_trade_operation_prod,
-          _admobBannerTradeRegisterAndroid: admob_banner_trade_register_prod,
+          _admobBannerTradeRegisterAndroid: admob_banner_trade_register_details_prod,
           _admobBannerTradesListAndroid: admob_banner_trades_list_prod,
         };
         break;
@@ -38,7 +38,7 @@ class Config {
       _config[_admobInterstitialTradeOperationAndroid];
 
   /// Admob Trade Register key on Android
-  static String get admobBannerTradeRegisterAndroid =>
+  static String get admobBannerTradeRegisterAndDetailsAndroid =>
       _config[_admobBannerTradeRegisterAndroid];
 
   /// Admob Trade List key on Android

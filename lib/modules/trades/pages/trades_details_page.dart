@@ -1,5 +1,6 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
+import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/helpers/view_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
@@ -7,6 +8,7 @@ import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -94,13 +96,13 @@ class _TradesDetailsState extends State<TradesDetails> {
             child: Column(
               children: [
                 Center(
-                    child: Text(trade.cryptoSymbol,
-                        style: textTheme.headline2)),
+                    child:
+                        Text(trade.cryptoSymbol, style: textTheme.headline2)),
                 SizedBox(height: 25),
                 TradeDetailsRow(
                   leftText: appLocalizations.operationType,
-                  rightText: toBeginningOfSentenceCase(
-                      ViewHelper.getTradeLabel(trade.operationType, appLocalizations))!,
+                  rightText: toBeginningOfSentenceCase(ViewHelper.getTradeLabel(
+                      trade.operationType, appLocalizations))!,
                   rightTextStyle: ViewHelper.getTradeColor(trade),
                 ),
                 SizedBox(height: 10),
@@ -135,6 +137,19 @@ class _TradesDetailsState extends State<TradesDetails> {
                     symbol: '\$',
                     decimalDigits: WalletHelper.getDecimalDigits(trade.price),
                   ).format(trade.amountDollars),
+                ),
+                SizedBox(height: 20),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 250,
+                      child: AdWidget(
+                          ad: AdHelper.bannerTradeRegisterAndDetails(
+                              size: AdSize.mediumRectangle)
+                            ..load()),
+                    ),
+                  ),
                 ),
               ],
             ),

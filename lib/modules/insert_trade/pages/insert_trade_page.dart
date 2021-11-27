@@ -293,7 +293,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                     SizedBox(height: 20),
                     Container(
                       height: 50,
-                      child: AdWidget(ad: AdHelper.bannerTradeRegister..load()),
+                      child: AdWidget(ad: AdHelper.bannerTradeRegisterAndDetails()..load()),
                     ),
                   ],
                 ),

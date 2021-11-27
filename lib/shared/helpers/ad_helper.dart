@@ -18,10 +18,10 @@ abstract class AdHelper {
   }
 
   /// Admob Trade Register
-  static BannerAd get bannerTradeRegister {
+  static BannerAd bannerTradeRegisterAndDetails({AdSize size = AdSize.banner}) {
     String adUnitId;
     if (Platform.isAndroid) {
-      adUnitId = Config.admobBannerTradeRegisterAndroid;
+      adUnitId = Config.admobBannerTradeRegisterAndDetailsAndroid;
     } else if (Platform.isIOS) {
       adUnitId = 'ca-app-pub-3940256099942544/2934735716';
     } else {
@@ -31,7 +31,7 @@ abstract class AdHelper {
     return BannerAd(
       adUnitId: adUnitId,
       request: AdRequest(),
-      size: AdSize.banner,
+      size: size,
       listener: BannerAdListener(
         onAdLoaded: (_) {},
         onAdClosed: (ad) {
@@ -48,7 +48,7 @@ abstract class AdHelper {
   static BannerAd get bannerTradesList {
     String adUnitId;
     if (Platform.isAndroid) {
-      adUnitId = Config.admobBannerTradeRegisterAndroid;
+      adUnitId = Config.admobBannerTradeRegisterAndDetailsAndroid;
     } else if (Platform.isIOS) {
       adUnitId = 'ca-app-pub-3940256099942544/2934735716';
     } else {
