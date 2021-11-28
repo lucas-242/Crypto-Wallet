@@ -1,8 +1,8 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
+import 'package:crypto_wallet/modules/wallet/widgets/ad_card_widget.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
-import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_scaffold/app_scaffold_widget.dart';
@@ -82,23 +82,21 @@ class _WalletPageState extends State<WalletPage> {
                     child: RefreshIndicator(
                       onRefresh: () => bloc.getCryptos(auth.user!.uid),
                       child: ListView.builder(
-                        itemCount: bloc.cryptos.length,
+                        itemCount: bloc.cryptosWithAds.length,
                         itemBuilder: (context, index) {
+                          if (bloc.cryptosWithAds[index] is BannerAd) {
+                            return AdCard(
+                              openedIndex: bloc.openedIndex,
+                              index: index,
+                              ad: bloc.cryptosWithAds[index],
+                            );
+                          }
                           return CryptoCard(
-                            crypto: bloc.cryptos[index],
+                            crypto: bloc.cryptosWithAds[index],
                             openedIndex: bloc.openedIndex,
                             index: index,
                             onTap: (int? tappedIndex) =>
                                 setState(() => bloc.openedIndex = tappedIndex),
-                            ad: (index + 1) % 3 == 0
-                                ? Container(
-                                    height: 100,
-                                    child: AdWidget(
-                                        ad: AdHelper.bannerWalletCoinsList
-                                          ..load(),
-                                        key: UniqueKey()),
-                                  )
-                                : null,
                           );
                         },
                       ),
