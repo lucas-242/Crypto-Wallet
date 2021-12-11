@@ -58,6 +58,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
 
     bloc.checkCryptoList();
     bloc.loadInterstitialAd();
+    bloc.loadBannerAd();
     bloc.onChangeField(user: uid);
     super.initState();
   }
@@ -103,14 +104,14 @@ class _InsertTradePageState extends State<InsertTradePage> {
     final walletBloc = context.read<WalletBloc>();
     await bloc
         .onSave(tradesBloc: tradesBloc, walletBloc: walletBloc, uid: uid)
-        .then((value) => Navigator.pop(context))
-        .catchError((error) {
-      if (error.message == bloc.appLocalizations.errorInsufficientBalance) {
-        ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
-          message: error.message,
-          type: SnackBarType.error,
-        ));
-      }
+        .then((value) {
+      Navigator.pop(context);
+    }).catchError((error) {
+      //TODO add default value to the first two fields and fill them if an error was triggered
+      ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
+        message: error.message,
+        type: SnackBarType.error,
+      ));
     });
   }
 
@@ -293,7 +294,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                     SizedBox(height: 20),
                     Container(
                       height: 50,
-                      child: AdWidget(ad: AdHelper.bannerTradeRegisterAndDetails()..load()),
+                      child: AdWidget(ad: bloc.bannerAd..load()),
                     ),
                   ],
                 ),

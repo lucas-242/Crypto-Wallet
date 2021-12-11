@@ -19,6 +19,7 @@ class InsertTradeBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
   CryptosService _cryptosService;
   late InterstitialAd _interstitialAd;
+  late BannerAd bannerAd;
 
   final formKey = GlobalKey<FormState>();
   TradeModel trade = TradeModel();
@@ -124,6 +125,8 @@ class InsertTradeBloc extends ChangeNotifier {
   /// Change the trade properties when the user changes crypto [amount] or [price]
   String onChangeCryptoAmountOrPrice({double? amount, double? price}) {
     var amountDollars = (amount ?? trade.amount) * (price ?? trade.price);
+    // var result = amountDollars.toStringAsFixed(2);
+    // amountDollars = double.parse(result);
 
     trade = trade.copyWith(
       amount: amount,
@@ -152,6 +155,7 @@ class InsertTradeBloc extends ChangeNotifier {
       if (_interstitialAd.responseInfo != null) _interstitialAd.show();
     }).catchError((error) {
       status = InsertTradeStatus.error(error.toString());
+      throw Exception(error.toString());
     });
   }
 
@@ -163,7 +167,7 @@ class InsertTradeBloc extends ChangeNotifier {
     // Adding crypto for the first time
     if (crypto == null) {
       if (trade.operationType != TradeType.buy)
-        throw Exception('Não há saldo suficiente');
+        throw Exception(appLocalizations.errorInsufficientBalance);
 
       var cryptoToCreate = _cryptosService.setCryptoForTheFirstTime(trade);
 
@@ -216,8 +220,12 @@ class InsertTradeBloc extends ChangeNotifier {
     return trade;
   }
 
+  void loadBannerAd() {
+    bannerAd = AdHelper.bannerTradeRegisterAndDetails();
+  }
+
   ///Load interstitialAd
-  loadInterstitialAd() {
+  void loadInterstitialAd() {
     InterstitialAd.load(
         adUnitId: AdHelper.interstitialTradeOperation,
         request: AdRequest(),

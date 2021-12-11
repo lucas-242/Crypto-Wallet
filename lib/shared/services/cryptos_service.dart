@@ -5,6 +5,9 @@ import '/shared/models/trade_model.dart';
 
 /// This service is responsible for calculate the Crypto properties when creating or removing a trade
 class CryptosService {
+  /// Precision to calculate decimal numbers
+  int _precision = 100000000;
+
   /// Calculate all [crypto] properties considering [trade] and all the [trades] before to calculate the Average Price.
   CryptoModel calculateCryptoProperties(CryptoModel crypto, TradeModel trade) {
     double amount = crypto.amount;
@@ -24,7 +27,7 @@ class CryptosService {
       checkBalance(crypto, trade);
       amount -= trade.amount;
       totalInvested -= trade.amountDollars;
-      totalInvested = totalInvested < 0 ? 0 : totalInvested;
+      totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
       totalProfit += trade.amount * (trade.price - averagePrice);
       totalFee = amount <= 0 ? 0 : totalFee;
     }
@@ -33,7 +36,7 @@ class CryptosService {
       checkBalance(crypto, trade);
       amount -= trade.fee;
       totalInvested -= trade.amountDollars;
-      totalInvested = totalInvested < 0 ? 0 : totalInvested;
+      totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
     }
 
     crypto = crypto.copyWith(
@@ -94,8 +97,8 @@ class CryptosService {
           firstTradeAfterSoldPosition = true;
         }
         averagePrice = calculateAveragePrice(element, crypto);
-        totalInvested = crypto.totalInvested + element.amountDollars;
-        amount = crypto.amount + element.amount;
+        totalInvested = _sum(crypto.totalInvested, element.amountDollars);
+        amount = _sum(crypto.amount, element.amount);
         totalFee += element.fee;
         crypto = setCrypto(
           crypto: crypto,
@@ -107,10 +110,10 @@ class CryptosService {
       // *When selling the average price and total fee don't change
       else if (element.operationType == TradeType.sell) {
         checkBalance(crypto, element);
-        totalInvested = crypto.totalInvested - element.amountDollars;
-        totalInvested = totalInvested < 0 ? 0 : totalInvested;
-        amount = crypto.amount - element.amount;
-        totalProfit += element.amount * (element.price - crypto.averagePrice);
+        amount = _subtraction(crypto.amount, element.amount);
+        totalInvested = _subtraction(crypto.totalInvested, element.amountDollars);
+        totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
+        totalProfit += element.amount * (_subtraction(element.price, crypto.averagePrice));
 
         if (amount == 0) {
           soldPositionAt = element.date;
@@ -129,9 +132,9 @@ class CryptosService {
       // *When transfering trades amount indicate the amount transfer to another wallet
       else {
         checkBalance(crypto, element);
-        totalInvested = crypto.totalInvested - element.amountDollars;
-        totalInvested = totalInvested < 0 ? 0 : totalInvested;
-        amount = crypto.amount - element.fee;
+        amount = _subtraction(crypto.amount, element.fee);
+        totalInvested = _subtraction(crypto.totalInvested, element.amountDollars);
+        totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
 
         if (amount == 0) {
           soldPositionAt = element.date;
@@ -212,11 +215,31 @@ class CryptosService {
 
   /// Check [crypto] balance based on [trade]
   void checkBalance(CryptoModel crypto, TradeModel trade) {
+    //TODO: Validar mensagem
     if (!crypto.hasBalace(
       trade.operationType,
       trade.amount,
     )) {
       throw Exception('Não há saldo suficiente');
     }
+  }
+
+  /// Sum two numbers avoiding problems with precision
+  double _sum(double value1, double value2) {
+    final sum = (value1 * _precision).roundToDouble() +
+        (value2 * _precision).roundToDouble();
+
+    final result = sum / _precision;
+    return result;
+  }
+
+  
+  /// Subtract two numbers avoiding problems with precision
+  double _subtraction(double value1, double value2) {
+    final difference = (value1 * _precision).roundToDouble() -
+        (value2 * _precision).roundToDouble();
+
+    final result = difference / _precision;
+    return result;
   }
 }
