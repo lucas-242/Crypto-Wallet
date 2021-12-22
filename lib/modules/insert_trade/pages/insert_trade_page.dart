@@ -1,4 +1,3 @@
-import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';

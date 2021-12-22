@@ -13,8 +13,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../widgets/trade_details_row_widget.dart';
-
 class TradesDetails extends StatefulWidget {
   const TradesDetails({Key? key}) : super(key: key);
 
