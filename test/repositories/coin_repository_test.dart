@@ -6,6 +6,22 @@ void main() {
   final bitcoinId = 'bitcoin';
   final cardanoId = 'cardano';
 
+  // test('aiin', () {
+  //   int precision = 100000000;
+
+  //   // print((0.13 * precision).roundToDouble());
+  //   // print((0.06 * precision).roundToDouble());
+  //   // print((0.15 * precision).roundToDouble());
+
+  //   final difference = (0.13 * precision).roundToDouble() +
+  //       (0.06 * precision).roundToDouble() +
+  //       (0.15 * precision).roundToDouble();
+
+  //   final result = difference / precision;
+  //   print(result);
+  //   expect(result, equals(0.34));
+  // });
+
   test('get Bitcoin and Cardano prices in USD', () async {
     final response = await repository.getPrices(coins: [bitcoinId, cardanoId]);
     print(response);

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:flutter/foundation.dart';
 
 import '/repositories/coin_repository/coin_repository.dart';
@@ -17,13 +18,15 @@ class WalletBloc extends ChangeNotifier {
   WalletRepository _walletRepository;
   CoinRepository _coinRepository;
 
-  List<CryptoModel> cryptos = [];
-
   WalletModel walletData = new WalletModel();
+
+  List<CryptoModel> cryptos = [];
+  List<dynamic> cryptosWithAds = [];
 
   ///The index of the opened Crypto Card of the Wallet Page
   int? openedIndex;
 
+  ///Indicate if the app can fetch for new data when user refreshs the screen
   bool canRefresh = true;
 
   final statusNotifier = ValueNotifier<WalletStatus>(WalletStatus());
@@ -43,6 +46,7 @@ class WalletBloc extends ChangeNotifier {
       if (result.isNotEmpty) {
         cryptos = await getCryptosMarketData(result);
         setWalletData();
+        loadBannerAds();
       }
     }).catchError((error) {
       status = WalletStatus.error(error.toString());
@@ -178,6 +182,16 @@ class WalletBloc extends ChangeNotifier {
       percentVariation: percentVariation,
       cryptosSummary: cryptosSummary,
     );
+  }
+
+  ///Insert banner Ads in the cryptos list
+  void loadBannerAds() {
+    cryptosWithAds = List.from(cryptos);
+    for (int i = 0; i < cryptos.length; i++) {
+      if ((i + 1) % 3 == 0) {
+        cryptosWithAds.insert(i, AdHelper.bannerWalletCoinsList..load());
+      }
+    }
   }
 
   void eraseData() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -55,7 +56,8 @@ class _InsertTradePageState extends State<InsertTradePage> {
     );
 
     bloc.checkCryptoList();
-    bloc.loadAd();
+    bloc.loadInterstitialAd();
+    bloc.loadBannerAd();
     bloc.onChangeField(user: uid);
     super.initState();
   }
@@ -101,14 +103,14 @@ class _InsertTradePageState extends State<InsertTradePage> {
     final walletBloc = context.read<WalletBloc>();
     await bloc
         .onSave(tradesBloc: tradesBloc, walletBloc: walletBloc, uid: uid)
-        .then((value) => Navigator.pop(context))
-        .catchError((error) {
-      if (error.message == bloc.appLocalizations.errorInsufficientBalance) {
-        ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
-          message: error.message,
-          type: SnackBarType.error,
-        ));
-      }
+        .then((value) {
+      Navigator.pop(context);
+    }).catchError((error) {
+      //TODO add default value to the first two fields and fill them if an error was triggered
+      ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
+        message: error.message,
+        type: SnackBarType.error,
+      ));
     });
   }
 
@@ -273,7 +275,9 @@ class _InsertTradePageState extends State<InsertTradePage> {
                               onTap: () {
                                 showDatePicker(
                                   context: context,
-                                  initialDate: dateController.text != '' ? bloc.trade.date : DateTime.now(),
+                                  initialDate: dateController.text != ''
+                                      ? bloc.trade.date
+                                      : DateTime.now(),
                                   firstDate: DateTime(2008),
                                   lastDate: DateTime.now(),
                                 ).then((value) => onChangeDatePicker(value));
@@ -285,6 +289,11 @@ class _InsertTradePageState extends State<InsertTradePage> {
                     Text(
                       bloc.appLocalizations.hintTrade,
                       style: textTheme.caption,
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      height: 50,
+                      child: AdWidget(ad: bloc.bannerAd..load()),
                     ),
                   ],
                 ),

@@ -1,14 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
+import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/home/home.dart';
-import 'package:crypto_wallet/modules/home/widgets/coins_slide_widget.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_scaffold/app_scaffold_widget.dart';
 import 'package:crypto_wallet/shared/widgets/total_wallet_card/total_wallet_card_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return CustomScaffold(
       scaffoldKey: _scaffoldKey,
       auth: auth,
       title: appLocalizations.dashboard,
@@ -73,7 +74,14 @@ class _HomePageState extends State<HomePage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TotalWalletCard(walletData: bloc.walletData),
+                    Consumer<AppBloc>(
+                      builder: (context, appBloc, child) {
+                        return TotalWalletCard(
+                          walletData: bloc.walletData,
+                          showUserTotal: appBloc.showUserTotalOption,
+                        );
+                      },
+                    ),
                     CoinsSlide(walletdData: bloc.walletData),
                     DashboardWatchList(cryptos: bloc.cryptos),
                   ],

@@ -1,11 +1,14 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
+import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
+import 'package:crypto_wallet/modules/wallet/widgets/ad_card_widget.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_scaffold/app_scaffold_widget.dart';
 import 'package:crypto_wallet/shared/widgets/total_wallet_card/total_wallet_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -38,7 +41,7 @@ class _WalletPageState extends State<WalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return CustomScaffold(
       title: appLocalizations.wallet,
       scaffoldKey: _scaffoldKey,
       auth: auth,
@@ -66,18 +69,30 @@ class _WalletPageState extends State<WalletPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TotalWalletCard(
-                    walletData: bloc.walletData,
-                    showTotalInvested: true,
+                  Consumer<AppBloc>(
+                    builder: (context, appBloc, child) {
+                      return TotalWalletCard(
+                        walletData: bloc.walletData,
+                        showTotalInvested: true,
+                        showUserTotal: appBloc.showUserTotalOption,
+                      );
+                    },
                   ),
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () => bloc.getCryptos(auth.user!.uid),
                       child: ListView.builder(
-                        itemCount: bloc.cryptos.length,
+                        itemCount: bloc.cryptosWithAds.length,
                         itemBuilder: (context, index) {
+                          if (bloc.cryptosWithAds[index] is BannerAd) {
+                            return AdCard(
+                              openedIndex: bloc.openedIndex,
+                              index: index,
+                              ad: bloc.cryptosWithAds[index],
+                            );
+                          }
                           return CryptoCard(
-                            crypto: bloc.cryptos[index],
+                            crypto: bloc.cryptosWithAds[index],
                             openedIndex: bloc.openedIndex,
                             index: index,
                             onTap: (int? tappedIndex) =>

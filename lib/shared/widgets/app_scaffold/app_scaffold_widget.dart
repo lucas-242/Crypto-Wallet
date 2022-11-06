@@ -11,13 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class AppScaffold extends StatelessWidget {
+class CustomScaffold extends StatelessWidget {
   final String title;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Auth auth;
   final Widget? body;
   final List<Widget>? appBarActions;
-  const AppScaffold({
+  const CustomScaffold({
     Key? key,
     this.body,
     required this.title,
@@ -52,12 +52,17 @@ class AppScaffold extends StatelessWidget {
       context.read<AppBloc>().changeTheme(AdaptiveTheme.of(context));
     }
 
+    void changeShowTotal() {
+      context.read<AppBloc>().changeShowTotal();
+    }
+
     return Scaffold(
       key: scaffoldKey,
       drawer: Drawer(
         child: CustomDrawer(
           onPressedDarkMode: () => changeTheme(),
           onPressedLogout: () => signOut(),
+          onPressedShowTotal: () => changeShowTotal(),
         ),
       ),
       appBar: CustomAppBar(

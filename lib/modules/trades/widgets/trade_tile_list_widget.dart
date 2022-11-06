@@ -1,6 +1,8 @@
+import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 import '../trades.dart';
@@ -21,7 +23,18 @@ class TradeTileList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    
+
+    Widget getAd(int dateIndex) => (dateIndex != 0 && dateIndex % 2 == 0)
+        ? Padding(
+            padding: EdgeInsets.only(top: 12.0),
+            child: Container(
+              height: 50,
+              child: AdWidget(
+                  ad: AdHelper.bannerTradesList..load(), key: UniqueKey()),
+            ),
+          )
+        : Container();
+
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
@@ -30,6 +43,7 @@ class TradeTileList extends StatelessWidget {
           final date = bloc.dates[dateIndex];
           return Column(
             children: [
+              getAd(dateIndex),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Column(

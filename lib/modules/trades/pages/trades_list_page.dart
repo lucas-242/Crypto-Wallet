@@ -1,6 +1,5 @@
 import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
-import 'package:crypto_wallet/modules/trades/widgets/trade_tile_list_widget.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/core/routes.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
@@ -29,7 +28,7 @@ class _TradesListPageState extends State<TradesListPage> {
     auth = context.read<Auth>();
     bloc = context.read<TradesBloc>();
     if (bloc.trades.isEmpty) bloc.getTrades(auth.user!.uid);
-    bloc.loadAd();
+    bloc.loadInterstitialAd();
     super.initState();
   }
 
@@ -47,7 +46,7 @@ class _TradesListPageState extends State<TradesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return CustomScaffold(
       title: bloc.appLocalizations.trades,
       scaffoldKey: _scaffoldKey,
       auth: auth,
@@ -123,7 +122,7 @@ class _TradesListPageState extends State<TradesListPage> {
                                       uid: auth.user!.uid,
                                       walletBloc: walletBloc,
                                     )
-                                    .then((value) => bloc.loadAd());
+                                    .then((value) => bloc.loadInterstitialAd());
                               },
                             );
                           }),

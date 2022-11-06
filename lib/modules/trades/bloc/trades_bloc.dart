@@ -25,12 +25,14 @@ class TradesBloc extends ChangeNotifier {
   late AppLocalizations appLocalizations;
 
   final statusNotifier = ValueNotifier<TradesStatus>(TradesStatus());
-
   TradesStatus get status => statusNotifier.value;
   set status(TradesStatus status) => statusNotifier.value = status;
 
-  TradesBloc({required WalletRepository walletRepository, required CryptosService cryptosService})
-      : _walletRepository = walletRepository, _cryptosService = cryptosService;
+  TradesBloc(
+      {required WalletRepository walletRepository,
+      required CryptosService cryptosService})
+      : _walletRepository = walletRepository,
+        _cryptosService = cryptosService;
 
   Future<void> getTrades(String uid) async {
     status = TradesStatus.loading();
@@ -139,17 +141,17 @@ class TradesBloc extends ChangeNotifier {
     }
 
     var otherTrades = allTrades.where((element) => element != trade).toList();
-    var updatedCrypto =
-        _cryptosService.recalculatingCryptoProperties(crypto, null, otherTrades);
+    var updatedCrypto = _cryptosService.recalculatingCryptoProperties(
+        crypto, null, otherTrades);
 
     return _walletRepository.deleteTrade(
         TradeDeleteOption.update, trade, updatedCrypto);
   }
 
   ///Load the InterstitialAd
-  loadAd() {
+  void loadInterstitialAd() {
     InterstitialAd.load(
-        adUnitId: AdHelper.interstitialAdUnitId,
+        adUnitId: AdHelper.interstitialTradeOperation,
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
