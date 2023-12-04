@@ -1,12 +1,13 @@
+import 'package:crypto_wallet/shared/core/trade_type.dart';
 import 'package:crypto_wallet/shared/helpers/view_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
-import 'package:crypto_wallet/shared/core/trade_type.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
+
 import '../widgets/trade_details_row_widget.dart';
 
 class TradeTile extends StatelessWidget {
@@ -22,8 +23,21 @@ class TradeTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
+      startActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.25,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: SlidableAction(
+              label: appLocalizations.delete,
+              icon: Icons.close,
+              onPressed: (_) => onDelete!(trade),
+              backgroundColor: theme.scaffoldBackgroundColor,
+            ),
+          ),
+        ],
+      ),
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () => onTap!(trade),
@@ -34,11 +48,10 @@ class TradeTile extends StatelessWidget {
               children: [
                 TradeDetailsRow(
                   leftText: trade.cryptoSymbol,
-                  leftTextStyle: theme.textTheme.subtitle2!
+                  leftTextStyle: theme.textTheme.titleSmall!
                       .copyWith(color: AppColors.primary),
-                  rightText: toBeginningOfSentenceCase(
-                      ViewHelper.getTradeLabel(
-                          trade.operationType, appLocalizations))!,
+                  rightText: toBeginningOfSentenceCase(ViewHelper.getTradeLabel(
+                      trade.operationType, appLocalizations))!,
                   rightTextStyle: ViewHelper.getTradeColor(trade),
                 ),
                 SizedBox(height: 5),
@@ -68,17 +81,6 @@ class TradeTile extends StatelessWidget {
           ),
         ),
       ),
-      secondaryActions: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: 15),
-          child: IconSlideAction(
-            caption: appLocalizations.delete,
-            icon: Icons.close,
-            onTap: () => onDelete!(trade),
-            color: theme.scaffoldBackgroundColor,
-          ),
-        ),
-      ],
     );
   }
 }

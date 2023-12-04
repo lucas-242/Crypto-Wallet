@@ -18,7 +18,7 @@ class LabelButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: style ?? textTheme.button,
+          style: style ?? textTheme.labelLarge,
         ),
       ),
     );
