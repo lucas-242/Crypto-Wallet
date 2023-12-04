@@ -52,7 +52,7 @@ class TradeTileList extends StatelessWidget {
                       width: SizeConfig.width,
                       child: Text(DateFormat.yMd().format(date),
                           textAlign: TextAlign.left,
-                          style: textTheme.subtitle2),
+                          style: textTheme.titleSmall),
                     ),
                     Divider(),
                   ],

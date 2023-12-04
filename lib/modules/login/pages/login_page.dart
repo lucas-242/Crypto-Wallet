@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Text(
                       'Crypto',
-                      style: textTheme.headline1!
+                      style: textTheme.displayLarge!
                           .copyWith(color: AppColors.primary),
                       textAlign: TextAlign.center,
                     ),
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Text(
                       'Wallet',
-                      style: textTheme.headline1,
+                      style: textTheme.displayLarge,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       appLocalizations.logo,
                       textAlign: TextAlign.center,
-                      style: textTheme.headline3,
+                      style: textTheme.displaySmall,
                     ),
                   ),
                 ],

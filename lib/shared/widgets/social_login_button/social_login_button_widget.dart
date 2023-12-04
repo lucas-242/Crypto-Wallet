@@ -43,7 +43,7 @@ class SocialLoginButton extends StatelessWidget {
                 children: [
                   Text(
                     appLocalizations.googleButton,
-                    style: textTheme.button,
+                    style: textTheme.labelLarge,
                   ),
                 ],
               ),

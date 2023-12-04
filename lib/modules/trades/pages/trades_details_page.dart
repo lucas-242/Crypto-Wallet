@@ -95,7 +95,7 @@ class _TradesDetailsState extends State<TradesDetails> {
               children: [
                 Center(
                     child:
-                        Text(trade.cryptoSymbol, style: textTheme.headline2)),
+                        Text(trade.cryptoSymbol, style: textTheme.displayMedium)),
                 SizedBox(height: 25),
                 TradeDetailsRow(
                   leftText: appLocalizations.operationType,

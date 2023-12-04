@@ -23,7 +23,7 @@ class TradeDetailsRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(leftText, style: leftTextStyle),
-        Text(rightText, style: rightTextStyle ?? textTheme.subtitle2),
+        Text(rightText, style: rightTextStyle ?? textTheme.titleSmall),
       ],
     );
   }

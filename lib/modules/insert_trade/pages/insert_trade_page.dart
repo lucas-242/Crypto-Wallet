@@ -288,7 +288,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                     SizedBox(height: 20),
                     Text(
                       bloc.appLocalizations.hintTrade,
-                      style: textTheme.caption,
+                      style: textTheme.bodySmall,
                     ),
                     SizedBox(height: 20),
                     Container(
@@ -308,7 +308,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
                 fisrtLabel: bloc.appLocalizations.cancel,
                 secondLabel: bloc.appLocalizations.save,
                 secondButtonStyle:
-                    textTheme.button!.copyWith(color: AppColors.primary),
+                    textTheme.labelLarge!.copyWith(color: AppColors.primary),
                 onPressedFirst: () => Navigator.of(context).pop(),
                 onPressedSecond: () => onSave());
           }

@@ -22,7 +22,7 @@ class TotalWalletCard extends StatelessWidget {
 
     Widget hideValue({TextStyle? style}) => Text(
           '\$ ***',
-          style: style ?? textTheme.headline2,
+          style: style ?? textTheme.displayMedium,
         );
 
     return Padding(
@@ -34,9 +34,9 @@ class TotalWalletCard extends StatelessWidget {
               ? Text(
                   NumberFormat.currency(symbol: '\$')
                       .format(walletData.totalNow),
-                  style: textTheme.headline1,
+                  style: textTheme.displayLarge,
                 )
-              : hideValue(style: textTheme.headline1),
+              : hideValue(style: textTheme.displayLarge),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -44,12 +44,12 @@ class TotalWalletCard extends StatelessWidget {
               showUserTotal
                   ? Text(
                       '${walletData.variation.isNegative ? '' : '+'} ${NumberFormat.currency(symbol: '\$').format(walletData.variation)}',
-                      style: textTheme.headline2,
+                      style: textTheme.displayMedium,
                     )
                   : hideValue(),
               Text(
                 ' (${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(walletData.percentVariation / 100)})',
-                style: textTheme.headline2,
+                style: textTheme.displayMedium,
               ),
               Icon(
                   walletData.variation.isNegative
@@ -68,15 +68,15 @@ class TotalWalletCard extends StatelessWidget {
                     children: [
                       Text(
                         '${appLocalizations.totalInvested}',
-                        style: textTheme.headline2!.copyWith(fontSize: 17),
+                        style: textTheme.displayMedium!.copyWith(fontSize: 17),
                       ),
               showUserTotal ?
                       Text(
                         NumberFormat.currency(symbol: '\$')
                             .format(walletData.totalInvested),
-                        style: textTheme.headline2!.copyWith(fontSize: 17),
+                        style: textTheme.displayMedium!.copyWith(fontSize: 17),
                       )
-                      : hideValue(style: textTheme.headline2!.copyWith(fontSize: 17))
+                      : hideValue(style: textTheme.displayMedium!.copyWith(fontSize: 17))
                     ],
                   ),
                 )

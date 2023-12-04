@@ -45,7 +45,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 15),
-                Text(user.displayName!, style: textTheme.headline2),
+                Text(user.displayName!, style: textTheme.displayMedium),
               ],
             ),
           ),
@@ -68,7 +68,7 @@ class CustomDrawer extends StatelessWidget {
                                 Icon(Icons.wb_sunny_outlined),
                                 SizedBox(width: 15),
                                 Text(appLocalizations.lightMode,
-                                    style: textTheme.button),
+                                    style: textTheme.labelLarge),
                               ],
                             )
                           : Row(
@@ -77,7 +77,7 @@ class CustomDrawer extends StatelessWidget {
                                 Icon(Icons.mode_night_outlined),
                                 SizedBox(width: 15),
                                 Text(appLocalizations.darkMode,
-                                    style: textTheme.button),
+                                    style: textTheme.labelLarge),
                               ],
                             ),
                 ),
@@ -96,7 +96,7 @@ class CustomDrawer extends StatelessWidget {
                             Icon(Icons.visibility_off_outlined),
                             SizedBox(width: 15),
                             Text(appLocalizations.hideTotal,
-                                style: textTheme.button),
+                                style: textTheme.labelLarge),
                           ],
                         );
                       } else {
@@ -106,7 +106,7 @@ class CustomDrawer extends StatelessWidget {
                             Icon(Icons.visibility_outlined),
                             SizedBox(width: 15),
                             Text(appLocalizations.showTotal,
-                                style: textTheme.button),
+                                style: textTheme.labelLarge),
                           ],
                         );
                       }
@@ -128,7 +128,7 @@ class CustomDrawer extends StatelessWidget {
                           Icon(Icons.logout),
                           SizedBox(width: 15),
                           Text(appLocalizations.logout,
-                              style: textTheme.button),
+                              style: textTheme.labelLarge),
                         ],
                       ),
                     ),

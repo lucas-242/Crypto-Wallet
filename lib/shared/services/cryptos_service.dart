@@ -1,7 +1,7 @@
-import '../core/trade_type.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/crypto_model.dart';
 import '/shared/models/trade_model.dart';
+import '../core/trade_type.dart';
 
 /// This service is responsible for calculate the Crypto properties when creating or removing a trade
 class CryptosService {
@@ -111,9 +111,11 @@ class CryptosService {
       else if (element.operationType == TradeType.sell) {
         checkBalance(crypto, element);
         amount = _subtraction(crypto.amount, element.amount);
-        totalInvested = _subtraction(crypto.totalInvested, element.amountDollars);
+        totalInvested =
+            _subtraction(crypto.totalInvested, element.amountDollars);
         totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
-        totalProfit += element.amount * (_subtraction(element.price, crypto.averagePrice));
+        totalProfit +=
+            element.amount * (_subtraction(element.price, crypto.averagePrice));
 
         if (amount == 0) {
           soldPositionAt = element.date;
@@ -133,7 +135,8 @@ class CryptosService {
       else {
         checkBalance(crypto, element);
         amount = _subtraction(crypto.amount, element.fee);
-        totalInvested = _subtraction(crypto.totalInvested, element.amountDollars);
+        totalInvested =
+            _subtraction(crypto.totalInvested, element.amountDollars);
         totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
 
         if (amount == 0) {
@@ -215,7 +218,7 @@ class CryptosService {
 
   /// Check [crypto] balance based on [trade]
   void checkBalance(CryptoModel crypto, TradeModel trade) {
-    //TODO: Validar mensagem
+    //TODO: Validate Message
     if (!crypto.hasBalace(
       trade.operationType,
       trade.amount,
@@ -233,7 +236,6 @@ class CryptosService {
     return result;
   }
 
-  
   /// Subtract two numbers avoiding problems with precision
   double _subtraction(double value1, double value2) {
     final difference = (value1 * _precision).roundToDouble() -

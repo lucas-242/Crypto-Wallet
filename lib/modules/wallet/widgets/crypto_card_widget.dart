@@ -40,7 +40,7 @@ class _CryptoCardState extends State<CryptoCard> {
     final theme = Theme.of(context);
 
     return DefaultTextStyle(
-      style: textTheme.headline4!,
+      style: textTheme.headlineMedium!,
       child: InkWell(
         onTap: () => widget
             .onTap(widget.openedIndex == widget.index ? null : widget.index),
@@ -92,7 +92,7 @@ class _CryptoCardState extends State<CryptoCard> {
                               ' - ${toBeginningOfSentenceCase(widget.crypto.name)}')
                     ],
                   ),
-                  style: textTheme.headline5,
+                  style: textTheme.headlineSmall,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -61,7 +61,7 @@ class WatchList extends StatelessWidget {
                       children: [
                         Text(
                           toBeginningOfSentenceCase(cryptos[index].name)!,
-                          style: textTheme.subtitle2,
+                          style: textTheme.titleSmall,
                         ),
                         Text(cryptos[index].symbol),
                       ],

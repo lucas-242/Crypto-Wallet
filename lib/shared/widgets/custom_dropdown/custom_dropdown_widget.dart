@@ -49,12 +49,12 @@ class CustomDropdown extends StatelessWidget {
       validator: validator,
       showSearchBox: showSeach,
       searchFieldProps: TextFieldProps(
-        style: textTheme.caption,
+        style: textTheme.bodySmall,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: appLocalizations.search,
           hintText: searchHint,
-          hintStyle: textTheme.caption,
+          hintStyle: textTheme.bodySmall,
           contentPadding: EdgeInsets.zero,
           border: OutlineInputBorder(),
           prefixIcon: Padding(
@@ -87,8 +87,8 @@ class CustomDropdown extends StatelessWidget {
       ListTile(
         title: Text(item.text,
             style: activeTheme == AdaptiveThemeMode.dark
-                ? textTheme.caption
-                : textTheme.bodyText2),
+                ? textTheme.bodySmall
+                : textTheme.bodyMedium),
       );
 
   Widget _dropdownBuilder(
@@ -98,7 +98,7 @@ class CustomDropdown extends StatelessWidget {
         child: Container(
           child: Text(
             item == null || item.text == '' ? hint : item.text,
-            style: textTheme.caption,
+            style: textTheme.bodySmall,
           ),
         ),
       );
@@ -111,7 +111,7 @@ class CustomDropdown extends StatelessWidget {
         child: Container(
           child: Text(
             appLocalizations.noResults,
-            style: textTheme.bodyText2!.copyWith(fontSize: 18),
+            style: textTheme.bodyMedium!.copyWith(fontSize: 18),
           ),
         ),
       );

@@ -48,14 +48,14 @@ class CustomTextFormField extends StatelessWidget {
             readOnly: readOnly,
             onChanged: onChanged,
             onTap: onTap,
-            style: textTheme.caption,
+            style: textTheme.bodySmall,
             inputFormatters: inputFormatters,
             decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelText: labelText,
               // labelStyle: textTheme.caption,
               hintText: hintText,
-              hintStyle: textTheme.caption,
+              hintStyle: textTheme.bodySmall,
               contentPadding: EdgeInsets.zero,
               border: OutlineInputBorder(),
               prefixIcon: Padding(
