@@ -1,8 +1,10 @@
+import 'package:crypto_wallet/app_store.dart';
 import 'package:crypto_wallet/core/components/custom_bottom_navigation/custom_bottom_navigation.dart';
 import 'package:crypto_wallet/core/components/shimmer/shimmer.dart';
-import 'package:crypto_wallet/themes/themes.dart';
+import 'package:crypto_wallet/core/routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+final appStore = AppStore();
 
 class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.child});
@@ -19,8 +21,8 @@ class AppShell extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         bottomNavigationBar: Shimmer(
           child: CustomBottomNavigation(
-            currentScreen: state.currentPage.value,
-            onChangePage: _onChangePage,
+            currentScreen: appStore.currentPageValue,
+            onChangePage: (page) => _onChangePage(context, page),
           ),
         ),
       ),
@@ -28,8 +30,7 @@ class AppShell extends StatelessWidget {
   }
 
   void _onChangePage(BuildContext context, int index) {
-    final cubit = context.read<InitialCubit>();
-    cubit.onChangePage(BottomNavigationPage.fromIndex(index));
-    context.navigateTo(BottomNavigationPage.getRoute(cubit.state.currentPage));
+    appStore.changePage(index);
+    context.navigateTo(BottomNavigationPage.getRoute(appStore.currentPage));
   }
 }

@@ -31,8 +31,8 @@ class CustomBottomNavigation extends StatelessWidget {
             onTap: onChangePage,
             currentIndex: currentScreen,
             type: BottomNavigationBarType.fixed,
-            selectedLabelStyle: context.textRobotoSubtitleTiny,
-            unselectedLabelStyle: context.textRobotoSubtitleTiny,
+            selectedLabelStyle: context.textSubtitleMd,
+            unselectedLabelStyle: context.textSubtitleMd,
             selectedItemColor: AppColors.primary,
             unselectedItemColor: AppColors.text,
             items: [
@@ -62,12 +62,12 @@ class CustomBottomNavigation extends StatelessWidget {
       BottomNavigationBarItem(
         label: text,
         icon: Padding(
-          padding: const EdgeInsets.only(bottom: AppInsets.xxxs),
-          child: ImusicaIcon(icon),
+          padding: const EdgeInsets.only(bottom: AppInsets.xxxSm),
+          child: Icon(icon),
         ),
         activeIcon: Padding(
-          padding: const EdgeInsets.only(bottom: AppInsets.xxxs),
-          child: ImusicaIcon(icon),
+          padding: const EdgeInsets.only(bottom: AppInsets.xxxSm),
+          child: Icon(icon),
         ),
       );
 }

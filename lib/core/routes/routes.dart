@@ -1,3 +1,5 @@
+export 'routes_extensions.dart';
+
 ///Represents the entire routes to navigate in the app
 class Routes {
   static const app = '/';

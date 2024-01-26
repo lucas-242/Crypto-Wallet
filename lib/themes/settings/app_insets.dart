@@ -1,9 +1,9 @@
 abstract class AppInsets {
   ///2px
-  static const xTiny = 2.0;
+  static const tiny = 2.0;
 
   ///4px
-  static const tiny = 4.0;
+  static const xxxSm = 4.0;
 
   ///8px
   static const xxSm = 8.0;
@@ -28,8 +28,4 @@ abstract class AppInsets {
 
   ///80px
   static const huge = 80.0;
-
-  static const mainHonrizontal = 24.0;
-  static const mainHonrizontalLg = 84.0;
-  static const mainHonrizontalXLg = 124.0;
 }

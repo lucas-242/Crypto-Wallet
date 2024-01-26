@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 abstract class AppColors {
   static const primary = Color(0xFFFFAF2F);
-  static const error = Color(0xFFCC0000);
-  static const success = Color(0xFF00CC14);
+  static const error = red;
+  static const success = green;
 
   static const text = white;
   static const textLight = grey;
@@ -17,6 +17,8 @@ abstract class AppColors {
 
   static const grey = Color(0xFF424A57);
   static const blue = Color(0xFF5384A2);
+  static const red = Color(0xFFCC0000);
+  static const green = Color(0xFF00CC14);
 
   static const shimmerGradient = LinearGradient(
     colors: [

@@ -5,10 +5,10 @@ abstract class AppSpacings {
   // Vertical space
 
   ///2px
-  static const verticalXTiny = SizedBox(height: AppInsets.xTiny);
+  static const verticalTiny = SizedBox(height: AppInsets.tiny);
 
   ///4px
-  static const verticalTiny = SizedBox(height: AppInsets.tiny);
+  static const verticalXXXSm = SizedBox(height: AppInsets.xxxSm);
 
   ///8px
   static const verticalXXSm = SizedBox(height: AppInsets.xxSm);
@@ -37,10 +37,10 @@ abstract class AppSpacings {
   // Horizontal space
 
   ///2px
-  static const horizontalXTiny = SizedBox(width: AppInsets.xTiny);
+  static const horizontalTiny = SizedBox(width: AppInsets.tiny);
 
   ///4px
-  static const horizontalTiny = SizedBox(width: AppInsets.tiny);
+  static const horizontalXXXSm = SizedBox(width: AppInsets.xxxSm);
 
   ///8px
   static const horizontalXXSm = SizedBox(width: AppInsets.xxSm);
