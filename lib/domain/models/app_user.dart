@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'app_user.g.dart';
+
+@JsonSerializable(createToJson: false)
 class AppUser extends Equatable {
   const AppUser({
     this.name = '',
@@ -7,6 +11,9 @@ class AppUser extends Equatable {
     this.photoUrl,
     this.uid = '',
   });
+
+  factory AppUser.fromJson(Map<String, dynamic> json) =>
+      _$AppUserFromJson(json);
 
   final String name;
   final String email;

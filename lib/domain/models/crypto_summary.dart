@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'crypto_summary.g.dart';
+
+@JsonSerializable()
 class CryptoSummary extends Equatable {
   const CryptoSummary({
     required this.cryptoId,
@@ -11,6 +15,11 @@ class CryptoSummary extends Equatable {
     this.amount = 0,
     this.percent = 0,
   });
+
+  factory CryptoSummary.fromJson(Map<String, dynamic> json) =>
+      _$CryptoSummaryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CryptoSummaryToJson(this);
 
   final String cryptoId;
   final String crypto;

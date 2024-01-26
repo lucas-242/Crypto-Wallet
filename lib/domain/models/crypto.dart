@@ -1,6 +1,10 @@
 import 'package:crypto_wallet/domain/models/crypto_history.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'crypto.g.dart';
+
+@JsonSerializable()
 class Crypto {
   Crypto({
     DateTime? updatedAt,
@@ -21,6 +25,10 @@ class Crypto {
     DateTime? lastTradeAt,
   })  : updatedAt = updatedAt ?? DateTime.now(),
         lastTradeAt = lastTradeAt ?? DateTime.now();
+
+  factory Crypto.fromJson(Map<String, dynamic> json) => _$CryptoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CryptoToJson(this);
 
   final String? id;
   final String name;
@@ -65,5 +73,43 @@ class Crypto {
       if (amount < amountToCheck) return false;
     }
     return true;
+  }
+
+  Crypto copyWith({
+    String? id,
+    String? name,
+    String? image,
+    String? symbol,
+    String? cryptoId,
+    double? amount,
+    double? averagePrice,
+    double? totalInvested,
+    double? price,
+    DateTime? updatedAt,
+    DateTime? soldPositionAt,
+    DateTime? lastTradeAt,
+    double? totalFee,
+    double? totalProfit,
+    String? user,
+    CryptoHistory? history,
+  }) {
+    return Crypto(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      image: image ?? this.image,
+      symbol: symbol ?? this.symbol,
+      cryptoId: cryptoId ?? this.cryptoId,
+      amount: amount ?? this.amount,
+      averagePrice: averagePrice ?? this.averagePrice,
+      totalInvested: totalInvested ?? this.totalInvested,
+      price: price ?? this.price,
+      updatedAt: updatedAt ?? this.updatedAt,
+      soldPositionAt: soldPositionAt ?? this.soldPositionAt,
+      lastTradeAt: lastTradeAt ?? this.lastTradeAt,
+      totalFee: totalFee ?? this.totalFee,
+      totalProfit: totalProfit ?? this.totalProfit,
+      user: user ?? this.user,
+      history: history ?? this.history,
+    );
   }
 }

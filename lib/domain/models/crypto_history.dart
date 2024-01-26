@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'crypto_history.g.dart';
+
+@JsonSerializable()
 class CryptoHistory extends Equatable {
   const CryptoHistory({
     this.priceChangePercentage1yInCurrency,
@@ -9,6 +13,11 @@ class CryptoHistory extends Equatable {
     this.high24h,
     this.low24h,
   });
+
+  factory CryptoHistory.fromJson(Map<String, dynamic> json) =>
+      _$CryptoHistoryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CryptoHistoryToJson(this);
 
   final double? priceChangePercentage1yInCurrency;
   final double? priceChangePercentage24hInCurrency;

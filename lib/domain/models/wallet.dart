@@ -1,7 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'crypto_summary.dart';
 
+part 'wallet.g.dart';
+
+@JsonSerializable()
 class Wallet extends Equatable {
   const Wallet({
     this.totalNow = 0,
@@ -10,6 +14,11 @@ class Wallet extends Equatable {
     this.percentVariation = 0,
     this.cryptosSummary = const [],
   });
+
+  factory Wallet.fromJson(Map<String, dynamic> json) => _$WalletFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WalletToJson(this);
+
   final double totalNow;
   final double totalInvested;
   final double variation;

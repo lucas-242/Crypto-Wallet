@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'trade.g.dart';
+
+@JsonSerializable()
 class Trade extends Equatable {
   Trade({
     this.id,
@@ -14,6 +18,10 @@ class Trade extends Equatable {
     DateTime? date,
     this.user,
   }) : date = date ?? DateTime.now();
+
+  factory Trade.fromJson(Map<String, dynamic> json) => _$TradeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TradeToJson(this);
 
   final String? id;
   final String operationType;
@@ -51,4 +59,32 @@ class Trade extends Equatable {
         profit,
         user,
       ];
+
+  Trade copyWith({
+    String? id,
+    String? operationType,
+    String? cryptoSymbol,
+    String? cryptoId,
+    double? amount,
+    double? amountDollars,
+    double? price,
+    double? fee,
+    DateTime? date,
+    double? profit,
+    String? user,
+  }) {
+    return Trade(
+      id: id ?? this.id,
+      operationType: operationType ?? this.operationType,
+      cryptoSymbol: cryptoSymbol ?? this.cryptoSymbol,
+      cryptoId: cryptoId ?? this.cryptoId,
+      amount: amount ?? this.amount,
+      amountDollars: amountDollars ?? this.amountDollars,
+      price: price ?? this.price,
+      fee: fee ?? this.fee,
+      date: date ?? this.date,
+      profit: profit ?? this.profit,
+      user: user ?? this.user,
+    );
+  }
 }
