@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'crypto.dart';
+part of 'wallet_crypto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Crypto _$CryptoFromJson(Map<String, dynamic> json) => Crypto(
+WalletCrypto _$WalletCryptoFromJson(Map<String, dynamic> json) => WalletCrypto(
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
@@ -20,9 +20,6 @@ Crypto _$CryptoFromJson(Map<String, dynamic> json) => Crypto(
       totalInvested: (json['totalInvested'] as num).toDouble(),
       user: json['user'] as String? ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0,
-      history: json['history'] == null
-          ? null
-          : CryptoHistory.fromJson(json['history'] as Map<String, dynamic>),
       totalFee: (json['totalFee'] as num?)?.toDouble() ?? 0,
       totalProfit: (json['totalProfit'] as num?)?.toDouble() ?? 0,
       soldPositionAt: json['soldPositionAt'] == null
@@ -33,7 +30,8 @@ Crypto _$CryptoFromJson(Map<String, dynamic> json) => Crypto(
           : DateTime.parse(json['lastTradeAt'] as String),
     );
 
-Map<String, dynamic> _$CryptoToJson(Crypto instance) => <String, dynamic>{
+Map<String, dynamic> _$WalletCryptoToJson(WalletCrypto instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'image': instance.image,
@@ -49,5 +47,4 @@ Map<String, dynamic> _$CryptoToJson(Crypto instance) => <String, dynamic>{
       'totalFee': instance.totalFee,
       'totalProfit': instance.totalProfit,
       'user': instance.user,
-      'history': instance.history,
     };

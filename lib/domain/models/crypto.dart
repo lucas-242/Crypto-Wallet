@@ -1,115 +1,63 @@
-import 'package:crypto_wallet/domain/models/crypto_history.dart';
-import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'dart:ui';
 
-part 'crypto.g.dart';
+import 'package:equatable/equatable.dart';
 
-@JsonSerializable()
-class Crypto {
-  Crypto({
-    DateTime? updatedAt,
-    this.id,
-    this.name = '',
-    this.image,
+//Represents the Crypto Entity for the App
+class Crypto extends Equatable {
+  const Crypto({
+    required this.id,
+    required this.name,
     required this.symbol,
-    required this.cryptoId,
-    required this.amount,
-    required this.averagePrice,
-    required this.totalInvested,
-    this.user = '',
-    this.price = 0,
-    this.history,
-    this.totalFee = 0,
-    this.totalProfit = 0,
-    this.soldPositionAt,
-    DateTime? lastTradeAt,
-  })  : updatedAt = updatedAt ?? DateTime.now(),
-        lastTradeAt = lastTradeAt ?? DateTime.now();
+    required this.color,
+    this.image,
+    this.currentPrice = 0,
+    this.priceChange1y,
+    this.priceChange24h,
+    this.priceChange30d,
+    this.priceChange7d,
+    this.high24h,
+    this.low24h,
+  });
 
-  factory Crypto.fromJson(Map<String, dynamic> json) => _$CryptoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CryptoToJson(this);
-
-  final String? id;
+  final String id;
   final String name;
-  final String? image;
   final String symbol;
-  final String cryptoId;
-  final double amount;
-  final double averagePrice;
-  final double totalInvested;
-  final double price;
-  final DateTime updatedAt;
 
-  /// Date when the user sold all position in the crypto
-  final DateTime? soldPositionAt;
+  final Color color;
+  final String? image;
+  final double currentPrice;
+  final double? priceChange24h;
+  final double? priceChange7d;
+  final double? priceChange30d;
+  final double? priceChange1y;
+  final double? high24h;
+  final double? low24h;
 
-  /// The newest Trade Date
-  final DateTime lastTradeAt;
+  double? get priceChangePercentage24h =>
+      priceChange24h != null ? priceChange24h! / currentPrice * 100 : null;
 
-  /// Total fee in dollars in buy trades. Used to calculate average price easily.
-  final double totalFee;
+  double? get priceChangePercentage7d =>
+      priceChange7d != null ? priceChange7d! / currentPrice * 100 : null;
 
-  /// Total profit in dollars in sell trades. Used to show to the user easily.
-  final double totalProfit;
+  double? get priceChangePercentage30d =>
+      priceChange30d != null ? priceChange30d! / currentPrice * 100 : null;
 
-  final String user;
-  final CryptoHistory? history;
+  double? get priceChangePercentage1y =>
+      priceChange1y != null ? priceChange1y! / currentPrice * 100 : null;
 
-  /// Total amount at current quote of selected currency
-  double get totalNow => price * amount;
-
-  double get gainLoss => totalNow - totalInvested - totalFee;
-
-  double get gainLossPercent => (gainLoss * 100 / totalNow) / 100;
-
-  ///Verify if has enough balance to selling or transfer
-  bool hasBalace(
-    String operationType,
-    double amountToCheck,
-  ) {
-    if (operationType == TradeType.sell ||
-        operationType == TradeType.transfer) {
-      if (amount < amountToCheck) return false;
-    }
-    return true;
-  }
-
-  Crypto copyWith({
-    String? id,
-    String? name,
-    String? image,
-    String? symbol,
-    String? cryptoId,
-    double? amount,
-    double? averagePrice,
-    double? totalInvested,
-    double? price,
-    DateTime? updatedAt,
-    DateTime? soldPositionAt,
-    DateTime? lastTradeAt,
-    double? totalFee,
-    double? totalProfit,
-    String? user,
-    CryptoHistory? history,
-  }) {
-    return Crypto(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      image: image ?? this.image,
-      symbol: symbol ?? this.symbol,
-      cryptoId: cryptoId ?? this.cryptoId,
-      amount: amount ?? this.amount,
-      averagePrice: averagePrice ?? this.averagePrice,
-      totalInvested: totalInvested ?? this.totalInvested,
-      price: price ?? this.price,
-      updatedAt: updatedAt ?? this.updatedAt,
-      soldPositionAt: soldPositionAt ?? this.soldPositionAt,
-      lastTradeAt: lastTradeAt ?? this.lastTradeAt,
-      totalFee: totalFee ?? this.totalFee,
-      totalProfit: totalProfit ?? this.totalProfit,
-      user: user ?? this.user,
-      history: history ?? this.history,
-    );
-  }
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        symbol,
+        color,
+        image,
+        currentPrice,
+        priceChange1y,
+        priceChange24h,
+        priceChange30d,
+        priceChange7d,
+        high24h,
+        low24h,
+      ];
 }

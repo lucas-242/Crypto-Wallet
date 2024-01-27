@@ -1,12 +1,12 @@
 import 'package:crypto_wallet/core/l10n/l10n.dart';
-import 'package:crypto_wallet/domain/models/crypto.dart';
+import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/presenter/home/components/watch_list.dart';
 import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
 
 class DashboardWatchList extends StatelessWidget {
   const DashboardWatchList({Key? key, required this.cryptos}) : super(key: key);
-  final List<Crypto> cryptos;
+  final List<WalletCrypto> cryptos;
 
   @override
   Widget build(BuildContext context) {

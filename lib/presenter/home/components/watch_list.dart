@@ -1,4 +1,4 @@
-import 'package:crypto_wallet/domain/models/crypto.dart';
+import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +17,7 @@ class WatchList extends StatelessWidget {
     this.time = WatchListTime.percentage24h,
   }) : super(key: key);
 
-  final List<Crypto> cryptos;
+  final List<WalletCrypto> cryptos;
   final WatchListTime time;
 
   @override

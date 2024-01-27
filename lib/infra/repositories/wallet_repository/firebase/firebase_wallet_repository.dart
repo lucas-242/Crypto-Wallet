@@ -6,9 +6,9 @@ import 'package:crypto_wallet/core/errors/errors.dart';
 import 'package:crypto_wallet/core/utils/log_utils.dart';
 import 'package:crypto_wallet/domain/data/local_storage.dart';
 import 'package:crypto_wallet/domain/models/app_user.dart';
-import 'package:crypto_wallet/domain/models/crypto.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_operartion.dart';
 import 'package:crypto_wallet/domain/models/trade.dart';
+import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/domain/repositories/wallet_repository.dart';
 
 final class FirebaseWalletRepository implements WalletRepository {
@@ -25,9 +25,9 @@ final class FirebaseWalletRepository implements WalletRepository {
       AppUser.fromJson(jsonDecode(_localStorage.get<String>('user')!)).uid;
 
   @override
-  Future<List<Crypto>> getCryptos() async {
+  Future<List<WalletCrypto>> getCryptos() async {
     try {
-      List<Crypto> result = [];
+      List<WalletCrypto> result = [];
 
       await _firestore
           .collection('cryptos')
@@ -36,7 +36,7 @@ final class FirebaseWalletRepository implements WalletRepository {
           .get()
           .then((QuerySnapshot querySnapshot) {
         result = querySnapshot.docs
-            .map((e) => Crypto.fromJson(e.data() as dynamic))
+            .map((e) => WalletCrypto.fromJson(e.data() as dynamic))
             .toList();
         querySnapshot.docs.asMap().forEach((index, data) =>
             result[index] = result[index].copyWith(id: data.id));
@@ -53,9 +53,9 @@ final class FirebaseWalletRepository implements WalletRepository {
   }
 
   @override
-  Future<Crypto?> getCryptoById(String cryptoId) async {
+  Future<WalletCrypto?> getCryptoById(String cryptoId) async {
     try {
-      Crypto? result;
+      WalletCrypto? result;
 
       await _firestore
           .collection('cryptos')
@@ -65,7 +65,7 @@ final class FirebaseWalletRepository implements WalletRepository {
           .then((QuerySnapshot querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
           final data = querySnapshot.docs.first;
-          result = Crypto.fromJson(data.data() as dynamic);
+          result = WalletCrypto.fromJson(data.data() as dynamic);
           result = result!.copyWith(id: data.id);
         }
       });
@@ -114,7 +114,7 @@ final class FirebaseWalletRepository implements WalletRepository {
 
   @override
   Future<void> addTrade(
-      TradeCreateOperation operation, Trade trade, Crypto crypto) async {
+      TradeCreateOperation operation, Trade trade, WalletCrypto crypto) async {
     try {
       return await _firestore.runTransaction((transaction) async {
         if (operation == TradeCreateOperation.create) {
@@ -142,7 +142,7 @@ final class FirebaseWalletRepository implements WalletRepository {
 
   @override
   Future<void> deleteTrade(
-      TradeDeleteOperation operation, Trade trade, Crypto crypto) async {
+      TradeDeleteOperation operation, Trade trade, WalletCrypto crypto) async {
     try {
       final DocumentReference tradesReference =
           _firestore.collection('trades').doc(trade.id);
