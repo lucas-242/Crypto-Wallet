@@ -33,6 +33,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "dashboard": MessageLookupByLibrary.simpleMessage("Dashboard"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "errorCredentialIsInvalid":
+            MessageLookupByLibrary.simpleMessage("The credential is invalid"),
+        "errorEmailIsInvalid": MessageLookupByLibrary.simpleMessage(
+            "Email is invalid or badly formatted"),
+        "errorEmailWasNotFound": MessageLookupByLibrary.simpleMessage(
+            "Email was not found, please create an account"),
         "errorFieldLessZero": MessageLookupByLibrary.simpleMessage(
             "This field must be equals or greater than \$0,00"),
         "errorFieldLessZeroOrZero": MessageLookupByLibrary.simpleMessage(
@@ -43,12 +49,28 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("This field can\'t be null"),
         "errorFieldWrongDate":
             MessageLookupByLibrary.simpleMessage("Insert a valid date"),
+        "errorIncorrectEmailOrPassword":
+            MessageLookupByLibrary.simpleMessage("Incorrect email or password"),
         "errorInsufficientBalance": MessageLookupByLibrary.simpleMessage(
             "Insufficient balance to carry out the transaction"),
-        "errorLogin":
-            MessageLookupByLibrary.simpleMessage("Error trying to login"),
-        "errorLogout":
-            MessageLookupByLibrary.simpleMessage("Error trying to logout"),
+        "errorLinkHasBeenUsed": MessageLookupByLibrary.simpleMessage(
+            "The link has already been used"),
+        "errorLinkHasExpired":
+            MessageLookupByLibrary.simpleMessage("The link has expired"),
+        "errorMethodNotAllowed": MessageLookupByLibrary.simpleMessage(
+            "Method not allowed. Please try another account or contact support for help"),
+        "errorPasswordIsWeak": MessageLookupByLibrary.simpleMessage(
+            "Password is too weak. Please, try a different one"),
+        "errorThereIsAnotherAccount": MessageLookupByLibrary.simpleMessage(
+            "There is already an account with this credential"),
+        "errorUnknowError": MessageLookupByLibrary.simpleMessage(
+            "An unknown exception occurred"),
+        "errorUserHasBeenDisabled": MessageLookupByLibrary.simpleMessage(
+            "This user has been disabled. Please contact support for help"),
+        "errorVerificationCodeIsInvalid": MessageLookupByLibrary.simpleMessage(
+            "The verification code entered is invalid"),
+        "errorVerificationIdIsInvalid": MessageLookupByLibrary.simpleMessage(
+            "The verification ID entered is invalid"),
         "fee": MessageLookupByLibrary.simpleMessage("Fee"),
         "filter": MessageLookupByLibrary.simpleMessage("Filter"),
         "gainLoss": MessageLookupByLibrary.simpleMessage("Gain / Loss"),

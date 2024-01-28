@@ -25,7 +25,8 @@ class WatchList extends StatelessWidget {
     return ListView.builder(
       itemCount: cryptos.length,
       itemBuilder: (context, index) {
-        final priceChangePercentage = getPriceChangePercentage(time, index);
+        const priceChangePercentage = 10;
+        // final priceChangePercentage = getPriceChangePercentage(time, index);
 
         return Container(
           padding: const EdgeInsets.only(
@@ -83,16 +84,16 @@ class WatchList extends StatelessWidget {
     );
   }
 
-  double getPriceChangePercentage(WatchListTime time, int index) {
-    switch (time) {
-      case WatchListTime.percentage24h:
-        return cryptos[index].history!.priceChangePercentage24hInCurrency!;
-      case WatchListTime.percentage7d:
-        return cryptos[index].history!.priceChangePercentage7dInCurrency!;
-      case WatchListTime.percentage30d:
-        return cryptos[index].history!.priceChangePercentage30dInCurrency!;
-      default:
-        return cryptos[index].history!.priceChangePercentage1yInCurrency!;
-    }
-  }
+  // double getPriceChangePercentage(WatchListTime time, int index) {
+  //   switch (time) {
+  //     case WatchListTime.percentage24h:
+  //       return cryptos[index].priceChangePercentage24hInCurrency!;
+  //     case WatchListTime.percentage7d:
+  //       return cryptos[index].history!.priceChangePercentage7dInCurrency!;
+  //     case WatchListTime.percentage30d:
+  //       return cryptos[index].history!.priceChangePercentage30dInCurrency!;
+  //     default:
+  //       return cryptos[index].history!.priceChangePercentage1yInCurrency!;
+  //   }
+  // }
 }

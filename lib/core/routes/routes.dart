@@ -3,7 +3,7 @@ export 'routes_extensions.dart';
 ///Represents the entire routes to navigate in the app
 class Routes {
   static const app = '/';
-  static const signIn = '/sign-in';
+  static const login = '/login';
   static const home = '/home';
   static const wallet = '/wallet';
   static const trades = '/trades';
@@ -15,7 +15,7 @@ class Routes {
 ///It should be used only in the routes_config.dart to easy the configuration
 class RelativePaths {
   static const app = '/';
-  static const signIn = '/sign-in';
+  static const login = '/login';
   static const home = '/home';
   static const wallet = '/wallet';
   static const trades = '/trades';

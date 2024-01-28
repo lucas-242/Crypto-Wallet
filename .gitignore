@@ -42,5 +42,12 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-/lib/core/environment/ad_keys.dart
+# Sensitive files
+/android/app/google-services.json
+/ios/firebase_app_id_file.json
+/ios/Runner/GoogleService-Info.plist
+/macos/firebase_app_id_file.json
+/macos/Runner/GoogleService-Info.plist
+/lib/core/environment/ad_keys.Dart
+/lib/firebase_options.dart
 ad.properties

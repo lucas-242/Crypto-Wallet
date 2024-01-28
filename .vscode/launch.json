@@ -1,0 +1,25 @@
+{
+    "version": "1.0.0",
+    "configurations": [
+      {
+        "name": "Dev",
+        "type": "dart",
+        "request": "launch",
+        "args": [
+            "--dart-define",
+            "APP_ENV=dev"
+        ]
+      },
+      {
+        "name": "Prod",
+        "type": "dart",
+        "request": "launch",
+        "args": [
+            "--release",
+            " ",
+            "--dart-define",
+            "APP_ENV=prod"
+        ]
+      }
+    ]
+  }

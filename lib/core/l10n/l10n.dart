@@ -220,21 +220,131 @@ class AppLocalizations {
     );
   }
 
-  /// `Erro ao tentar logar`
-  String get errorLogin {
+  /// `Ocorreu um erro desconhecido`
+  String get errorUnknowError {
     return Intl.message(
-      'Erro ao tentar logar',
-      name: 'errorLogin',
+      'Ocorreu um erro desconhecido',
+      name: 'errorUnknowError',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error trying to logout`
-  String get errorLogout {
+  /// `O link expirou`
+  String get errorLinkHasExpired {
     return Intl.message(
-      'Error trying to logout',
-      name: 'errorLogout',
+      'O link expirou',
+      name: 'errorLinkHasExpired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `O link já foi usado`
+  String get errorLinkHasBeenUsed {
+    return Intl.message(
+      'O link já foi usado',
+      name: 'errorLinkHasBeenUsed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A senha é muito fraca, por favor, tente outra senha`
+  String get errorPasswordIsWeak {
+    return Intl.message(
+      'A senha é muito fraca, por favor, tente outra senha',
+      name: 'errorPasswordIsWeak',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `O email é inválido ou mal formatado`
+  String get errorEmailIsInvalid {
+    return Intl.message(
+      'O email é inválido ou mal formatado',
+      name: 'errorEmailIsInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Este usuário foi desabilitado. Entre em contato com o suporte para obter ajuda`
+  String get errorUserHasBeenDisabled {
+    return Intl.message(
+      'Este usuário foi desabilitado. Entre em contato com o suporte para obter ajuda',
+      name: 'errorUserHasBeenDisabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `O email não foi encontrado, por favor, crie uma conta`
+  String get errorEmailWasNotFound {
+    return Intl.message(
+      'O email não foi encontrado, por favor, crie uma conta',
+      name: 'errorEmailWasNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Já existe uma conta com estas credenciais`
+  String get errorThereIsAnotherAccount {
+    return Intl.message(
+      'Já existe uma conta com estas credenciais',
+      name: 'errorThereIsAnotherAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A credencial é inválida`
+  String get errorCredentialIsInvalid {
+    return Intl.message(
+      'A credencial é inválida',
+      name: 'errorCredentialIsInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `O código de verificação inserido é inválido`
+  String get errorVerificationCodeIsInvalid {
+    return Intl.message(
+      'O código de verificação inserido é inválido',
+      name: 'errorVerificationCodeIsInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `O Id de verificação inserido é inválido`
+  String get errorVerificationIdIsInvalid {
+    return Intl.message(
+      'O Id de verificação inserido é inválido',
+      name: 'errorVerificationIdIsInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Método não permitido. Tente outra conta ou entre em contato com o suporte para obter ajuda.`
+  String get errorMethodNotAllowed {
+    return Intl.message(
+      'Método não permitido. Tente outra conta ou entre em contato com o suporte para obter ajuda.',
+      name: 'errorMethodNotAllowed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Senha ou email incorretos`
+  String get errorIncorrectEmailOrPassword {
+    return Intl.message(
+      'Senha ou email incorretos',
+      name: 'errorIncorrectEmailOrPassword',
       desc: '',
       args: [],
     );

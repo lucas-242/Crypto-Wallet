@@ -9,6 +9,14 @@ part of 'app_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AppStore on _AppStore, Store {
+  Computed<BottomNavigationPage>? _$currentPageComputed;
+
+  @override
+  BottomNavigationPage get currentPage => (_$currentPageComputed ??=
+          Computed<BottomNavigationPage>(() => super.currentPage,
+              name: '_AppStore.currentPage'))
+      .value;
+
   late final _$currentPageValueAtom =
       Atom(name: '_AppStore.currentPageValue', context: context);
 
@@ -25,20 +33,12 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  late final _$currentPageAtom =
-      Atom(name: '_AppStore.currentPage', context: context);
+  late final _$signInWithGoogleAsyncAction =
+      AsyncAction('_AppStore.signInWithGoogle', context: context);
 
   @override
-  BottomNavigationPage get currentPage {
-    _$currentPageAtom.reportRead();
-    return super.currentPage;
-  }
-
-  @override
-  set currentPage(BottomNavigationPage value) {
-    _$currentPageAtom.reportWrite(value, super.currentPage, () {
-      super.currentPage = value;
-    });
+  Future<void> signInWithGoogle() {
+    return _$signInWithGoogleAsyncAction.run(() => super.signInWithGoogle());
   }
 
   late final _$_AppStoreActionController =
@@ -50,6 +50,17 @@ mixin _$AppStore on _AppStore, Store {
         _$_AppStoreActionController.startAction(name: '_AppStore.changePage');
     try {
       return super.changePage(newPage);
+    } finally {
+      _$_AppStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void listenUser() {
+    final _$actionInfo =
+        _$_AppStoreActionController.startAction(name: '_AppStore.listenUser');
+    try {
+      return super.listenUser();
     } finally {
       _$_AppStoreActionController.endAction(_$actionInfo);
     }

@@ -34,6 +34,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "dashboard": MessageLookupByLibrary.simpleMessage("Dashboard"),
         "date": MessageLookupByLibrary.simpleMessage("Data"),
         "delete": MessageLookupByLibrary.simpleMessage("Deletar"),
+        "errorCredentialIsInvalid":
+            MessageLookupByLibrary.simpleMessage("A credencial é inválida"),
+        "errorEmailIsInvalid": MessageLookupByLibrary.simpleMessage(
+            "O email é inválido ou mal formatado"),
+        "errorEmailWasNotFound": MessageLookupByLibrary.simpleMessage(
+            "O email não foi encontrado, por favor, crie uma conta"),
         "errorFieldLessZero": MessageLookupByLibrary.simpleMessage(
             "Esse campo precisa ser igual ou maior que \$0,00"),
         "errorFieldLessZeroOrZero": MessageLookupByLibrary.simpleMessage(
@@ -44,12 +50,28 @@ class MessageLookup extends MessageLookupByLibrary {
             "Esse campo precisa ser preenchido"),
         "errorFieldWrongDate":
             MessageLookupByLibrary.simpleMessage("Insira uma data válida"),
+        "errorIncorrectEmailOrPassword":
+            MessageLookupByLibrary.simpleMessage("Senha ou email incorretos"),
         "errorInsufficientBalance": MessageLookupByLibrary.simpleMessage(
             "Saldo insuficiente para efetuar a operação"),
-        "errorLogin":
-            MessageLookupByLibrary.simpleMessage("Erro ao tentar logar"),
-        "errorLogout":
-            MessageLookupByLibrary.simpleMessage("Error trying to logout"),
+        "errorLinkHasBeenUsed":
+            MessageLookupByLibrary.simpleMessage("O link já foi usado"),
+        "errorLinkHasExpired":
+            MessageLookupByLibrary.simpleMessage("O link expirou"),
+        "errorMethodNotAllowed": MessageLookupByLibrary.simpleMessage(
+            "Método não permitido. Tente outra conta ou entre em contato com o suporte para obter ajuda."),
+        "errorPasswordIsWeak": MessageLookupByLibrary.simpleMessage(
+            "A senha é muito fraca, por favor, tente outra senha"),
+        "errorThereIsAnotherAccount": MessageLookupByLibrary.simpleMessage(
+            "Já existe uma conta com estas credenciais"),
+        "errorUnknowError": MessageLookupByLibrary.simpleMessage(
+            "Ocorreu um erro desconhecido"),
+        "errorUserHasBeenDisabled": MessageLookupByLibrary.simpleMessage(
+            "Este usuário foi desabilitado. Entre em contato com o suporte para obter ajuda"),
+        "errorVerificationCodeIsInvalid": MessageLookupByLibrary.simpleMessage(
+            "O código de verificação inserido é inválido"),
+        "errorVerificationIdIsInvalid": MessageLookupByLibrary.simpleMessage(
+            "O Id de verificação inserido é inválido"),
         "fee": MessageLookupByLibrary.simpleMessage("Taxa"),
         "filter": MessageLookupByLibrary.simpleMessage("Filtrar"),
         "gainLoss": MessageLookupByLibrary.simpleMessage("Ganho / Perda"),

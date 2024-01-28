@@ -1,14 +1,14 @@
 import 'package:crypto_wallet/core/components/image_fade/image_fade.dart';
 import 'package:crypto_wallet/core/l10n/l10n.dart';
-import 'package:crypto_wallet/domain/models/wallet.dart';
+import 'package:crypto_wallet/domain/models/crypto.dart';
 import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CoinsCarrousel extends StatelessWidget {
-  const CoinsCarrousel({super.key, required this.wallet});
+  const CoinsCarrousel({super.key, required this.cryptos});
 
-  final Wallet wallet;
+  final List<Crypto> cryptos;
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +25,17 @@ class CoinsCarrousel extends StatelessWidget {
           height: context.height * 0.23,
           child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: wallet.cryptosSummary.length,
+              itemCount: cryptos.length,
               itemBuilder: (context, index) {
-                final cryptoSummary = wallet.cryptosSummary[index];
+                final crypto = cryptos[index];
                 return Padding(
                   padding: EdgeInsets.only(
-                    right: wallet.cryptosSummary.length == index + 1
-                        ? 0
-                        : AppInsets.xxSm,
+                    right: cryptos.length == index + 1 ? 0 : AppInsets.xxSm,
                   ),
                   child: Row(
                     children: [
                       Card(
-                        color: Color(cryptoSummary.color),
+                        color: crypto.color,
                         elevation: 2,
                         child: Padding(
                           padding: const EdgeInsets.all(AppInsets.md),
@@ -45,18 +43,18 @@ class CoinsCarrousel extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ImageFade(image: cryptoSummary.image),
+                              ImageFade(image: crypto.image),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text.rich(
                                     TextSpan(
-                                      text: cryptoSummary.crypto,
+                                      text: crypto.name,
                                       style: context.textMd,
                                       children: [
                                         TextSpan(
                                           text:
-                                              ' - ${toBeginningOfSentenceCase(cryptoSummary.name)}',
+                                              ' - ${toBeginningOfSentenceCase(crypto.name)}',
                                           style: context.textSm,
                                         ),
                                       ],
@@ -65,18 +63,18 @@ class CoinsCarrousel extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   AppSpacings.verticalXXSm,
-                                  Text(
-                                    '${cryptoSummary.amount.toStringAsFixed(8)} ',
-                                    style: context.textMd,
-                                  ),
+                                  // Text(
+                                  //   '${crypto.amount.toStringAsFixed(8)} ',
+                                  //   style: context.textMd,
+                                  // ),
                                   AppSpacings.verticalXXSm,
-                                  Text(
-                                    NumberFormat.decimalPercentPattern(
-                                            decimalDigits: 1)
-                                        .format(cryptoSummary.percent / 100),
-                                    style: context.textSm
-                                        .copyWith(color: AppColors.white),
-                                  ),
+                                  // Text(
+                                  //   NumberFormat.decimalPercentPattern(
+                                  //           decimalDigits: 1)
+                                  //       .format(crypto.percent / 100),
+                                  //   style: context.textSm
+                                  //       .copyWith(color: AppColors.white),
+                                  // ),
                                 ],
                               )
                             ],
