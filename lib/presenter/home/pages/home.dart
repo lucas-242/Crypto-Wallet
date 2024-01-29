@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.status == BaseStateStatus.success) {
-            context.navigateTo(Routes.login);
+            context.globalNavigate(Routes.login);
           } else if (state.status == BaseStateStatus.error) {
             context.showSnackBar(state.callbackMessage);
           }

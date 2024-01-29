@@ -32,8 +32,6 @@ enum BottomNavigationPage {
         route = Routes.home;
     }
 
-    route += Routes.app;
-
     return route;
   }
 }

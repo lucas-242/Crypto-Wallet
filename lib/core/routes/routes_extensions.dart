@@ -1,16 +1,26 @@
 import 'package:crypto_wallet/core/components/custom_snack_bar/custom_snack_bar.dart';
+import 'package:crypto_wallet/core/routes/routes.dart';
 import 'package:crypto_wallet/core/utils/log_utils.dart';
 import 'package:flutter/material.dart';
 
 extension RoutesExtensions on BuildContext {
-  void navigateTo(String route) {
+//TODO: Create only 1 navigation method
+
+  /// Navigates using the Global Navigator
+  void globalNavigate(String route) {
     Log.navigation('Navigating to $route');
     Navigator.pushReplacementNamed(this, route);
   }
 
+  /// Navigates using the Shell Navigator
+  void navigateTo(String route) {
+    Log.navigation('Navigating to $route');
+    Routes.shellKey.currentState!.pushReplacementNamed(route);
+  }
+
   void pushTo(String route, {Object? params}) {
     Log.navigation('Navigating to pushed route $route with params: $params');
-    Navigator.pushNamed(this, route, arguments: params);
+    Routes.shellKey.currentState!.pushNamed(route, arguments: params);
   }
 
   void pop() {

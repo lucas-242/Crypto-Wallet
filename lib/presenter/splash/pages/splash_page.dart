@@ -28,37 +28,34 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ServiceLocator.get<AppCubit>(),
-      child: BlocListener<AppCubit, AppState>(
-        listener: (context, state) {
-          if (state.user != null) {
-            context.navigateTo(Routes.home);
-          } else {
-            context.navigateTo(Routes.login);
-          }
-        },
-        child: Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  'Crypto',
-                  style:
-                      context.textTitleXLg.copyWith(color: AppColors.primary),
-                  textAlign: TextAlign.center,
-                ),
+    return BlocListener<AppCubit, AppState>(
+      bloc: ServiceLocator.get<AppCubit>(),
+      listener: (context, state) {
+        if (state.user != null) {
+          context.globalNavigate(Routes.home);
+        } else {
+          context.globalNavigate(Routes.login);
+        }
+      },
+      child: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(
+                'Crypto',
+                style: context.textTitleXLg.copyWith(color: AppColors.primary),
+                textAlign: TextAlign.center,
               ),
-              Center(
-                child: Text(
-                  'Wallet',
-                  style: context.textTitleXLg,
-                  textAlign: TextAlign.center,
-                ),
+            ),
+            Center(
+              child: Text(
+                'Wallet',
+                style: context.textTitleXLg,
+                textAlign: TextAlign.center,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
