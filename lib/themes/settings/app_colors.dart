@@ -14,6 +14,7 @@ abstract class AppColors {
   static const overlay = Color(0x99222222);
   static const shadow = Color(0x25000000);
   static const transparent = Color(0x00000000);
+  static const buttonOverlay = Color(0x0F424A57);
 
   static const grey = Color(0xFF424A57);
   static const blue = Color(0xFF5384A2);

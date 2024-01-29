@@ -23,6 +23,9 @@ extension TypographyExtension on BuildContext {
   /// Size 16, Font 600
   TextStyle get textSubtitleMd => AppTextStyles.subtitleMd;
 
+  /// Size 14, Font 600
+  TextStyle get textSubtitleSm => AppTextStyles.subtitleSm;
+
   /// Size 20, Font 400
   TextStyle get textLg => AppTextStyles.lg;
 

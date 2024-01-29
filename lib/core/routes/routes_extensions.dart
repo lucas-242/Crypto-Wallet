@@ -35,6 +35,11 @@ extension RoutesExtensions on BuildContext {
     getCustomSnackBar(this, title: title);
   }
 
+  void showDrawer() {
+    Log.navigation('Opening Drawer');
+    Scaffold.of(Routes.shellKey.currentContext!).openDrawer();
+  }
+
   // void showDialog({
   //   double? width,
   //   required String title,

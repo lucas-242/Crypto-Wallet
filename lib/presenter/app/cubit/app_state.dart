@@ -6,10 +6,12 @@ final class AppState extends BaseState with EquatableMixin {
     super.callbackMessage,
     this.currentPageValue = 0,
     this.user,
+    this.showWalletValues = false,
   });
 
   final int currentPageValue;
   final AppUser? user;
+  final bool showWalletValues;
 
   BottomNavigationPage get currentPage =>
       BottomNavigationPage.fromIndex(currentPageValue);
@@ -21,6 +23,7 @@ final class AppState extends BaseState with EquatableMixin {
         currentPageValue,
         currentPage,
         user,
+        showWalletValues,
       ];
 
   @override
@@ -29,11 +32,13 @@ final class AppState extends BaseState with EquatableMixin {
     String? callbackMessage,
     int? currentPageValue,
     AppUser? user,
+    bool? showWalletValues,
   }) =>
       AppState(
         status: status ?? this.status,
         callbackMessage: callbackMessage ?? this.callbackMessage,
         currentPageValue: currentPageValue ?? this.currentPageValue,
         user: user ?? this.user,
+        showWalletValues: showWalletValues ?? this.showWalletValues,
       );
 }

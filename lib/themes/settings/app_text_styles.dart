@@ -50,6 +50,12 @@ abstract class AppTextStyles {
         fontWeight: AppFonts.bold,
       );
 
+  /// Size 14, Font 600
+  static TextStyle get subtitleSm => _defaultTextStyle.copyWith(
+        fontSize: AppFonts.sizeSm,
+        fontWeight: AppFonts.bold,
+      );
+
   /// Size 20, Font 400
   static TextStyle get lg =>
       _defaultTextStyle.copyWith(fontSize: AppFonts.sizeLg);

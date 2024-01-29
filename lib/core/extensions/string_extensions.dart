@@ -9,4 +9,26 @@ extension StringExtensions on String {
 
     return characters.join();
   }
+
+  String capitalize() {
+    if (length <= 1) {
+      return toUpperCase();
+    }
+
+    final List<String> words = split(' ');
+    final capitalizedWords = _capitalizeWords(words);
+    return capitalizedWords.join(' ');
+  }
+
+  Iterable<String> _capitalizeWords(List<String> words) {
+    return words.map((word) {
+      if (word.trim().isNotEmpty) {
+        final String firstLetter = word.trim().substring(0, 1).toUpperCase();
+        final String remainingLetters = word.trim().substring(1);
+
+        return '$firstLetter$remainingLetters';
+      }
+      return '';
+    });
+  }
 }

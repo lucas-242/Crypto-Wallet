@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:crypto_wallet/core/components/custom_bottom_navigation/custom_bottom_navigation.dart';
 import 'package:crypto_wallet/core/utils/base_state.dart';
 import 'package:crypto_wallet/domain/models/app_user.dart';
+import 'package:crypto_wallet/domain/models/enums/bottom_navigation_page.dart';
 import 'package:crypto_wallet/domain/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
 
@@ -19,6 +19,9 @@ class AppCubit extends Cubit<AppState> {
 
   void changePage(int newPage) =>
       emit(state.copyWith(currentPageValue: newPage));
+
+  void changeShowWalletValues() =>
+      emit(state.copyWith(showWalletValues: !state.showWalletValues));
 
   void listenUser() {
     _userSubscription = _authRepository.user().listen((user) {

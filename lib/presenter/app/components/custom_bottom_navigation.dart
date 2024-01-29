@@ -16,23 +16,19 @@ class CustomBottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         DecoratedBox(
           decoration: const BoxDecoration(
             boxShadow: [
-              BoxShadow(
-                blurRadius: 8,
-                color: AppColors.shadow,
-              ),
+              BoxShadow(blurRadius: 8, color: AppColors.shadow),
             ],
           ),
           child: BottomNavigationBar(
             onTap: onChangePage,
             currentIndex: currentScreen,
             type: BottomNavigationBarType.fixed,
-            selectedLabelStyle: context.textSubtitleMd,
-            unselectedLabelStyle: context.textSubtitleMd,
+            selectedLabelStyle: context.textSubtitleSm,
+            unselectedLabelStyle: context.textSm,
             selectedItemColor: AppColors.primary,
             unselectedItemColor: AppColors.text,
             items: [
@@ -62,10 +58,6 @@ class CustomBottomNavigation extends StatelessWidget {
       BottomNavigationBarItem(
         label: text,
         icon: Padding(
-          padding: const EdgeInsets.only(bottom: AppInsets.xxxSm),
-          child: Icon(icon),
-        ),
-        activeIcon: Padding(
           padding: const EdgeInsets.only(bottom: AppInsets.xxxSm),
           child: Icon(icon),
         ),
