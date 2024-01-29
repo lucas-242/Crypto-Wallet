@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/core/components/custom_snack_bar/custom_snack_bar.dart';
 import 'package:crypto_wallet/core/utils/log_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +18,12 @@ extension RoutesExtensions on BuildContext {
     Navigator.pop(this);
   }
 
-  // void showSnackBar(String title) {
-  //   Log.navigation('''Showing snack bar:
-  //   title: $title,
-  //   ''');
-  //   getCustomSnackBar(this, title: title);
-  // }
+  void showSnackBar(String title) {
+    Log.navigation('''Showing snack bar:
+    title: $title,
+    ''');
+    getCustomSnackBar(this, title: title);
+  }
 
   // void showDialog({
   //   double? width,

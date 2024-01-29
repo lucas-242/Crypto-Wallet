@@ -52,7 +52,7 @@ final class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Stream<AppUser?> userChanges() =>
+  Stream<AppUser?> user() =>
       firebaseAuth.userChanges().map((user) => user?.toAppUser());
 
   @override
