@@ -11,7 +11,7 @@ class ImageFade extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppBorders.radiusCircle),
       child: Container(
         height: context.height * 0.065,
-        width: context.width * 0.13,
+        width: context.height * 0.065,
         color: AppColors.white,
         padding: const EdgeInsets.all(AppInsets.xxSm),
         child: image != null ? Image.network(image!) : Container(),

@@ -43,10 +43,10 @@ abstract class Routes {
         page = const HomePage();
       case Routes.wallet:
         page = Container(color: Colors.green);
+      case Routes.trades:
+        page = Container(color: Colors.green);
       default:
-        page = Container(
-          color: Colors.blue,
-        );
+        page = const HomePage();
     }
 
     return MaterialPageRoute<dynamic>(

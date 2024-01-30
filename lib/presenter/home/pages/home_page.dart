@@ -1,11 +1,12 @@
-import 'package:crypto_wallet/core/l10n/l10n.dart';
 import 'package:crypto_wallet/core/routes/routes.dart';
 import 'package:crypto_wallet/core/utils/base_state.dart';
+import 'package:crypto_wallet/domain/data/cryptos.dart';
 import 'package:crypto_wallet/domain/models/wallet.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
-import 'package:crypto_wallet/presenter/home/components/coins_carrousel.dart';
+import 'package:crypto_wallet/presenter/home/components/cryptos_carrousel.dart';
 import 'package:crypto_wallet/presenter/home/components/wallet_total_card.dart';
+import 'package:crypto_wallet/presenter/home/components/watch_list_tab.dart';
 import 'package:crypto_wallet/presenter/login/cubit/login_cubit.dart';
 import 'package:crypto_wallet/service_locator.dart';
 import 'package:crypto_wallet/themes/themes.dart';
@@ -21,6 +22,72 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _cubit = ServiceLocator.get<LoginCubit>();
+
+  final wallet = const Wallet(
+    totalNow: 10000,
+    totalInvested: 1000,
+    variation: 9000,
+    percentVariation: 100,
+  );
+
+  final cryptos = [
+    WalletCrypto(
+      id: 'aaaa',
+      cryptoId: 'bitcoin',
+      amount: 0.01588,
+      averagePrice: 25752.0,
+      totalInvested: 1000,
+      marketData: Cryptos.supported[0],
+    ),
+    WalletCrypto(
+      id: 'aaaa',
+      cryptoId: 'ethereum',
+      amount: 0.01588,
+      averagePrice: 25752.0,
+      totalInvested: 1000,
+      marketData: Cryptos.supported[1],
+    ),
+    WalletCrypto(
+      id: 'aaaa',
+      cryptoId: 'cardano',
+      amount: 0.01588,
+      averagePrice: 25752.0,
+      totalInvested: 1000,
+      marketData: Cryptos.supported[2],
+    ),
+    WalletCrypto(
+      id: 'aaaa',
+      cryptoId: 'binance_coin',
+      amount: 0.01588,
+      averagePrice: 25752.0,
+      totalInvested: 1000,
+      marketData: Cryptos.supported[3],
+    ),
+    WalletCrypto(
+      id: 'aaaa',
+      cryptoId: 'tether',
+      amount: 0.01588,
+      averagePrice: 25752.0,
+      totalInvested: 1000,
+      marketData: Cryptos.supported[4],
+    ),
+    WalletCrypto(
+      id: 'aaaa',
+      cryptoId: 'ripple',
+      amount: 0.01588,
+      averagePrice: 25752.0,
+      totalInvested: 1000,
+      marketData: Cryptos.supported[5],
+    ),
+    WalletCrypto(
+      id: 'aaaa',
+      cryptoId: 'dogecoin',
+      amount: 0.01588,
+      averagePrice: 25752.0,
+      totalInvested: 1000,
+      marketData: Cryptos.supported[6],
+    )
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -41,47 +108,14 @@ class _HomePageState extends State<HomePage> {
               child: BlocBuilder<AppCubit, AppState>(
                 builder: (context, state) {
                   return WalletTotalCard(
-                    data: const Wallet(
-                        totalNow: 10000,
-                        totalInvested: 1000,
-                        variation: 9000,
-                        percentVariation: 100),
+                    data: wallet,
                     hideValues: context.read<AppCubit>().state.showWalletValues,
                   );
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: AppInsets.md),
-              child: CoinsCarrousel(cryptos: [
-                WalletCrypto(
-                  id: 'aaaa',
-                  cryptoId: 'bitcoin',
-                  amount: 0.01588,
-                  averagePrice: 25752.0,
-                  totalInvested: 1000,
-                ),
-                WalletCrypto(
-                  id: 'aaaa',
-                  cryptoId: 'ethereum',
-                  amount: 0.01588,
-                  averagePrice: 25752.0,
-                  totalInvested: 1000,
-                ),
-                WalletCrypto(
-                  id: 'aaaa',
-                  cryptoId: 'cardano',
-                  amount: 0.01588,
-                  averagePrice: 25752.0,
-                  totalInvested: 1000,
-                )
-              ]),
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: _cubit.signOut,
-              child: Text(AppLocalizations.current.logout),
-            )
+            CryptosCarrousel(cryptos: cryptos),
+            Expanded(child: WatchListTab(cryptos: cryptos)),
           ],
         ),
       ),

@@ -8,6 +8,8 @@ abstract class Cryptos {
       id: 'bitcoin',
       name: 'Bitcoin',
       symbol: 'BTC',
+      image:
+          'https://metacore.mobula.io/ea67a92c8e0a9b951d6fafed56e8ee714180e9ccbadb7d0555b9cb1b1224dba7.png',
       color: Color(0xFFF79319),
     ),
     const Crypto(

@@ -1,6 +1,7 @@
 import 'package:crypto_wallet/core/components/shimmer/shimmer.dart';
 import 'package:crypto_wallet/core/extensions/extensions.dart';
 import 'package:crypto_wallet/core/routes/routes.dart';
+import 'package:crypto_wallet/domain/models/app_user.dart';
 import 'package:crypto_wallet/domain/models/enums/bottom_navigation_page.dart';
 import 'package:crypto_wallet/presenter/app/components/custom_bottom_navigation.dart';
 import 'package:crypto_wallet/presenter/app/components/custom_drawer.dart';
@@ -51,7 +52,7 @@ class _AppShellState extends State<AppShell> {
             child: CustomDrawer(
               onPressedLogout: _loginCubit.signOut,
               onPressedShowTotal: _appCubit.changeShowWalletValues,
-              user: _appCubit.state.user!,
+              user: _appCubit.state.user ?? const AppUser(),
             ),
           ),
           appBar: AppBar(

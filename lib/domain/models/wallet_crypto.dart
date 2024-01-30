@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/domain/models/crypto.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -12,11 +13,11 @@ class WalletCrypto {
     required this.averagePrice,
     required this.totalInvested,
     this.percentInWallet = 0,
-    this.user = '',
-    this.price = 0,
+    this.userId = '',
     this.totalFee = 0,
     this.totalProfit = 0,
     this.soldPositionAt,
+    this.marketData,
     DateTime? lastTradeAt,
     DateTime? updatedAt,
   })  : updatedAt = updatedAt ?? DateTime.now(),
@@ -32,11 +33,13 @@ class WalletCrypto {
   final double amount;
   final double averagePrice;
   final double totalInvested;
-  final double price;
   final DateTime updatedAt;
 
 //TODO: Remove it
   final double percentInWallet;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Crypto? marketData;
 
   /// Date when the user sold all position in the crypto
   final DateTime? soldPositionAt;
@@ -50,10 +53,11 @@ class WalletCrypto {
   /// Total profit in dollars in sell trades. Used to show to the user easily.
   final double totalProfit;
 
-  final String user;
+  @JsonKey(name: 'user')
+  final String userId;
 
   /// Total amount at current quote of selected currency
-  double get totalNow => price * amount;
+  double get totalNow => marketData?.currentPrice ?? 0 * amount;
 
   double get gainLoss => totalNow - totalInvested - totalFee;
 
@@ -73,20 +77,17 @@ class WalletCrypto {
 
   WalletCrypto copyWith({
     String? id,
-    String? name,
-    String? image,
-    String? symbol,
     String? cryptoId,
     double? amount,
     double? averagePrice,
     double? totalInvested,
-    double? price,
     DateTime? updatedAt,
     DateTime? soldPositionAt,
     DateTime? lastTradeAt,
     double? totalFee,
     double? totalProfit,
-    String? user,
+    String? userId,
+    Crypto? marketData,
   }) {
     return WalletCrypto(
       id: id ?? this.id,
@@ -94,13 +95,13 @@ class WalletCrypto {
       amount: amount ?? this.amount,
       averagePrice: averagePrice ?? this.averagePrice,
       totalInvested: totalInvested ?? this.totalInvested,
-      price: price ?? this.price,
       updatedAt: updatedAt ?? this.updatedAt,
       soldPositionAt: soldPositionAt ?? this.soldPositionAt,
       lastTradeAt: lastTradeAt ?? this.lastTradeAt,
       totalFee: totalFee ?? this.totalFee,
       totalProfit: totalProfit ?? this.totalProfit,
-      user: user ?? this.user,
+      userId: userId ?? this.userId,
+      marketData: marketData ?? this.marketData,
     );
   }
 }
