@@ -1,7 +1,7 @@
-import 'package:crypto_wallet/presenter/app/app_shell.dart';
+import 'package:crypto_wallet/presenter/app/pages/app_shell.dart';
+import 'package:crypto_wallet/presenter/app/pages/splash_page.dart';
 import 'package:crypto_wallet/presenter/home/pages/home_page.dart';
 import 'package:crypto_wallet/presenter/login/pages/login_page.dart';
-import 'package:crypto_wallet/presenter/splash/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 
 export 'routes_extensions.dart';
@@ -44,7 +44,7 @@ abstract class Routes {
       case Routes.wallet:
         page = Container(color: Colors.green);
       case Routes.trades:
-        page = Container(color: Colors.green);
+        page = Container(color: Colors.blue);
       default:
         page = const HomePage();
     }
