@@ -65,13 +65,11 @@ class _AppShellState extends State<AppShell> {
               onPressed: context.showDrawer,
             ),
           ),
-          body: SafeArea(
-            child: Shimmer(
-              child: Navigator(
-                key: _key,
-                initialRoute: widget.route,
-                onGenerateRoute: Routes.onGenerateAppShellRoute,
-              ),
+          body: Shimmer(
+            child: Navigator(
+              key: _key,
+              initialRoute: widget.route,
+              onGenerateRoute: Routes.onGenerateAppShellRoute,
             ),
           ),
           extendBody: true,

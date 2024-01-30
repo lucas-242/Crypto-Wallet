@@ -6,21 +6,19 @@ part 'wallet_crypto.g.dart';
 @JsonSerializable()
 class WalletCrypto {
   WalletCrypto({
-    DateTime? updatedAt,
-    this.id,
-    this.name = '',
-    this.image,
-    required this.symbol,
+    required this.id,
     required this.cryptoId,
     required this.amount,
     required this.averagePrice,
     required this.totalInvested,
+    this.percentInWallet = 0,
     this.user = '',
     this.price = 0,
     this.totalFee = 0,
     this.totalProfit = 0,
     this.soldPositionAt,
     DateTime? lastTradeAt,
+    DateTime? updatedAt,
   })  : updatedAt = updatedAt ?? DateTime.now(),
         lastTradeAt = lastTradeAt ?? DateTime.now();
 
@@ -30,15 +28,15 @@ class WalletCrypto {
   Map<String, dynamic> toJson() => _$WalletCryptoToJson(this);
 
   final String? id;
-  final String name;
-  final String? image;
-  final String symbol;
   final String cryptoId;
   final double amount;
   final double averagePrice;
   final double totalInvested;
   final double price;
   final DateTime updatedAt;
+
+//TODO: Remove it
+  final double percentInWallet;
 
   /// Date when the user sold all position in the crypto
   final DateTime? soldPositionAt;
@@ -92,9 +90,6 @@ class WalletCrypto {
   }) {
     return WalletCrypto(
       id: id ?? this.id,
-      name: name ?? this.name,
-      image: image ?? this.image,
-      symbol: symbol ?? this.symbol,
       cryptoId: cryptoId ?? this.cryptoId,
       amount: amount ?? this.amount,
       averagePrice: averagePrice ?? this.averagePrice,
