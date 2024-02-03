@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,8 @@ class ImageFade extends StatelessWidget {
         width: context.height * 0.065,
         color: AppColors.white,
         padding: const EdgeInsets.all(AppInsets.xxSm),
-        child: image != null ? Image.network(image!) : Container(),
+        child:
+            image != null ? CachedNetworkImage(imageUrl: image!) : Container(),
       ),
     );
   }
