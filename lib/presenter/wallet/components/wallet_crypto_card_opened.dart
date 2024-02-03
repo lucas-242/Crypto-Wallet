@@ -14,72 +14,75 @@ class WalletCryptoCardOpened extends StatelessWidget {
     final marketData = crypto.marketData!;
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      height: crypto.isOpen ? context.height * 0.22 : 0,
+      duration: const Duration(milliseconds: 350),
+      height: crypto.isOpen ? context.height * .2 : 0,
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            AppSpacings.verticalMd,
-            const Divider(thickness: 1),
-            AppSpacings.verticalMd,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(AppLocalizations.current.price),
-                Text(
-                  marketData.currentPrice.formatCurrency(
-                    marketData.currentPrice.getDecimalDigits(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppInsets.md),
+          child: Column(
+            children: [
+              AppSpacings.verticalMd,
+              const Divider(thickness: 1),
+              AppSpacings.verticalMd,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(AppLocalizations.current.price),
+                  Text(
+                    marketData.currentPrice.formatCurrency(
+                      marketData.currentPrice.getDecimalDigits(),
+                    ),
+                  )
+                ],
+              ),
+              AppSpacings.verticalMd,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.current.averagePrice,
                   ),
-                )
-              ],
-            ),
-            AppSpacings.verticalMd,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.current.averagePrice,
-                ),
-                Text(crypto.averagePrice.formatCurrency(
-                    marketData.currentPrice.getDecimalDigits())),
-              ],
-            ),
-            AppSpacings.verticalMd,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.current.totalInvested,
-                ),
-                Text(crypto.totalInvested.formatCurrency(
-                    marketData.currentPrice.getDecimalDigits())),
-              ],
-            ),
-            AppSpacings.verticalMd,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(AppLocalizations.current.gainLoss),
-                Row(
-                  children: [
-                    Text(
-                      '${crypto.gainLoss.formatCurrency(marketData.currentPrice.getDecimalDigits())} (${crypto.gainLossPercent.formatPercent()})',
-                    ),
-                    AppSpacings.horizontalXXXSm,
-                    Icon(
-                      crypto.gainLoss.isNegative
-                          ? Icons.arrow_downward
-                          : Icons.arrow_upward,
-                      color: crypto.gainLoss.isNegative
-                          ? AppColors.red
-                          : AppColors.green,
-                      size: AppInsets.md,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                  Text(crypto.averagePrice.formatCurrency(
+                      marketData.currentPrice.getDecimalDigits())),
+                ],
+              ),
+              AppSpacings.verticalMd,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.current.totalInvested,
+                  ),
+                  Text(crypto.totalInvested.formatCurrency(
+                      marketData.currentPrice.getDecimalDigits())),
+                ],
+              ),
+              AppSpacings.verticalMd,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(AppLocalizations.current.gainLoss),
+                  Row(
+                    children: [
+                      Text(
+                        '${crypto.gainLoss.formatCurrency(marketData.currentPrice.getDecimalDigits())} (${crypto.gainLossPercent.formatPercent()})',
+                      ),
+                      AppSpacings.horizontalXXXSm,
+                      Icon(
+                        crypto.gainLoss.isNegative
+                            ? Icons.arrow_downward
+                            : Icons.arrow_upward,
+                        color: crypto.gainLoss.isNegative
+                            ? AppColors.red
+                            : AppColors.green,
+                        size: AppInsets.md,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

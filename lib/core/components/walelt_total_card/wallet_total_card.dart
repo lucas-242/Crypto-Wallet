@@ -65,7 +65,7 @@ class WalletTotalCard extends StatelessWidget {
                   children: [
                     Text(
                       AppLocalizations.current.totalInvested,
-                      style: context.textLg,
+                      style: context.textSubtitleLg,
                     ),
                     state.showWalletValues
                         ? hideValue()

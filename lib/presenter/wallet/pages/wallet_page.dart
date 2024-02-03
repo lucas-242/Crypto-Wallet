@@ -19,10 +19,8 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     final cubit = context.read<WalletCubit>();
     return Padding(
-      padding: const EdgeInsets.only(
-        left: AppInsets.xLg,
-        right: AppInsets.xLg,
-        bottom: AppInsets.xxxSm,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppInsets.md,
       ),
       child: BlocBuilder<WalletCubit, WalletState>(
         builder: (context, state) => state.when(
@@ -37,9 +35,16 @@ class _WalletPageState extends State<WalletPage> {
                     itemCount: state.wallet.cryptos.length,
                     itemBuilder: (context, index) {
                       final crypto = state.wallet.cryptos[index];
+                      final isNextOpen = state.wallet.cryptos
+                              .elementAtOrNull(index + 1)
+                              ?.isOpen ??
+                          false;
+
                       return WalletCryptoCard(
                         crypto: crypto,
-                        onTap: (crypto) => cubit.onOpenCloseCryptoCard(crypto),
+                        isNextCardOpen: isNextOpen,
+                        onTap: (crypto) =>
+                            cubit.onOpenCloseCryptoCard(crypto.cryptoId),
                       );
                     },
                   ),

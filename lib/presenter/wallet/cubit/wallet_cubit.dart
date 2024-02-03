@@ -71,9 +71,13 @@ class WalletCubit extends Cubit<WalletState> {
     return response;
   }
 
-  void onOpenCloseCryptoCard(WalletCrypto crypto) {
-    final index = state.wallet.cryptos.indexWhere((c) => c.id == crypto.id);
-    state.wallet.cryptos.replaceRange(index, index, [crypto]);
-    emit(state);
+  void onOpenCloseCryptoCard(String cryptoId) {
+    final currentCryptos = state.wallet.cryptos;
+    final updatedCryptos = currentCryptos
+        .map((c) =>
+            c.copyWith(isOpen: c.cryptoId == cryptoId ? !c.isOpen : false))
+        .toList();
+
+    emit(state.copyWith(wallet: Wallet(cryptos: updatedCryptos)));
   }
 }

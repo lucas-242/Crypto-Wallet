@@ -33,5 +33,6 @@ final class Wallet extends Equatable {
         totalInvested,
         variation,
         percentVariation,
+        cryptos,
       ];
 }

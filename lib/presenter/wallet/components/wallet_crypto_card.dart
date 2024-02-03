@@ -9,10 +9,12 @@ class WalletCryptoCard extends StatefulWidget {
     super.key,
     required this.crypto,
     required this.onTap,
+    required this.isNextCardOpen,
   });
 
   final WalletCrypto crypto;
   final Function(WalletCrypto) onTap;
+  final bool isNextCardOpen;
 
   @override
   State<WalletCryptoCard> createState() => _WalletCryptoCardState();
@@ -21,31 +23,28 @@ class WalletCryptoCard extends StatefulWidget {
 class _WalletCryptoCardState extends State<WalletCryptoCard> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTextStyle(
-      style: context.textMd,
-      child: InkWell(
-        onTap: () => widget.onTap(widget.crypto),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppBorders.radiusMd),
-            color:
-                widget.crypto.isOpen ? AppColors.black : AppColors.background,
+    return InkWell(
+      onTap: () => widget.onTap(widget.crypto),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppBorders.radiusMd),
+          color: widget.crypto.isOpen ? AppColors.black : AppColors.background,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: AppInsets.md,
           ),
-          child: Padding(
-            padding: EdgeInsets.only(
-                top: AppInsets.md,
-                bottom: widget.crypto.isOpen ? AppInsets.md : 0,
-                left: AppInsets.md,
-                right: AppInsets.md),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                WalletCryptoCardClosed(crypto: widget.crypto),
-                WalletCryptoCardOpened(crypto: widget.crypto),
-                if (widget.crypto.isOpen) AppSpacings.verticalLg,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              WalletCryptoCardClosed(crypto: widget.crypto),
+              if (widget.isNextCardOpen) AppSpacings.verticalLg,
+              WalletCryptoCardOpened(crypto: widget.crypto),
+              if (!widget.crypto.isOpen && !widget.isNextCardOpen) ...[
+                AppSpacings.verticalLg,
                 const Divider(thickness: 1),
               ],
-            ),
+            ],
           ),
         ),
       ),
