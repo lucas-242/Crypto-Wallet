@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_wallet/core/errors/errors.dart';
+import 'package:crypto_wallet/core/l10n/l10n.dart';
 import 'package:crypto_wallet/core/utils/log_utils.dart';
 import 'package:crypto_wallet/domain/data/local_storage.dart';
-import 'package:crypto_wallet/domain/models/app_user.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_operartion.dart';
 import 'package:crypto_wallet/domain/models/trade.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
@@ -17,12 +16,18 @@ final class FirebaseWalletRepository implements WalletRepository {
     required LocalStorage localStorage,
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
         _localStorage = localStorage;
+
   final FirebaseFirestore _firestore;
   final LocalStorage _localStorage;
 
-  //TODO: Check this
-  String _getUser() =>
-      AppUser.fromJson(jsonDecode(_localStorage.get<String>('user')!)).uid;
+  String _getUser() {
+    final user = _localStorage.getUser();
+    if (user == null) {
+      ClientError(AppLocalizations.current.errorUnknowError);
+    }
+
+    return user!.uid;
+  }
 
   @override
   Future<List<WalletCrypto>> getCryptos() async {

@@ -5,16 +5,9 @@ import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
 
 class WalletCryptoCardOpened extends StatelessWidget {
-  const WalletCryptoCardOpened({
-    super.key,
-    required this.crypto,
-    required this.index,
-    this.openedIndex,
-  });
+  const WalletCryptoCardOpened({super.key, required this.crypto});
 
   final WalletCrypto crypto;
-  final int index;
-  final int? openedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +15,7 @@ class WalletCryptoCardOpened extends StatelessWidget {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
-      height: openedIndex == index ? context.height * 0.22 : 0,
+      height: crypto.isOpen ? context.height * 0.22 : 0,
       child: SingleChildScrollView(
         child: Column(
           children: [

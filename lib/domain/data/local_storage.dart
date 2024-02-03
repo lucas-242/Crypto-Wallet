@@ -1,5 +1,9 @@
+import 'package:crypto_wallet/domain/models/app_user.dart';
+
 abstract interface class LocalStorage {
-  Future<void> remove(String key);
-  Future<void> set<T>(String key, T value);
-  T? get<T>(String key);
+  static const userStorageKey = 'user';
+
+  AppUser? getUser();
+  Future<void> setUser(AppUser user);
+  Future<void> clear();
 }

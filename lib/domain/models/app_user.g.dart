@@ -12,3 +12,10 @@ AppUser _$AppUserFromJson(Map<String, dynamic> json) => AppUser(
       photoUrl: json['photoUrl'] as String?,
       uid: json['uid'] as String? ?? '',
     );
+
+Map<String, dynamic> _$AppUserToJson(AppUser instance) => <String, dynamic>{
+      'name': instance.name,
+      'email': instance.email,
+      'photoUrl': instance.photoUrl,
+      'uid': instance.uid,
+    };

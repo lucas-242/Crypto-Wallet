@@ -9,6 +9,7 @@ import 'package:crypto_wallet/infra/repositories/market_data_repository/mobula/m
 import 'package:crypto_wallet/infra/repositories/wallet_repository/firebase/firebase_wallet_repository.dart';
 import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
 import 'package:crypto_wallet/presenter/login/cubit/login_cubit.dart';
+import 'package:crypto_wallet/presenter/wallet/cubit/wallet_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -65,7 +66,16 @@ abstract class ServiceLocator {
   }
 
   static void _initBlocs() {
-    _instance.registerSingleton(AppCubit(_instance.get<AuthRepository>()));
+    _instance.registerSingleton(AppCubit(
+      _instance.get<LocalStorage>(),
+      _instance.get<AuthRepository>(),
+    ));
+
+    _instance.registerSingleton(WalletCubit(
+      _instance.get<WalletRepository>(),
+      _instance.get<MarketDataRepository>(),
+    ));
+
     _instance
         .registerFactory(() => LoginCubit(_instance.get<AuthRepository>()));
   }

@@ -1,12 +1,13 @@
-import 'package:crypto_wallet/core/components/shimmer/shimmer.dart';
 import 'package:crypto_wallet/core/extensions/extensions.dart';
 import 'package:crypto_wallet/core/routes/routes.dart';
 import 'package:crypto_wallet/domain/models/app_user.dart';
 import 'package:crypto_wallet/domain/models/enums/bottom_navigation_page.dart';
+import 'package:crypto_wallet/presenter/app/components/app_navigator.dart';
 import 'package:crypto_wallet/presenter/app/components/custom_bottom_navigation.dart';
 import 'package:crypto_wallet/presenter/app/components/custom_drawer.dart';
 import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
 import 'package:crypto_wallet/presenter/login/cubit/login_cubit.dart';
+import 'package:crypto_wallet/presenter/wallet/cubit/wallet_cubit.dart';
 import 'package:crypto_wallet/service_locator.dart';
 import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +29,13 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   final _appCubit = ServiceLocator.get<AppCubit>();
   final _loginCubit = ServiceLocator.get<LoginCubit>();
-  final _key = GlobalKey<NavigatorState>(debugLabel: 'Shell Key');
+  final _walletCubit = ServiceLocator.get<WalletCubit>();
 
   String get title => widget.route.capitalize();
 
   @override
   void initState() {
-    Routes.shellKey = _key;
+    _walletCubit.getWalletData();
     super.initState();
   }
 
@@ -44,6 +45,7 @@ class _AppShellState extends State<AppShell> {
       providers: [
         BlocProvider(create: (context) => _appCubit),
         BlocProvider(create: (context) => _loginCubit),
+        BlocProvider(create: (context) => _walletCubit),
       ],
       child: PopScope(
         canPop: false,
@@ -66,22 +68,14 @@ class _AppShellState extends State<AppShell> {
               onPressed: context.showDrawer,
             ),
           ),
-          body: Shimmer(
-            child: Navigator(
-              key: _key,
-              initialRoute: widget.route,
-              onGenerateRoute: Routes.onGenerateAppShellRoute,
-            ),
-          ),
+          body: AppNavigator(route: widget.route),
           extendBody: true,
           resizeToAvoidBottomInset: false,
-          bottomNavigationBar: Shimmer(
-            child: BlocBuilder(
-              bloc: _appCubit,
-              builder: (context, state) => CustomBottomNavigation(
-                currentScreen: _appCubit.state.currentPageValue,
-                onChangePage: (page) => _onChangePage(context, page),
-              ),
+          bottomNavigationBar: BlocBuilder(
+            bloc: _appCubit,
+            builder: (context, state) => CustomBottomNavigation(
+              currentScreen: _appCubit.state.currentPageValue,
+              onChangePage: (page) => _onChangePage(context, page),
             ),
           ),
         ),

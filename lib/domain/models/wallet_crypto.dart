@@ -18,6 +18,7 @@ class WalletCrypto {
     this.totalProfit = 0,
     this.soldPositionAt,
     this.marketData,
+    this.isOpen = false,
     DateTime? lastTradeAt,
     DateTime? updatedAt,
   })  : updatedAt = updatedAt ?? DateTime.now(),
@@ -38,9 +39,6 @@ class WalletCrypto {
 //TODO: Remove it
   final double percentInWallet;
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final Crypto? marketData;
-
   /// Date when the user sold all position in the crypto
   final DateTime? soldPositionAt;
 
@@ -55,6 +53,14 @@ class WalletCrypto {
 
   @JsonKey(name: 'user')
   final String userId;
+
+  ///Crypto market data
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Crypto? marketData;
+
+  ///Flag if an crypto card is open in the wallet page
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool isOpen;
 
   /// Total amount at current quote of selected currency
   double get totalNow => marketData?.currentPrice ?? 0 * amount;
@@ -89,6 +95,7 @@ class WalletCrypto {
     double? percentInWallet,
     String? userId,
     Crypto? marketData,
+    bool? isOpen,
   }) {
     return WalletCrypto(
       id: id ?? this.id,
@@ -104,6 +111,7 @@ class WalletCrypto {
       percentInWallet: percentInWallet ?? this.percentInWallet,
       userId: userId ?? this.userId,
       marketData: marketData ?? this.marketData,
+      isOpen: isOpen ?? this.isOpen,
     );
   }
 }

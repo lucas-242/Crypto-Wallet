@@ -8,15 +8,11 @@ class WalletCryptoCard extends StatefulWidget {
   const WalletCryptoCard({
     super.key,
     required this.crypto,
-    required this.index,
-    this.openedIndex,
     required this.onTap,
   });
 
   final WalletCrypto crypto;
-  final int index;
-  final int? openedIndex;
-  final Function(int?) onTap;
+  final Function(WalletCrypto) onTap;
 
   @override
   State<WalletCryptoCard> createState() => _WalletCryptoCardState();
@@ -28,34 +24,26 @@ class _WalletCryptoCardState extends State<WalletCryptoCard> {
     return DefaultTextStyle(
       style: context.textMd,
       child: InkWell(
-        onTap: () => widget
-            .onTap(widget.openedIndex == widget.index ? null : widget.index),
+        onTap: () => widget.onTap(widget.crypto),
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppBorders.radiusMd),
-            color: widget.openedIndex == widget.index
-                ? AppColors.black
-                : AppColors.background,
+            color:
+                widget.crypto.isOpen ? AppColors.black : AppColors.background,
           ),
           child: Padding(
             padding: EdgeInsets.only(
                 top: AppInsets.md,
-                bottom: widget.openedIndex == widget.index ? AppInsets.md : 0,
+                bottom: widget.crypto.isOpen ? AppInsets.md : 0,
                 left: AppInsets.md,
                 right: AppInsets.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 WalletCryptoCardClosed(crypto: widget.crypto),
-                WalletCryptoCardOpened(
-                  crypto: widget.crypto,
-                  index: widget.index,
-                  openedIndex: widget.openedIndex,
-                ),
-                if (widget.openedIndex == widget.index) AppSpacings.verticalLg,
-                if (widget.openedIndex == widget.index ||
-                    widget.openedIndex == widget.index + 1)
-                  const Divider(thickness: 1),
+                WalletCryptoCardOpened(crypto: widget.crypto),
+                if (widget.crypto.isOpen) AppSpacings.verticalLg,
+                const Divider(thickness: 1),
               ],
             ),
           ),

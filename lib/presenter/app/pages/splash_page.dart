@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AppCubit, AppState>(
-      bloc: ServiceLocator.get<AppCubit>(),
+      bloc: _cubit,
       listener: (context, state) {
         if (state.user != null) {
           context.globalNavigate(Routes.home);

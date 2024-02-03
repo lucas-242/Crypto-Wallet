@@ -4,7 +4,6 @@ import 'package:crypto_wallet/core/utils/base_state.dart';
 import 'package:crypto_wallet/domain/data/cryptos.dart';
 import 'package:crypto_wallet/domain/models/wallet.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
-import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
 import 'package:crypto_wallet/presenter/home/components/cryptos_carrousel.dart';
 import 'package:crypto_wallet/presenter/home/components/watch_list_tab.dart';
 import 'package:crypto_wallet/presenter/login/cubit/login_cubit.dart';
@@ -22,13 +21,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _cubit = ServiceLocator.get<LoginCubit>();
-
-  final wallet = const Wallet(
-    totalNow: 10000,
-    totalInvested: 1000,
-    variation: 9000,
-    percentVariation: 100,
-  );
 
   final cryptos = [
     WalletCrypto(
@@ -88,6 +80,13 @@ class _HomePageState extends State<HomePage> {
       marketData: Cryptos.supported[6],
     )
   ];
+  late final Wallet wallet;
+
+  @override
+  void initState() {
+    wallet = Wallet(cryptos: cryptos);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,14 +104,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppInsets.md),
-              child: BlocBuilder<AppCubit, AppState>(
-                builder: (context, state) {
-                  return WalletTotalCard(
-                    data: wallet,
-                    hideValues: context.read<AppCubit>().state.showWalletValues,
-                  );
-                },
-              ),
+              child: WalletTotalCard(wallet: wallet),
             ),
             CryptosCarrousel(cryptos: cryptos),
             Expanded(child: WatchListTab(cryptos: cryptos)),
