@@ -5,8 +5,14 @@ import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
 
 class CryptoCard extends StatelessWidget {
-  const CryptoCard({super.key, required this.crypto});
+  const CryptoCard({
+    super.key,
+    required this.crypto,
+    required this.percentInWallet,
+  });
+
   final WalletCrypto crypto;
+  final double percentInWallet;
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +53,7 @@ class CryptoCard extends StatelessWidget {
                   ),
                   AppSpacings.verticalXXXSm,
                   Text(
-                    'TODO',
-                    // Wallet.getPercentInWallet(crypto.id),
-                    // crypto.percentInWallet.formatPercent(),
+                    percentInWallet.formatPercent(),
                     style: context.textMd.copyWith(color: AppColors.white),
                   ),
                 ],

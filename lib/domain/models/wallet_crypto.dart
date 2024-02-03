@@ -48,7 +48,7 @@ final class WalletCrypto extends Equatable {
   final bool isOpen;
 
   /// Total amount at current quote of selected currency
-  double get totalNow => marketData?.currentPrice ?? 0 * amount;
+  double get totalNow => (marketData?.currentPrice ?? 0) * amount;
 
   double get gainLoss => totalNow - totalInvested - totalFee;
 

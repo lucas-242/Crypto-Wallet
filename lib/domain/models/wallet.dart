@@ -21,7 +21,7 @@ final class Wallet extends Equatable {
   final List<WalletCrypto> cryptos;
 
   double getpercentInWallet(String cryptoId) {
-    final crypto = cryptos.where((c) => c.id == cryptoId).firstOrNull;
+    final crypto = cryptos.where((c) => c.cryptoId == cryptoId).firstOrNull;
     if (crypto == null) return 0;
 
     return (crypto.totalNow * 100) / totalNow;

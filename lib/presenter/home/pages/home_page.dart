@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: AppInsets.md),
                 child: WalletTotalCard(wallet: state.wallet),
               ),
-              CryptosCarrousel(cryptos: state.wallet.cryptos),
+              CryptosCarrousel(wallet: state.wallet),
               Expanded(child: WatchListTab(cryptos: state.wallet.cryptos)),
             ],
           ),

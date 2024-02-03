@@ -1,13 +1,13 @@
 import 'package:crypto_wallet/core/l10n/l10n.dart';
-import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
+import 'package:crypto_wallet/domain/models/wallet.dart';
 import 'package:crypto_wallet/presenter/home/components/crypto_card.dart';
 import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
 
 class CryptosCarrousel extends StatelessWidget {
-  const CryptosCarrousel({super.key, required this.cryptos});
+  const CryptosCarrousel({super.key, required this.wallet});
 
-  final List<WalletCrypto> cryptos;
+  final Wallet wallet;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +25,13 @@ class CryptosCarrousel extends StatelessWidget {
             height: context.height * 0.23,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: cryptos.length,
+              itemCount: wallet.cryptos.length,
               itemBuilder: (context, index) {
-                final crypto = cryptos[index];
-                return CryptoCard(crypto: crypto);
+                final crypto = wallet.cryptos[index];
+                return CryptoCard(
+                  crypto: crypto,
+                  percentInWallet: wallet.getpercentInWallet(crypto.cryptoId),
+                );
               },
             ),
           ),
