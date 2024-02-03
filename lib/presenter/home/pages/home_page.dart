@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/core/components/walelt_total_card/wallet_total_card.dart';
 import 'package:crypto_wallet/core/routes/routes.dart';
 import 'package:crypto_wallet/core/utils/base_state.dart';
 import 'package:crypto_wallet/domain/data/cryptos.dart';
@@ -5,7 +6,6 @@ import 'package:crypto_wallet/domain/models/wallet.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
 import 'package:crypto_wallet/presenter/home/components/cryptos_carrousel.dart';
-import 'package:crypto_wallet/presenter/home/components/wallet_total_card.dart';
 import 'package:crypto_wallet/presenter/home/components/watch_list_tab.dart';
 import 'package:crypto_wallet/presenter/login/cubit/login_cubit.dart';
 import 'package:crypto_wallet/service_locator.dart';

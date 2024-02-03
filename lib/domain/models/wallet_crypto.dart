@@ -86,6 +86,7 @@ class WalletCrypto {
     DateTime? lastTradeAt,
     double? totalFee,
     double? totalProfit,
+    double? percentInWallet,
     String? userId,
     Crypto? marketData,
   }) {
@@ -100,6 +101,7 @@ class WalletCrypto {
       lastTradeAt: lastTradeAt ?? this.lastTradeAt,
       totalFee: totalFee ?? this.totalFee,
       totalProfit: totalProfit ?? this.totalProfit,
+      percentInWallet: percentInWallet ?? this.percentInWallet,
       userId: userId ?? this.userId,
       marketData: marketData ?? this.marketData,
     );

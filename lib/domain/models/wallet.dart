@@ -1,38 +1,30 @@
+import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'wallet.g.dart';
-
-@JsonSerializable()
 class Wallet extends Equatable {
-  const Wallet({
-    this.totalNow = 0,
-    this.totalInvested = 0,
-    this.variation = 0,
-    this.percentVariation = 0,
-  });
+  const Wallet({this.cryptos = const []});
 
-  factory Wallet.fromJson(Map<String, dynamic> json) => _$WalletFromJson(json);
+  double get totalNow => cryptos
+      .map((e) => e.totalNow)
+      .fold(0, (previousValue, element) => previousValue + element);
 
-  Map<String, dynamic> toJson() => _$WalletToJson(this);
+  double get totalInvested => cryptos
+      .map((e) => e.totalInvested)
+      .fold(0, (previousValue, element) => previousValue + element);
 
-  final double totalNow;
-  final double totalInvested;
-  final double variation;
-  final double percentVariation;
+  double get variation => cryptos
+      .map((e) => e.gainLoss)
+      .fold(0, (previousValue, element) => previousValue + element);
 
-  Wallet copyWith({
-    double? totalNow,
-    double? totalInvested,
-    double? variation,
-    double? percentVariation,
-  }) {
-    return Wallet(
-      totalInvested: totalInvested ?? this.totalInvested,
-      totalNow: totalNow ?? this.totalNow,
-      variation: variation ?? this.variation,
-      percentVariation: percentVariation ?? this.percentVariation,
-    );
+  double get percentVariation => (variation.abs() * 100) / totalNow;
+
+  final List<WalletCrypto> cryptos;
+
+  double getpercentInWallet(String cryptoId) {
+    final crypto = cryptos.where((c) => c.id == cryptoId).firstOrNull;
+    if (crypto == null) return 0;
+
+    return (crypto.totalNow * 100) / totalNow;
   }
 
   @override

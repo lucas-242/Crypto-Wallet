@@ -1,7 +1,12 @@
+import 'package:crypto_wallet/core/utils/wallet_utils.dart';
 import 'package:intl/intl.dart';
 
 extension NumberFormatExtensions<T> on T {
-  String formatCurrency() => NumberFormat.currency(symbol: '\$').format(this);
+  String formatCurrency([int? decimalDigits]) =>
+      NumberFormat.currency(symbol: '\$', decimalDigits: decimalDigits)
+          .format(this);
+
+  int getDecimalDigits() => WalletUtils.getDecimalDigits(this as double);
 
   String formatPercent() => NumberFormat.decimalPercentPattern(decimalDigits: 1)
       .format((this as num) / 100);
