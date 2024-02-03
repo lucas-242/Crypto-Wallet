@@ -2,7 +2,6 @@ import 'package:crypto_wallet/core/extensions/extensions.dart';
 import 'package:crypto_wallet/core/routes/routes.dart';
 import 'package:crypto_wallet/domain/models/app_user.dart';
 import 'package:crypto_wallet/domain/models/enums/bottom_navigation_page.dart';
-import 'package:crypto_wallet/presenter/app/components/app_navigator.dart';
 import 'package:crypto_wallet/presenter/app/components/custom_bottom_navigation.dart';
 import 'package:crypto_wallet/presenter/app/components/custom_drawer.dart';
 import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
@@ -14,13 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key, required this.route});
+  const AppShell({super.key, required this.child});
 
   static State<AppShell> of(BuildContext context) {
     return context.findAncestorStateOfType<_AppShellState>()!;
   }
 
-  final String route;
+  final Widget child;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -30,8 +29,6 @@ class _AppShellState extends State<AppShell> {
   final _appCubit = ServiceLocator.get<AppCubit>();
   final _loginCubit = ServiceLocator.get<LoginCubit>();
   final _walletCubit = ServiceLocator.get<WalletCubit>();
-
-  String get title => widget.route.capitalize();
 
   @override
   void initState() {
@@ -68,7 +65,7 @@ class _AppShellState extends State<AppShell> {
               onPressed: context.showDrawer,
             ),
           ),
-          body: AppNavigator(route: widget.route),
+          body: widget.child,
           extendBody: true,
           resizeToAvoidBottomInset: false,
           bottomNavigationBar: BlocBuilder(

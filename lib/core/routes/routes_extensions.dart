@@ -2,30 +2,22 @@ import 'package:crypto_wallet/core/components/custom_snack_bar/custom_snack_bar.
 import 'package:crypto_wallet/core/routes/routes.dart';
 import 'package:crypto_wallet/core/utils/log_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 extension RoutesExtensions on BuildContext {
-//TODO: Create only 1 navigation method
-
-  /// Navigates using the Global Navigator
-  void globalNavigate(String route) {
-    Log.navigation('Navigating to $route');
-    Navigator.pushReplacementNamed(this, route);
-  }
-
-  /// Navigates using the Shell Navigator
   void navigateTo(String route) {
     Log.navigation('Navigating to $route');
-    Routes.shellKey.currentState!.pushReplacementNamed(route);
+    go(route);
   }
 
   void pushTo(String route, {Object? params}) {
     Log.navigation('Navigating to pushed route $route with params: $params');
-    Routes.shellKey.currentState!.pushNamed(route, arguments: params);
+    push(route, extra: params);
   }
 
   void pop() {
     Log.navigation('Route poped');
-    Navigator.pop(this);
+    GoRouter.of(this).pop();
   }
 
   void showSnackBar(String title) {

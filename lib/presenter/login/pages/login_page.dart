@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
         return BlocListener<LoginCubit, LoginState>(
           listener: (context, state) {
             if (state.status == BaseStateStatus.success) {
-              context.globalNavigate(Routes.home);
+              context.navigateTo(Routes.home);
             } else if (state.status == BaseStateStatus.error) {
               context.showSnackBar(state.callbackMessage);
             }

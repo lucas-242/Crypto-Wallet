@@ -32,9 +32,9 @@ class _SplashPageState extends State<SplashPage> {
       bloc: _cubit,
       listener: (context, state) {
         if (state.user != null) {
-          context.globalNavigate(Routes.home);
+          context.navigateTo(Routes.home);
         } else {
-          context.globalNavigate(Routes.login);
+          context.navigateTo(Routes.login);
         }
       },
       child: Scaffold(
