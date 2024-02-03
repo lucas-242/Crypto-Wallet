@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'app_user.g.dart';
 
 @JsonSerializable()
-class AppUser extends Equatable {
+final class AppUser extends Equatable {
   const AppUser({
     this.name = '',
     this.email = '',

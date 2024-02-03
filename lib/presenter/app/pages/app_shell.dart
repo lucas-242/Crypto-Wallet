@@ -1,5 +1,6 @@
 import 'package:crypto_wallet/core/extensions/extensions.dart';
 import 'package:crypto_wallet/core/routes/routes.dart';
+import 'package:crypto_wallet/core/utils/base_state.dart';
 import 'package:crypto_wallet/domain/models/app_user.dart';
 import 'package:crypto_wallet/domain/models/enums/bottom_navigation_page.dart';
 import 'package:crypto_wallet/presenter/app/components/custom_bottom_navigation.dart';
@@ -44,35 +45,45 @@ class _AppShellState extends State<AppShell> {
         BlocProvider(create: (context) => _loginCubit),
         BlocProvider(create: (context) => _walletCubit),
       ],
-      child: PopScope(
-        canPop: false,
-        child: Scaffold(
-          drawer: Drawer(
-            child: CustomDrawer(
-              onPressedLogout: _loginCubit.signOut,
-              onPressedShowTotal: _appCubit.changeShowWalletValues,
-              user: _appCubit.state.user ?? const AppUser(),
+      child: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state.status == BaseStateStatus.success) {
+            context.navigateTo(Routes.login);
+          } else if (state.status == BaseStateStatus.error) {
+            context.showSnackBar(state.callbackMessage);
+          }
+        },
+        child: PopScope(
+          canPop: false,
+          child: Scaffold(
+            drawer: Drawer(
+              child: CustomDrawer(
+                onPressedLogout: _loginCubit.signOut,
+                onPressedShowTotal: _appCubit.changeShowWalletValues,
+                user: _appCubit.state.user ?? const AppUser(),
+              ),
             ),
-          ),
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              _appCubit.state.currentPage.name.capitalize(),
-              style: context.textSubtitleLg.copyWith(color: AppColors.primary),
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text(
+                _appCubit.state.currentPage.name.capitalize(),
+                style:
+                    context.textSubtitleLg.copyWith(color: AppColors.primary),
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: context.showDrawer,
+              ),
             ),
-            leading: IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: context.showDrawer,
-            ),
-          ),
-          body: widget.child,
-          extendBody: true,
-          resizeToAvoidBottomInset: false,
-          bottomNavigationBar: BlocBuilder(
-            bloc: _appCubit,
-            builder: (context, state) => CustomBottomNavigation(
-              currentScreen: _appCubit.state.currentPageValue,
-              onChangePage: (page) => _onChangePage(context, page),
+            body: widget.child,
+            extendBody: true,
+            resizeToAvoidBottomInset: false,
+            bottomNavigationBar: BlocBuilder(
+              bloc: _appCubit,
+              builder: (context, state) => CustomBottomNavigation(
+                currentScreen: _appCubit.state.currentPageValue,
+                onChangePage: (page) => _onChangePage(context, page),
+              ),
             ),
           ),
         ),

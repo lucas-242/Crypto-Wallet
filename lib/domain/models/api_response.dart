@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ApiResponse {
+final class ApiResponse {
   ApiResponse({
     required this.status,
     required this.body,

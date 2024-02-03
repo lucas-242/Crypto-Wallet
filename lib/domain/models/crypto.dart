@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 
 //Represents the Crypto Entity for the App
-class Crypto extends Equatable {
+final class Crypto extends Equatable {
   const Crypto({
     required this.id,
     required this.name,

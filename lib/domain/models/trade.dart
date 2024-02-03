@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'trade.g.dart';
 
 @JsonSerializable()
-class Trade extends Equatable {
+final class Trade extends Equatable {
   Trade({
     this.id,
     this.operationType = '',

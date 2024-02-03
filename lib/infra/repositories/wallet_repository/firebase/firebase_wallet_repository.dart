@@ -9,6 +9,7 @@ import 'package:crypto_wallet/domain/models/enums/trade_operartion.dart';
 import 'package:crypto_wallet/domain/models/trade.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/domain/repositories/wallet_repository.dart';
+import 'package:crypto_wallet/infra/repositories/wallet_repository/firebase/models/firebase_crypto_model.dart';
 
 final class FirebaseWalletRepository implements WalletRepository {
   FirebaseWalletRepository({
@@ -36,12 +37,13 @@ final class FirebaseWalletRepository implements WalletRepository {
 
       await _firestore
           .collection('cryptos')
-          .where('user', isEqualTo: _getUser)
+          .where('user', isEqualTo: _getUser())
           .where('amount', isGreaterThan: 0)
           .get()
           .then((QuerySnapshot querySnapshot) {
         result = querySnapshot.docs
-            .map((e) => WalletCrypto.fromJson(e.data() as dynamic))
+            .map((e) => FirebaseCryptoModel.fromJson(e.data() as dynamic)
+                .toWalletCrypto())
             .toList();
         querySnapshot.docs.asMap().forEach((index, data) =>
             result[index] = result[index].copyWith(id: data.id));
@@ -64,13 +66,14 @@ final class FirebaseWalletRepository implements WalletRepository {
 
       await _firestore
           .collection('cryptos')
-          .where('user', isEqualTo: _getUser)
+          .where('user', isEqualTo: _getUser())
           .where('cryptoId', isEqualTo: cryptoId)
           .get()
           .then((QuerySnapshot querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
           final data = querySnapshot.docs.first;
-          result = WalletCrypto.fromJson(data.data() as dynamic);
+          result = FirebaseCryptoModel.fromJson(data.data() as dynamic)
+              .toWalletCrypto();
           result = result!.copyWith(id: data.id);
         }
       });
@@ -91,7 +94,7 @@ final class FirebaseWalletRepository implements WalletRepository {
     try {
       List<Trade> result = [];
       final query =
-          _firestore.collection('trades').where('user', isEqualTo: _getUser);
+          _firestore.collection('trades').where('user', isEqualTo: _getUser());
 
       if (cryptoId != null) {
         query.where('cryptoId', isEqualTo: cryptoId);
@@ -121,15 +124,16 @@ final class FirebaseWalletRepository implements WalletRepository {
   Future<void> addTrade(
       TradeCreateOperation operation, Trade trade, WalletCrypto crypto) async {
     try {
+      final toCreate = FirebaseCryptoModel.fromWalletCrypto(crypto);
       return await _firestore.runTransaction((transaction) async {
         if (operation == TradeCreateOperation.create) {
           final DocumentReference cryptosReference =
               _firestore.collection('cryptos').doc();
-          transaction.set(cryptosReference, crypto.toJson());
+          transaction.set(cryptosReference, toCreate.toJson());
         } else {
           final DocumentReference cryptosReference =
               _firestore.collection('cryptos').doc(crypto.id);
-          transaction.update(cryptosReference, crypto.toJson());
+          transaction.update(cryptosReference, toCreate.toJson());
         }
 
         final DocumentReference tradesReference =
@@ -155,11 +159,13 @@ final class FirebaseWalletRepository implements WalletRepository {
       final DocumentReference cryptosReference =
           _firestore.collection('cryptos').doc(crypto.id);
 
+      final toCreate = FirebaseCryptoModel.fromWalletCrypto(crypto);
+
       return await _firestore.runTransaction((transaction) async {
         if (operation == TradeDeleteOperation.delete) {
           transaction.delete(cryptosReference);
         } else {
-          transaction.update(cryptosReference, crypto.toJson());
+          transaction.update(cryptosReference, toCreate.toJson());
         }
 
         transaction.delete(tradesReference);

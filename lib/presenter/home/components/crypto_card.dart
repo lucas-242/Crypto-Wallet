@@ -47,7 +47,9 @@ class CryptoCard extends StatelessWidget {
                   ),
                   AppSpacings.verticalXXXSm,
                   Text(
-                    crypto.percentInWallet.formatPercent(),
+                    'TODO',
+                    // Wallet.getPercentInWallet(crypto.id),
+                    // crypto.percentInWallet.formatPercent(),
                     style: context.textMd.copyWith(color: AppColors.white),
                   ),
                 ],

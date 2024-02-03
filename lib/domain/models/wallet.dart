@@ -1,7 +1,7 @@
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:equatable/equatable.dart';
 
-class Wallet extends Equatable {
+final class Wallet extends Equatable {
   const Wallet({this.cryptos = const []});
 
   double get totalNow => cryptos

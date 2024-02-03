@@ -1,18 +1,14 @@
 import 'package:crypto_wallet/domain/models/crypto.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:equatable/equatable.dart';
 
-part 'wallet_crypto.g.dart';
-
-@JsonSerializable()
-class WalletCrypto {
+final class WalletCrypto extends Equatable {
   WalletCrypto({
     required this.id,
     required this.cryptoId,
     required this.amount,
     required this.averagePrice,
     required this.totalInvested,
-    this.percentInWallet = 0,
     this.userId = '',
     this.totalFee = 0,
     this.totalProfit = 0,
@@ -24,20 +20,12 @@ class WalletCrypto {
   })  : updatedAt = updatedAt ?? DateTime.now(),
         lastTradeAt = lastTradeAt ?? DateTime.now();
 
-  factory WalletCrypto.fromJson(Map<String, dynamic> json) =>
-      _$WalletCryptoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$WalletCryptoToJson(this);
-
   final String? id;
   final String cryptoId;
   final double amount;
   final double averagePrice;
   final double totalInvested;
   final DateTime updatedAt;
-
-//TODO: Remove it
-  final double percentInWallet;
 
   /// Date when the user sold all position in the crypto
   final DateTime? soldPositionAt;
@@ -51,15 +39,12 @@ class WalletCrypto {
   /// Total profit in dollars in sell trades. Used to show to the user easily.
   final double totalProfit;
 
-  @JsonKey(name: 'user')
   final String userId;
 
   ///Crypto market data
-  @JsonKey(includeFromJson: false, includeToJson: false)
   final Crypto? marketData;
 
   ///Flag if an crypto card is open in the wallet page
-  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isOpen;
 
   /// Total amount at current quote of selected currency
@@ -92,7 +77,6 @@ class WalletCrypto {
     DateTime? lastTradeAt,
     double? totalFee,
     double? totalProfit,
-    double? percentInWallet,
     String? userId,
     Crypto? marketData,
     bool? isOpen,
@@ -108,10 +92,26 @@ class WalletCrypto {
       lastTradeAt: lastTradeAt ?? this.lastTradeAt,
       totalFee: totalFee ?? this.totalFee,
       totalProfit: totalProfit ?? this.totalProfit,
-      percentInWallet: percentInWallet ?? this.percentInWallet,
       userId: userId ?? this.userId,
       marketData: marketData ?? this.marketData,
       isOpen: isOpen ?? this.isOpen,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        cryptoId,
+        amount,
+        averagePrice,
+        totalInvested,
+        updatedAt,
+        soldPositionAt,
+        lastTradeAt,
+        totalFee,
+        totalProfit,
+        userId,
+        marketData,
+        isOpen,
+      ];
 }

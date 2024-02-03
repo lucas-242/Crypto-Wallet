@@ -61,9 +61,11 @@ class WalletCubit extends Cubit<WalletState> {
     final response = <WalletCrypto>[];
     for (final crypto in walletCryptos) {
       final marketData =
-          marketDataResponse.firstWhere((m) => m.id == crypto.cryptoId);
+          marketDataResponse.where((m) => m.id == crypto.cryptoId);
 
-      response.add(crypto.copyWith(marketData: marketData));
+      if (marketData.isNotEmpty) {
+        response.add(crypto.copyWith(marketData: marketData.first));
+      }
     }
 
     return response;

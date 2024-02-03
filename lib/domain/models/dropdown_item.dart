@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class DropdownItem extends Equatable {
+final class DropdownItem extends Equatable {
   const DropdownItem({String? label, required this.value})
       : label = label ?? value;
 
