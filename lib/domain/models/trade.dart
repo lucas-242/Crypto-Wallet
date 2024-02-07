@@ -16,7 +16,7 @@ final class Trade extends Equatable {
     this.fee = 0,
     this.profit = 0,
     DateTime? date,
-    this.user,
+    this.userId,
   }) : date = date ?? DateTime.now();
 
   factory Trade.fromJson(Map<String, dynamic> json) => _$TradeFromJson(json);
@@ -43,7 +43,7 @@ final class Trade extends Equatable {
 
   /// If it is a sell trade, it can have a profit
   final double profit;
-  final String? user;
+  final String? userId;
 
   @override
   List<Object?> get props => [
@@ -57,7 +57,7 @@ final class Trade extends Equatable {
         fee,
         date,
         profit,
-        user,
+        userId,
       ];
 
   Trade copyWith({
@@ -84,7 +84,7 @@ final class Trade extends Equatable {
       fee: fee ?? this.fee,
       date: date ?? this.date,
       profit: profit ?? this.profit,
-      user: user ?? this.user,
+      userId: user ?? userId,
     );
   }
 }

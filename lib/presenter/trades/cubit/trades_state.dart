@@ -9,6 +9,8 @@ final class TradesState extends BaseState with EquatableMixin {
 
   final List<Trade> trades;
 
+  List<DateTime> get dates => trades.map((e) => e.date).toList();
+
   @override
   List<Object> get props => [
         status,

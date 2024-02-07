@@ -4,6 +4,7 @@ import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
 import 'package:crypto_wallet/domain/models/trade.dart';
 import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TradeTile extends StatelessWidget {
   const TradeTile({
@@ -27,10 +28,10 @@ class TradeTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: SlidableAction(
-              label: appLocalizations.delete,
+              label: AppLocalizations.current.delete,
               icon: Icons.close,
               onPressed: (_) => onDelete!(trade),
-              backgroundColor: theme.scaffoldBackgroundColor,
+              backgroundColor: AppColors.background,
             ),
           ),
         ],

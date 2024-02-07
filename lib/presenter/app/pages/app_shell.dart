@@ -7,6 +7,7 @@ import 'package:crypto_wallet/presenter/app/components/custom_bottom_navigation.
 import 'package:crypto_wallet/presenter/app/components/custom_drawer.dart';
 import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
 import 'package:crypto_wallet/presenter/login/cubit/login_cubit.dart';
+import 'package:crypto_wallet/presenter/trades/cubit/trades_cubit.dart';
 import 'package:crypto_wallet/presenter/wallet/cubit/wallet_cubit.dart';
 import 'package:crypto_wallet/service_locator.dart';
 import 'package:crypto_wallet/themes/themes.dart';
@@ -30,6 +31,7 @@ class _AppShellState extends State<AppShell> {
   final _appCubit = ServiceLocator.get<AppCubit>();
   final _loginCubit = ServiceLocator.get<LoginCubit>();
   final _walletCubit = ServiceLocator.get<WalletCubit>();
+  final _tradesCubit = ServiceLocator.get<TradesCubit>();
 
   @override
   void initState() {
@@ -44,6 +46,7 @@ class _AppShellState extends State<AppShell> {
         BlocProvider(create: (context) => _appCubit),
         BlocProvider(create: (context) => _loginCubit),
         BlocProvider(create: (context) => _walletCubit),
+        BlocProvider(create: (context) => _tradesCubit),
       ],
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {

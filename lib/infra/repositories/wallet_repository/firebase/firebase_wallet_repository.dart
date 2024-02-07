@@ -10,6 +10,7 @@ import 'package:crypto_wallet/domain/models/trade.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/domain/repositories/wallet_repository.dart';
 import 'package:crypto_wallet/infra/repositories/wallet_repository/firebase/models/firebase_crypto_model.dart';
+import 'package:crypto_wallet/infra/repositories/wallet_repository/firebase/models/firebase_trade_model.dart';
 
 final class FirebaseWalletRepository implements WalletRepository {
   FirebaseWalletRepository({
@@ -104,8 +105,10 @@ final class FirebaseWalletRepository implements WalletRepository {
 
       await query.get().then((QuerySnapshot querySnapshot) {
         result = querySnapshot.docs
-            .map((e) => Trade.fromJson(e.data() as dynamic))
+            .map((e) =>
+                FirebaseTradeModel.fromJson(e.data() as dynamic).toTrade())
             .toList();
+
         querySnapshot.docs.asMap().forEach((index, data) =>
             result[index] = result[index].copyWith(id: data.id));
       });

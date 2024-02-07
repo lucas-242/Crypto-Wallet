@@ -1,3 +1,4 @@
+import 'package:crypto_wallet/presenter/trades/components/trade_tile_list.dart';
 import 'package:crypto_wallet/themes/settings/app_spacings.dart';
 import 'package:flutter/material.dart';
 
@@ -18,29 +19,7 @@ class TradeList extends StatelessWidget {
         //   searchHint: 'BTC, ETH, ADA ...',
         // ),
         AppSpacings.verticalMd,
-        Expanded(
-          child: Consumer<TradesBloc>(builder: (context, bloc, child) {
-            return TradeTileList(
-              bloc: bloc,
-              onTap: (trade) => Navigator.pushNamed(
-                context,
-                AppRoutes.tradesDetails,
-                arguments: {'trade': trade, 'uid': auth.user!.uid},
-              ),
-              onRefresh: () => bloc.getTrades(auth.user!.uid),
-              onDelete: (trade) {
-                final walletBloc = context.read<WalletBloc>();
-                bloc
-                    .onDelete(
-                      trade: trade,
-                      uid: auth.user!.uid,
-                      walletBloc: walletBloc,
-                    )
-                    .then((value) => bloc.loadInterstitialAd());
-              },
-            );
-          }),
-        ),
+        TradeTileList(onRefresh: () async {}, onTap: (_) {}, onDelete: (_) {}),
       ],
     );
   }

@@ -15,6 +15,12 @@ class _TradesPageState extends State<TradesPage> {
   final _cubit = ServiceLocator.get<TradesCubit>();
 
   @override
+  void initState() {
+    _cubit.getTrades();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: context.read<TradesCubit>().getTrades,
