@@ -13,10 +13,15 @@ class TradesCubit extends Cubit<TradesState> {
 
   final WalletRepository _walletRepository;
 
-  Future<void> getTrades() async {
+  Future<void> getTrades({bool forceRefresh = false}) async {
     try {
+      if (!forceRefresh && state.trades.isNotEmpty) {
+        return;
+      }
+
       emit(state.copyWith(status: BaseStateStatus.loading));
       final trades = await _walletRepository.getTrades();
+      trades.sort((a, b) => b.date.compareTo(a.date));
       emit(state.copyWith(status: BaseStateStatus.success, trades: trades));
     } on AppError catch (error) {
       emit(

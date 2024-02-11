@@ -26,7 +26,7 @@ class TradeTile extends StatelessWidget {
         extentRatio: 0.25,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 15),
+            padding: const EdgeInsets.only(left: AppInsets.md),
             child: SlidableAction(
               label: AppLocalizations.current.delete,
               icon: Icons.close,
@@ -38,42 +38,63 @@ class TradeTile extends StatelessWidget {
       ),
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: () => onTap!(trade),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text(
-                  trade.cryptoSymbol,
-                  style:
-                      context.textSubtitleMd.copyWith(color: AppColors.primary),
-                ),
-                Text(trade.operationType.capitalize())
-              ],
-            ),
-            AppSpacings.verticalXXSm,
-            Row(
-              children: [
-                Text(AppLocalizations.current.amount),
-                Text(trade.amount.toStringAsFixed(8)),
-              ],
-            ),
-            AppSpacings.verticalXXSm,
-            if (trade.operationType != TradeType.transfer)
+        onTap: () => onTap?.call(trade),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppInsets.sm),
+          child: Column(
+            children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(AppLocalizations.current.price),
-                  Text(trade.price.getDecimalDigits().formatCurrency()),
-                ],
-              )
-            else
-              Row(
-                children: [
-                  Text(AppLocalizations.current.fee),
-                  Text(trade.fee.getDecimalDigits().formatCurrency()),
+                  Text(
+                    trade.cryptoSymbol,
+                    style: context.textSubtitleMd
+                        .copyWith(color: AppColors.primary),
+                  ),
+                  Text(
+                    trade.operationType.capitalize(),
+                    style: context.textSubtitleMd.copyWith(
+                      color: trade.operationType == TradeType.buy
+                          ? AppColors.green
+                          : AppColors.red,
+                    ),
+                  )
                 ],
               ),
-          ],
+              if (trade.operationType != TradeType.transfer)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(AppLocalizations.current.price),
+                    Text(
+                      trade.amountDollars.formatCurrency(),
+                      style: context.textSubtitleMd,
+                    ),
+                  ],
+                )
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(AppLocalizations.current.fee),
+                    Text(
+                      trade.fee.formatCurrency(),
+                      style: context.textSubtitleMd,
+                    ),
+                  ],
+                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(AppLocalizations.current.amount),
+                  Text(
+                    trade.amount.toStringAsFixed(8),
+                    style: context.textSubtitleMd,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

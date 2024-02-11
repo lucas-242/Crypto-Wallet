@@ -1,6 +1,6 @@
 import 'package:crypto_wallet/core/components/status_pages/status_pages.dart';
+import 'package:crypto_wallet/presenter/trades/components/trade_content.dart';
 import 'package:crypto_wallet/presenter/trades/cubit/trades_cubit.dart';
-import 'package:crypto_wallet/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,21 +12,20 @@ class TradesPage extends StatefulWidget {
 }
 
 class _TradesPageState extends State<TradesPage> {
-  final _cubit = ServiceLocator.get<TradesCubit>();
-
   @override
   void initState() {
-    _cubit.getTrades();
+    context.read<TradesCubit>().getTrades();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: context.read<TradesCubit>().getTrades,
+      onRefresh: () =>
+          context.read<TradesCubit>().getTrades(forceRefresh: true),
       child: BlocBuilder<TradesCubit, TradesState>(
         builder: (context, state) => state.when(
-          onState: (_) => const Column(),
+          onState: (_) => const TradesContent(),
           onError: (_) => FeedbackPage(message: state.callbackMessage),
           onLoading: () => const LoadingPage(),
         ),

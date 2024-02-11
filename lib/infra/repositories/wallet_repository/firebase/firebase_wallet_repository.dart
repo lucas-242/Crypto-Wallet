@@ -101,7 +101,7 @@ final class FirebaseWalletRepository implements WalletRepository {
         query.where('cryptoId', isEqualTo: cryptoId);
       }
 
-      query.orderBy('date');
+      query.orderBy('date', descending: true);
 
       await query.get().then((QuerySnapshot querySnapshot) {
         result = querySnapshot.docs
