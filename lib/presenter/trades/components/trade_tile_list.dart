@@ -65,8 +65,8 @@ class TradeTileList extends StatelessWidget {
                     children: [
                       TradeTile(
                         trade: trades[index],
-                        onTap: (trade) => onTap(trade),
-                        onDelete: (trade) => onDelete(trade),
+                        onTap: onTap,
+                        onDelete: onDelete,
                       ),
                       if (trades.length > 1 && index != trades.length - 1)
                         const Divider(),

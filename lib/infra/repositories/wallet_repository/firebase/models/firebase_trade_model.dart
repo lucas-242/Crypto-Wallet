@@ -61,7 +61,7 @@ final class FirebaseTradeModel {
   Map<String, dynamic> toJson() => _$FirebaseTradeModelToJson(this);
 
   Trade toTrade() => Trade(
-        id: id,
+        id: id ?? '',
         cryptoId: cryptoId,
         amount: amount,
         amountDollars: amountDollars,

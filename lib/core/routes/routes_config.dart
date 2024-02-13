@@ -3,6 +3,7 @@ import 'package:crypto_wallet/presenter/app/pages/app_shell.dart';
 import 'package:crypto_wallet/presenter/app/pages/splash_page.dart';
 import 'package:crypto_wallet/presenter/home/pages/home_page.dart';
 import 'package:crypto_wallet/presenter/login/pages/login_page.dart';
+import 'package:crypto_wallet/presenter/trades/pages/trades_details_page.dart';
 import 'package:crypto_wallet/presenter/trades/pages/trades_page.dart';
 import 'package:crypto_wallet/presenter/wallet/pages/wallet_page.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +44,19 @@ abstract class RoutesConfig {
       ),
       GoRoute(
         path: Routes.trades,
-        pageBuilder: (context, state) =>
-            _customTransition(state, const TradesPage()),
+        pageBuilder: (context, state) => _customTransition(
+          state,
+          const TradesPage(),
+        ),
+        routes: [
+          GoRoute(
+            path: ':id',
+            pageBuilder: (context, state) => _customTransition(
+              state,
+              const TradesDetailsPage(),
+            ),
+          ),
+        ],
       ),
     ],
   );

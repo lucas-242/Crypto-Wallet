@@ -42,4 +42,7 @@ class TradesCubit extends Cubit<TradesState> {
     }
     return state.trades.where((e) => e.cryptoId == item.value).toList();
   }
+
+  void onSelectTrade(Trade trade) => emit(
+      state.copyWith(selectedTrade: trade, status: BaseStateStatus.initial));
 }

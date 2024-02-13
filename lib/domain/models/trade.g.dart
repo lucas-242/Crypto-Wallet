@@ -7,7 +7,7 @@ part of 'trade.dart';
 // **************************************************************************
 
 Trade _$TradeFromJson(Map<String, dynamic> json) => Trade(
-      id: json['id'] as String?,
+      id: json['id'] as String? ?? '',
       operationType: json['operationType'] as String? ?? '',
       cryptoSymbol: json['cryptoSymbol'] as String? ?? '',
       cryptoId: json['cryptoId'] as String? ?? '',

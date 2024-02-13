@@ -1,6 +1,9 @@
+import 'package:crypto_wallet/core/routes/routes.dart';
 import 'package:crypto_wallet/presenter/trades/components/trade_tile_list.dart';
+import 'package:crypto_wallet/presenter/trades/cubit/trades_cubit.dart';
 import 'package:crypto_wallet/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TradesContent extends StatelessWidget {
   const TradesContent({super.key});
@@ -24,7 +27,10 @@ class TradesContent extends StatelessWidget {
           Expanded(
             child: TradeTileList(
               onRefresh: () async {},
-              onTap: (_) {},
+              onTap: (trade) {
+                context.read<TradesCubit>().onSelectTrade(trade);
+                context.pushTo('${Routes.trades}/${trade.id}');
+              },
               onDelete: (_) {},
             ),
           ),

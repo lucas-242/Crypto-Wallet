@@ -6,7 +6,7 @@ part 'trade.g.dart';
 @JsonSerializable()
 final class Trade extends Equatable {
   Trade({
-    this.id,
+    this.id = '',
     this.operationType = '',
     this.cryptoSymbol = '',
     this.cryptoId = '',
@@ -23,7 +23,7 @@ final class Trade extends Equatable {
 
   Map<String, dynamic> toJson() => _$TradeToJson(this);
 
-  final String? id;
+  final String id;
   final String operationType;
   final String cryptoSymbol;
   final String cryptoId;
