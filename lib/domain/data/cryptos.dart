@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:crypto_wallet/domain/models/crypto.dart';
 
 abstract class Cryptos {
+  static Crypto? getCrypto(String cryptoId) =>
+      supported.where((c) => c.id == cryptoId).firstOrNull;
+
   static final supported = <Crypto>[
     const Crypto(
       id: 'bitcoin',
