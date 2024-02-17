@@ -125,8 +125,12 @@ final class FirebaseWalletRepository implements WalletRepository {
 
   @override
   Future<void> addTrade(
-      TradeCreateOperation operation, Trade trade, WalletCrypto crypto) async {
+    TradeCreateOperation operation,
+    Trade trade,
+    WalletCrypto crypto,
+  ) async {
     try {
+      //TODO: Add UserId
       final toCreate = FirebaseCryptoModel.fromWalletCrypto(crypto);
       return await _firestore.runTransaction((transaction) async {
         if (operation == TradeCreateOperation.create) {

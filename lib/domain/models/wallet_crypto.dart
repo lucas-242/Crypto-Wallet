@@ -1,10 +1,11 @@
 import 'package:crypto_wallet/domain/models/crypto.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
+import 'package:crypto_wallet/domain/models/trade.dart';
 import 'package:equatable/equatable.dart';
 
 final class WalletCrypto extends Equatable {
   WalletCrypto({
-    required this.id,
+    this.id = '',
     required this.cryptoId,
     required this.amount,
     required this.averagePrice,
@@ -19,6 +20,16 @@ final class WalletCrypto extends Equatable {
     DateTime? updatedAt,
   })  : updatedAt = updatedAt ?? DateTime.now(),
         lastTradeAt = lastTradeAt ?? DateTime.now();
+
+  factory WalletCrypto.fromTrade(Trade trade) => WalletCrypto(
+        cryptoId: trade.cryptoId,
+        lastTradeAt: trade.date,
+        amount: trade.amount,
+        averagePrice: ((trade.price * trade.amount) + trade.fee) / trade.amount,
+        totalInvested: trade.amountDollars,
+        totalFee: trade.fee,
+        updatedAt: DateTime.now(),
+      );
 
   final String? id;
   final String cryptoId;

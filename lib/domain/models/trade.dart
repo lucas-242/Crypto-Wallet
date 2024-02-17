@@ -1,4 +1,3 @@
-import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -87,26 +86,5 @@ final class Trade extends Equatable {
       profit: profit ?? this.profit,
       userId: user ?? userId,
     );
-  }
-
-  /// Set [trade] profit, price and amount dollars according to the operation type and the crypto [averagePrice]
-  ///
-  /// When transfering, the trade price is the average price, and the Amount in Dollars is calculated using the fee
-
-  Trade setTrade(double averagePrice) {
-    if (operationType == TradeType.transfer) {
-      return copyWith(
-        price: averagePrice,
-        amountDollars: fee,
-      );
-    }
-
-    if (operationType == TradeType.sell) {
-      return copyWith(
-        profit: amount * (price - averagePrice),
-      );
-    }
-
-    return this;
   }
 }

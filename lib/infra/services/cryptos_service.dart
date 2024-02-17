@@ -1,42 +1,47 @@
-import 'package:crypto_wallet/domain/data/cryptos.dart';
-import 'package:crypto_wallet/domain/models/crypto.dart';
+import 'package:crypto_wallet/core/extensions/double_extensions.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
 import 'package:crypto_wallet/domain/models/trade.dart';
+import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 
 /// This service is responsible for calculate the Crypto properties when creating or removing a trade
 class CryptosService {
-  /// Precision to calculate decimal numbers
-  final int _precision = 100000000;
-
-  /// Calculate all [crypto] properties considering [trade] and all the [trades] before to calculate the Average Price.
-  Crypto calculateCryptoProperties(Crypto crypto, Trade trade) {
+  /// Calculate all [crypto] properties considering [trade].
+  WalletCrypto setCryptoByOperation(WalletCrypto crypto, Trade trade) {
     double amount = crypto.amount;
     double totalInvested = crypto.totalInvested;
     double averagePrice = crypto.averagePrice;
     double totalFee = crypto.totalFee;
     double totalProfit = crypto.totalProfit;
 
-    if (trade.operationType == TradeType.buy) {
-      amount += trade.amount;
-      totalInvested += trade.amountDollars;
-      totalFee += trade.fee;
-      averagePrice = calculateAveragePrice(trade, crypto);
-    }
-    // !When selling the average price doesn't change
-    else if (trade.operationType == TradeType.sell) {
-      checkBalance(crypto, trade);
-      amount -= trade.amount;
-      totalInvested -= trade.amountDollars;
-      totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
-      totalProfit += trade.amount * (trade.price - averagePrice);
-      totalFee = amount <= 0 ? 0 : totalFee;
-    }
-    // !When transfering trades amount indicate the amount transfer to another wallet
-    else {
-      checkBalance(crypto, trade);
-      amount -= trade.fee;
-      totalInvested -= trade.amountDollars;
-      totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
+    switch (trade.operationType) {
+      case TradeType.buy:
+        {
+          amount += trade.amount;
+          totalInvested += trade.amountDollars;
+          totalFee += trade.fee;
+          averagePrice = _calculateAveragePrice(trade, crypto);
+        }
+        break;
+      // !When selling the average price doesn't change
+      case TradeType.sell:
+        {
+          _checkBalance(crypto, trade);
+          amount -= trade.amount;
+          totalInvested -= trade.amountDollars;
+          totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
+          totalProfit += trade.amount * (trade.price - averagePrice);
+          totalFee = amount <= 0 ? 0 : totalFee;
+        }
+        break;
+      // !When transfering trades amount indicate the amount transfer to another wallet
+      default:
+        {
+          _checkBalance(crypto, trade);
+          amount -= trade.fee;
+          totalInvested -= trade.amountDollars;
+          totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
+        }
+        break;
     }
 
     crypto = crypto.copyWith(
@@ -48,31 +53,50 @@ class CryptosService {
       totalProfit: totalProfit,
       soldPositionAt: amount == 0 ? trade.date : crypto.soldPositionAt,
       lastTradeAt: trade.date,
-      user: crypto.user,
+      userId: crypto.userId,
     );
 
     return crypto;
   }
 
-  /// Used to recalculate all the propreties of the [crypto] when deleting a [trade]
-  /// considering all the [otherTrades]
+  /// Calculate the average price considering [trade] and the [crypto] data
+  double _calculateAveragePrice(Trade trade, WalletCrypto crypto) =>
+      ((trade.price * trade.amount) +
+          trade.fee +
+          crypto.totalInvested +
+          crypto.totalFee) /
+      (crypto.amount + trade.amount);
+
+  /// Check [crypto] balance based on [trade]
+  void _checkBalance(WalletCrypto crypto, Trade trade) {
+    //TODO: Validate Message
+    if (!crypto.hasBalace(
+      trade.operationType,
+      trade.amount,
+    )) {
+      throw Exception('Não há saldo suficiente');
+    }
+  }
+
+  /// Used to recalculate all the [crypto] properties when deleting a [trade]
+  /// considering all the [trades].
   ///
-  ///If [trade] would be null, only [otherTrades] will be consider to calculate properties
-  Crypto recalculatingCryptoProperties(
-    Crypto crypto,
+  ///If [trade] is null, only [trades] will be consider to calculate properties.
+  ///Used when editing trades or after sold all [crypto] position
+  WalletCrypto recalculatingWalletCrypto({
+    required WalletCrypto crypto,
+    required List<Trade> trades,
     Trade? trade,
-    List<Trade> otherTrades,
-  ) {
+  }) {
     final List<Trade> allTrades = [];
-    allTrades.addAll(otherTrades);
+    allTrades.addAll(trades);
     if (trade != null) allTrades.add(trade);
     allTrades.sort((a, b) => a.date.compareTo(b.date));
 
     Trade? soldPositionInThisTrade;
     var firstTradeAfterSoldPosition = false;
 
-    crypto = setCrypto(
-      crypto: crypto,
+    crypto = crypto.copyWith(
       amount: 0,
       averagePrice: 0,
       totalInvested: 0,
@@ -92,12 +116,11 @@ class CryptosService {
         if (!firstTradeAfterSoldPosition && soldPositionInThisTrade != null) {
           firstTradeAfterSoldPosition = true;
         }
-        averagePrice = calculateAveragePrice(element, crypto);
-        totalInvested = _sum(crypto.totalInvested, element.amountDollars);
-        amount = _sum(crypto.amount, element.amount);
+        averagePrice = _calculateAveragePrice(element, crypto);
+        totalInvested = crypto.totalInvested.sum(element.amountDollars);
+        amount = crypto.amount.sum(element.amount);
         totalFee += element.fee;
-        crypto = setCrypto(
-          crypto: crypto,
+        crypto = crypto.copyWith(
           amount: amount,
           averagePrice: averagePrice,
           totalInvested: totalInvested,
@@ -105,13 +128,12 @@ class CryptosService {
       }
       // *When selling the average price and total fee don't change
       else if (element.operationType == TradeType.sell) {
-        checkBalance(crypto, element);
-        amount = _subtraction(crypto.amount, element.amount);
-        totalInvested =
-            _subtraction(crypto.totalInvested, element.amountDollars);
+        _checkBalance(crypto, element);
+        amount = crypto.amount.sub(element.amount);
+        totalInvested = crypto.totalInvested.sub(element.amountDollars);
         totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
         totalProfit +=
-            element.amount * (_subtraction(element.price, crypto.averagePrice));
+            element.amount * (element.price.sub(crypto.averagePrice));
 
         if (amount == 0) {
           soldPositionAt = element.date;
@@ -120,8 +142,7 @@ class CryptosService {
           soldPositionInThisTrade = element;
         }
 
-        crypto = setCrypto(
-          crypto: crypto,
+        crypto = crypto.copyWith(
           amount: amount,
           averagePrice: averagePrice,
           totalInvested: totalInvested,
@@ -129,10 +150,9 @@ class CryptosService {
       }
       // *When transfering trades amount indicate the amount transfer to another wallet
       else {
-        checkBalance(crypto, element);
-        amount = _subtraction(crypto.amount, element.fee);
-        totalInvested =
-            _subtraction(crypto.totalInvested, element.amountDollars);
+        _checkBalance(crypto, element);
+        amount = crypto.amount.sub(element.fee);
+        totalInvested = crypto.totalInvested.sub(element.amountDollars);
         totalInvested = totalInvested < 0 || amount == 0 ? 0 : totalInvested;
 
         if (amount == 0) {
@@ -142,8 +162,7 @@ class CryptosService {
           soldPositionInThisTrade = element;
         }
 
-        crypto = setCrypto(
-          crypto: crypto,
+        crypto = crypto.copyWith(
           amount: amount,
           averagePrice: averagePrice,
           totalInvested: totalInvested,
@@ -160,84 +179,5 @@ class CryptosService {
     );
 
     return crypto;
-  }
-
-  /// Calculate the average price considering all buying [trade] and the [totalAmount] on wallet
-  double calculateAveragePrice(Trade trade, Crypto crypto) {
-    final average = ((trade.price * trade.amount) +
-            trade.fee +
-            crypto.totalInvested +
-            crypto.totalFee) /
-        (crypto.amount + trade.amount);
-    return average;
-  }
-
-  /// Copy the [crypto] setting the [amount], [averagePrice], [totalInvested] and [totalFee] properties
-  Crypto setCrypto({
-    required Crypto crypto,
-    required double amount,
-    required double averagePrice,
-    required double totalInvested,
-  }) {
-    return crypto.copyWith(
-      amount: amount,
-      averagePrice: averagePrice,
-      totalInvested: totalInvested,
-    );
-  }
-
-  /// Create a [Crypto] considering a [trade]
-  Crypto setCryptoForTheFirstTime(Trade trade) {
-    final infos = Cryptos.getCrypto(trade.cryptoId);
-    var crypto = Crypto(
-      cryptoId: trade.cryptoId,
-      name: infos.name,
-      symbol: infos.symbol,
-      amount: 0,
-      averagePrice: 0,
-      totalInvested: 0,
-      user: trade.user!,
-      lastTradeAt: trade.date,
-    );
-
-    final averagePrice = calculateAveragePrice(trade, crypto);
-    crypto = crypto.copyWith(
-      amount: trade.amount,
-      averagePrice: averagePrice,
-      totalInvested: trade.amountDollars,
-      totalFee: trade.fee,
-      updatedAt: DateTime.now(),
-    );
-
-    return crypto;
-  }
-
-  /// Check [crypto] balance based on [trade]
-  void checkBalance(Crypto crypto, Trade trade) {
-    //TODO: Validate Message
-    if (!crypto.hasBalace(
-      trade.operationType,
-      trade.amount,
-    )) {
-      throw Exception('Não há saldo suficiente');
-    }
-  }
-
-  /// Sum two numbers avoiding problems with precision
-  double _sum(double value1, double value2) {
-    final sum = (value1 * _precision).roundToDouble() +
-        (value2 * _precision).roundToDouble();
-
-    final result = sum / _precision;
-    return result;
-  }
-
-  /// Subtract two numbers avoiding problems with precision
-  double _subtraction(double value1, double value2) {
-    final difference = (value1 * _precision).roundToDouble() -
-        (value2 * _precision).roundToDouble();
-
-    final result = difference / _precision;
-    return result;
   }
 }

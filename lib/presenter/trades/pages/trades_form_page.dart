@@ -3,6 +3,7 @@ import 'package:crypto_wallet/core/components/custom_text_form_field/custom_text
 import 'package:crypto_wallet/core/components/status_pages/status_pages.dart';
 import 'package:crypto_wallet/core/l10n/l10n.dart';
 import 'package:crypto_wallet/core/routes/routes.dart';
+import 'package:crypto_wallet/core/utils/base_state.dart';
 import 'package:crypto_wallet/core/utils/form_validator.dart';
 import 'package:crypto_wallet/core/utils/wallet_utils.dart';
 import 'package:crypto_wallet/domain/data/cryptos.dart';
@@ -74,7 +75,17 @@ class _TradesFormPageState extends State<TradesFormPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppInsets.md),
-        child: BlocBuilder<TradesFormCubit, TradesFormState>(
+        child: BlocConsumer<TradesFormCubit, TradesFormState>(
+          listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
+            if (state.status == BaseStateStatus.success) {
+              return context.pop();
+            }
+
+            if (state.status == BaseStateStatus.error) {
+              return context.showSnackBar(state.callbackMessage);
+            }
+          },
           builder: (context, state) => state.when(
             onState: (_) => SingleChildScrollView(
               child: Column(
@@ -220,7 +231,8 @@ class _TradesFormPageState extends State<TradesFormPage> {
                   secondButtonStyle:
                       context.textSubtitleMd.copyWith(color: AppColors.primary),
                   onPressedFirst: context.pop,
-                  onPressedSecond: onSave,
+                  onPressedSecond: () =>
+                      context.read<TradesFormCubit>().onSave(),
                 ),
             onLoading: () => const SizedBox.shrink()),
       ),
@@ -252,17 +264,5 @@ class _TradesFormPageState extends State<TradesFormPage> {
     final cubit = context.read<TradesFormCubit>();
     cubit.onChangePrice(value);
     tradedAmoutController.text = cubit.state.trade.amountDollars.toString();
-  }
-
-  Future<void> onSave() async {
-    final tradesBloc = context.read<TradesBloc>();
-    final walletBloc = context.read<WalletBloc>();
-    await bloc
-        .onSave(tradesBloc: tradesBloc, walletBloc: walletBloc, uid: uid)
-        .then((value) {
-      Navigator.pop(context);
-    }).catchError((error) {
-      context.showSnackBar(error.message);
-    });
   }
 }

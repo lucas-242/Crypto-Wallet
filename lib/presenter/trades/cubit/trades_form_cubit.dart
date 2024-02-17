@@ -2,19 +2,22 @@ import 'package:bloc/bloc.dart';
 import 'package:crypto_wallet/core/errors/errors.dart';
 import 'package:crypto_wallet/core/l10n/l10n.dart';
 import 'package:crypto_wallet/core/utils/base_state.dart';
-import 'package:crypto_wallet/domain/models/crypto.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_operartion.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
 import 'package:crypto_wallet/domain/models/trade.dart';
+import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/domain/repositories/wallet_repository.dart';
+import 'package:crypto_wallet/infra/services/cryptos_service.dart';
 import 'package:equatable/equatable.dart';
 
 part 'trades_form_state.dart';
 
 class TradesFormCubit extends Cubit<TradesFormState> {
-  TradesFormCubit(this._walletRepository) : super(TradesFormState());
+  TradesFormCubit(this._walletRepository, this._cryptosService)
+      : super(TradesFormState());
 
   final WalletRepository _walletRepository;
+  final CryptosService _cryptosService;
 
   void onChangeField({
     String? operationType,
@@ -61,7 +64,7 @@ class TradesFormCubit extends Cubit<TradesFormState> {
     ));
   }
 
-  Future<void> onSave({required String uid}) async {
+  Future<void> onSave() async {
     try {
       await addTrade();
     } catch (error) {
@@ -87,7 +90,7 @@ class TradesFormCubit extends Cubit<TradesFormState> {
       return _addCryptoForTheFirstTime();
     }
 
-    return _addCrypto();
+    return _updateCrypto(crypto);
   }
 
   Future<void> _addCryptoForTheFirstTime() async {
@@ -95,32 +98,58 @@ class TradesFormCubit extends Cubit<TradesFormState> {
       throw ClientError(AppLocalizations.current.errorInsufficientBalance);
     }
 
-    final cryptoToCreate = _cryptosService.setCryptoForTheFirstTime(trade);
+    final cryptoToCreate = WalletCrypto.fromTrade(state.trade);
 
     await _walletRepository.addTrade(
-        TradeCreateOperation.create, trade, cryptoToCreate);
+      TradeCreateOperation.create,
+      state.trade,
+      cryptoToCreate,
+    );
 
     return;
   }
 
-  Future<void> _addCrypto() async {
-    late Crypto updatedCrypto;
+  Future<void> _updateCrypto(WalletCrypto crypto) async {
+    late WalletCrypto updatedCrypto;
 
-    //Check if the type of trade to set some properties
-    trade = setTrade(trade, crypto.averagePrice);
+    final trade = _setTradeAccordingOperation(state.trade, crypto.averagePrice);
 
     //If this trade is before the last one or if it is the first trade after sold all position
     if ((trade.date.compareTo(crypto.lastTradeAt) < 0) ||
         (crypto.soldPositionAt != null && crypto.amount == 0)) {
-      final otherTrades = await _walletRepository.getTrades(trade.user!,
-          cryptoId: trade.cryptoId);
-      updatedCrypto = _cryptosService.recalculatingCryptoProperties(
-          crypto, trade, otherTrades);
+      final otherTrades =
+          await _walletRepository.getTrades(cryptoId: trade.cryptoId);
+      updatedCrypto = _cryptosService.recalculatingWalletCrypto(
+        crypto: crypto,
+        trade: trade,
+        trades: otherTrades,
+      );
     } else {
-      updatedCrypto = _cryptosService.calculateCryptoProperties(crypto, trade);
+      updatedCrypto = _cryptosService.setCryptoByOperation(crypto, trade);
     }
 
     await _walletRepository.addTrade(
         TradeCreateOperation.update, trade, updatedCrypto);
+  }
+
+  /// Set [trade]'s profit, price and amount dollars according to the operation type and the WalletCrypto [averagePrice]
+  ///
+  /// When transfering, the trade price is the average price, and the Amount in Dollars is calculated using the fee
+
+  Trade _setTradeAccordingOperation(Trade trade, double averagePrice) {
+    if (trade.operationType == TradeType.transfer) {
+      return trade.copyWith(
+        price: averagePrice,
+        amountDollars: trade.fee,
+      );
+    }
+
+    if (trade.operationType == TradeType.sell) {
+      return trade.copyWith(
+        profit: trade.amount * (trade.price - averagePrice),
+      );
+    }
+
+    return trade;
   }
 }
