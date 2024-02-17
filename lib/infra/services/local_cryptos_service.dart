@@ -1,11 +1,13 @@
 import 'package:crypto_wallet/core/extensions/double_extensions.dart';
+import 'package:crypto_wallet/core/l10n/l10n.dart';
 import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
 import 'package:crypto_wallet/domain/models/trade.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
+import 'package:crypto_wallet/domain/services/cryptos_services.dart';
+import 'package:http/http.dart';
 
-/// This service is responsible for calculate the Crypto properties when creating or removing a trade
-class CryptosService {
-  /// Calculate all [crypto] properties considering [trade].
+final class LocalCryptosService implements CryptosService {
+  @override
   WalletCrypto setCryptoByOperation(WalletCrypto crypto, Trade trade) {
     double amount = crypto.amount;
     double totalInvested = crypto.totalInvested;
@@ -69,20 +71,15 @@ class CryptosService {
 
   /// Check [crypto] balance based on [trade]
   void _checkBalance(WalletCrypto crypto, Trade trade) {
-    //TODO: Validate Message
-    if (!crypto.hasBalace(
+    if (!crypto.hasBalance(
       trade.operationType,
       trade.amount,
     )) {
-      throw Exception('Não há saldo suficiente');
+      throw ClientException(AppLocalizations.current.errorInsufficientBalance);
     }
   }
 
-  /// Used to recalculate all the [crypto] properties when deleting a [trade]
-  /// considering all the [trades].
-  ///
-  ///If [trade] is null, only [trades] will be consider to calculate properties.
-  ///Used when editing trades or after sold all [crypto] position
+  @override
   WalletCrypto recalculatingWalletCrypto({
     required WalletCrypto crypto,
     required List<Trade> trades,

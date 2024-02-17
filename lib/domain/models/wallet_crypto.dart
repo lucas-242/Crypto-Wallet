@@ -66,7 +66,7 @@ final class WalletCrypto extends Equatable {
   double get gainLossPercent => (gainLoss * 100 / totalNow) / 100;
 
   ///Verify if has enough balance to selling or transfer
-  bool hasBalace(
+  bool hasBalance(
     String operationType,
     double amountToCheck,
   ) {

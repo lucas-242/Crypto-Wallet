@@ -7,7 +7,7 @@ import 'package:crypto_wallet/domain/models/enums/trade_type.dart';
 import 'package:crypto_wallet/domain/models/trade.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 import 'package:crypto_wallet/domain/repositories/wallet_repository.dart';
-import 'package:crypto_wallet/infra/services/cryptos_service.dart';
+import 'package:crypto_wallet/domain/services/cryptos_services.dart';
 import 'package:equatable/equatable.dart';
 
 part 'trades_form_state.dart';

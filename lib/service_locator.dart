@@ -2,11 +2,13 @@ import 'package:crypto_wallet/domain/data/local_storage.dart';
 import 'package:crypto_wallet/domain/repositories/auth_repository.dart';
 import 'package:crypto_wallet/domain/repositories/market_data_repository.dart';
 import 'package:crypto_wallet/domain/repositories/wallet_repository.dart';
+import 'package:crypto_wallet/domain/services/cryptos_services.dart';
 import 'package:crypto_wallet/firebase_options.dart';
 import 'package:crypto_wallet/infra/local_storage/shared_preferences/shared_preferences_local_storage.dart';
 import 'package:crypto_wallet/infra/repositories/auth_repository/firebase/firebase_auth_repository.dart';
 import 'package:crypto_wallet/infra/repositories/market_data_repository/mobula/mobula_market_data_repository.dart';
 import 'package:crypto_wallet/infra/repositories/wallet_repository/firebase/firebase_wallet_repository.dart';
+import 'package:crypto_wallet/infra/services/local_cryptos_service.dart';
 import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
 import 'package:crypto_wallet/presenter/login/cubit/login_cubit.dart';
 import 'package:crypto_wallet/presenter/trades/cubit/trades_cubit.dart';
@@ -25,6 +27,7 @@ abstract class ServiceLocator {
   static Future<void> init() async {
     await _initFirebase();
     await _initStorages();
+    _initServices();
     _initRepositories();
     _initBlocs();
   }
@@ -50,10 +53,12 @@ abstract class ServiceLocator {
     );
   }
 
+  static Future<void> _initServices() async {
+    _instance.registerFactory<CryptosService>(() => LocalCryptosService());
+  }
+
   static void _initRepositories() {
-    _instance.registerFactory<AuthRepository>(
-      () => FirebaseAuthRepository(),
-    );
+    _instance.registerFactory<AuthRepository>(() => FirebaseAuthRepository());
 
     _instance.registerFactory<WalletRepository>(
       () => FirebaseWalletRepository(
