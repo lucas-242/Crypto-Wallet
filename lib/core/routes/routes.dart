@@ -8,7 +8,7 @@ abstract class Routes {
   static const home = '/';
   static const wallet = '/wallet';
   static const trades = '/trades';
-  static const addTrade = '${trades}add';
+  static const addTrade = '$trades/add';
 
   static final globalKey = GlobalKey<NavigatorState>(debugLabel: 'Global Key');
   static final shellKey = GlobalKey<NavigatorState>(debugLabel: 'Shell Key');

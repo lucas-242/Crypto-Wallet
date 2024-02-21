@@ -66,7 +66,10 @@ class TradesFormCubit extends Cubit<TradesFormState> {
 
   Future<void> onSave() async {
     try {
+      emit(state.copyWith(status: BaseStateStatus.loading));
+
       await addTrade();
+      emit(state.copyWith(status: BaseStateStatus.success));
     } catch (error) {
       emit(state.copyWith(status: BaseStateStatus.error));
     }

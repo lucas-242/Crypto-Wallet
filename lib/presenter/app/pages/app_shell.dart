@@ -77,6 +77,12 @@ class _AppShellState extends State<AppShell> {
                 icon: const Icon(Icons.menu),
                 onPressed: context.showDrawer,
               ),
+              actions: [
+                IconButton(
+                  onPressed: () => context.pushTo(Routes.addTrade),
+                  icon: const Icon(Icons.add, color: AppColors.white),
+                ),
+              ],
             ),
             body: widget.child,
             extendBody: true,

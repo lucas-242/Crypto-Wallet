@@ -12,6 +12,7 @@ import 'package:crypto_wallet/infra/services/local_cryptos_service.dart';
 import 'package:crypto_wallet/presenter/app/cubit/app_cubit.dart';
 import 'package:crypto_wallet/presenter/login/cubit/login_cubit.dart';
 import 'package:crypto_wallet/presenter/trades/cubit/trades_cubit.dart';
+import 'package:crypto_wallet/presenter/trades/cubit/trades_form_cubit.dart';
 import 'package:crypto_wallet/presenter/wallet/cubit/wallet_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -85,6 +86,13 @@ abstract class ServiceLocator {
     _instance.registerSingleton(TradesCubit(
       _instance.get<WalletRepository>(),
     ));
+
+    _instance.registerFactory(
+      () => TradesFormCubit(
+        _instance.get<WalletRepository>(),
+        _instance.get<CryptosService>(),
+      ),
+    );
 
     _instance
         .registerFactory(() => LoginCubit(_instance.get<AuthRepository>()));

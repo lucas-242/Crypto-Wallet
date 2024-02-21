@@ -1,6 +1,7 @@
 import 'package:crypto_wallet/domain/models/trade.dart';
 import 'package:crypto_wallet/domain/models/wallet_crypto.dart';
 
+//TODO: ERASE IT
 /// This service is responsible for calculate the Crypto properties when creating or removing a trade
 abstract class CryptosService {
   /// Calculate all [crypto] properties considering [trade].

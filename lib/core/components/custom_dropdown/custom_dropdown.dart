@@ -41,40 +41,37 @@ class _CustomDropdownState extends State<CustomDropdown> {
   Widget build(BuildContext context) {
     final List<DropdownItem> filteredItems = getFilteredItems();
 
-    return Padding(
-      padding: const EdgeInsets.all(AppInsets.md),
-      child: Column(
-        children: [
-          if (widget.showSeach)
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: widget.searchHint,
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _searchTerm = value;
-                });
-              },
+    return Column(
+      children: [
+        if (widget.showSeach)
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: widget.searchHint,
             ),
-          AppSpacings.verticalMd,
-          DropdownButtonFormField<DropdownItem>(
-            value: widget.selectedItem,
-            hint: Text(widget.label),
-            icon: const Icon(Icons.arrow_drop_down),
-            elevation: 16,
-            style: const TextStyle(color: AppColors.black),
-            onChanged: widget.onChanged,
-            validator: widget.validator,
-            items: filteredItems
-                .map<DropdownMenuItem<DropdownItem>>(
-                    (value) => DropdownMenuItem<DropdownItem>(
-                          value: value,
-                          child: Text(value.label),
-                        ))
-                .toList(),
+            onChanged: (value) {
+              setState(() {
+                _searchTerm = value;
+              });
+            },
           ),
-        ],
-      ),
+        AppSpacings.verticalMd,
+        DropdownButtonFormField<DropdownItem>(
+          value: widget.selectedItem,
+          hint: Text(widget.label, style: context.textMd),
+          icon: const Icon(Icons.arrow_drop_down, color: AppColors.white),
+          elevation: 16,
+          style: context.textMd,
+          onChanged: widget.onChanged,
+          validator: widget.validator,
+          items: filteredItems
+              .map<DropdownMenuItem<DropdownItem>>(
+                  (value) => DropdownMenuItem<DropdownItem>(
+                        value: value,
+                        child: Text(value.label),
+                      ))
+              .toList(),
+        ),
+      ],
     );
   }
 }
