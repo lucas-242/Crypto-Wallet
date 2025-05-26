@@ -1,9 +1,9 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/watch_list/watch_list_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardWatchList extends StatelessWidget {
   final List<CryptoModel> cryptos;

@@ -1,8 +1,8 @@
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '/blocs/wallet/wallet.dart';
 import '/modules/insert_trade/insert_trade.dart';
@@ -13,7 +13,6 @@ import '/shared/helpers/view_helper.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/dropdown_item_model.dart';
 import '/shared/models/enums/status_page.dart';
-import '../../../shared/core/trade_type.dart';
 import '/shared/models/trade_model.dart';
 import '/shared/services/cryptos_service.dart';
 import '/shared/themes/themes.dart';
@@ -21,6 +20,7 @@ import '/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import '/shared/widgets/bottom_buttons/bottom_buttons_widget.dart';
 import '/shared/widgets/custom_dropdown/custom_dropdown_widget.dart';
 import '/shared/widgets/custom_text_form_field/custom_text_form_field_widget.dart';
+import '../../../shared/core/trade_type.dart';
 
 class InsertTradePage extends StatefulWidget {
   final WalletRepository walletRepository;
@@ -43,8 +43,10 @@ class _InsertTradePageState extends State<InsertTradePage> {
   final tradedAmoutController = TextEditingController();
   final priceController = TextEditingController();
   final feeController = TextEditingController();
-  final dateController =
-      MaskedTextController(text: 'dd/MM/yyyy', mask: '00/00/0000');
+  final dateController = MaskedTextController(
+    text: 'dd/MM/yyyy',
+    mask: '00/00/0000',
+  );
 
   @override
   void initState() {
@@ -77,10 +79,7 @@ class _InsertTradePageState extends State<InsertTradePage> {
   DropdownItem? getSelectedItem(TradeModel trade) {
     if (trade.cryptoId.isNotEmpty) {
       var crypto = WalletHelper.findCoin(bloc.trade.cryptoId);
-      DropdownItem(
-        text: '${crypto.symbol} - ${crypto.name}',
-        value: crypto.id,
-      );
+      DropdownItem(text: '${crypto.symbol} - ${crypto.name}', value: crypto.id);
     }
 
     return null;
@@ -89,10 +88,12 @@ class _InsertTradePageState extends State<InsertTradePage> {
   void onChangeDatePicker(DateTime? date) {
     bloc.onChangeField(date: date);
     if (date != null) {
-      final day =
-          date.day < 10 ? '0' + date.day.toString() : date.day.toString();
-      final month =
-          date.month < 10 ? '0' + date.month.toString() : date.month.toString();
+      final day = date.day < 10
+          ? '0' + date.day.toString()
+          : date.day.toString();
+      final month = date.month < 10
+          ? '0' + date.month.toString()
+          : date.month.toString();
       final formattedDate = '$day$month${date.year}';
       dateController.text = formattedDate;
     }
@@ -104,14 +105,14 @@ class _InsertTradePageState extends State<InsertTradePage> {
     await bloc
         .onSave(tradesBloc: tradesBloc, walletBloc: walletBloc, uid: uid)
         .then((value) {
-      Navigator.pop(context);
-    }).catchError((error) {
-      //TODO add default value to the first two fields and fill them if an error was triggered
-      ScaffoldMessenger.of(context).showSnackBar(getAppSnackBar(
-        message: error.message,
-        type: SnackBarType.error,
-      ));
-    });
+          Navigator.pop(context);
+        })
+        .catchError((error) {
+          //TODO add default value to the first two fields and fill them if an error was triggered
+          ScaffoldMessenger.of(context).showSnackBar(
+            getAppSnackBar(message: error.message, type: SnackBarType.error),
+          );
+        });
   }
 
   @override
@@ -126,191 +127,215 @@ class _InsertTradePageState extends State<InsertTradePage> {
       body: Padding(
         padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 5),
         child: ValueListenableBuilder<InsertTradeStatus>(
-            valueListenable: bloc.statusNotifier,
-            builder: (context, status, child) {
-              if (status.statusPage == StatusPage.loading) {
-                return Container(
-                  height: SizeConfig.height * 0.8,
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Form(
-                      key: bloc.formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomDropdown(
-                            label: bloc.appLocalizations.operationType,
-                            hint: bloc.appLocalizations.hintFieldOperationType,
-                            items: TradeType.list
-                                .map((e) => DropdownItem(
-                                    value: e,
-                                    text: ViewHelper.getTradeLabel(
-                                        e, bloc.appLocalizations)))
-                                .toList(),
-                            onChanged: (DropdownItem? data) {
-                              if (data != null) {
-                                bloc.onChangeField(operationType: data.value);
-                                setState(() {});
-                              }
-                            },
-                            validator: (item) => bloc.validateDropdown(item),
-                          ),
-                          SizedBox(height: 25),
-                          CustomDropdown(
-                            label: bloc.appLocalizations.crypto,
-                            hint: bloc.appLocalizations.hintFieldCrypto,
-                            items: WalletHelper.coinsList
-                                .map((e) => DropdownItem(
-                                    text: '${e.symbol} - ${e.name}',
-                                    auxValue: e.symbol,
-                                    value: e.id))
-                                .toList(),
-                            selectedItem: getSelectedItem(bloc.trade),
-                            onChanged: (DropdownItem? data) {
-                              if (data != null) {
-                                bloc.onChangeField(
-                                    cryptoId: data.value,
-                                    cryptoSymbol: data.auxValue);
-                                setState(() {});
-                              }
-                            },
-                            validator: (item) => bloc.validateDropdown(item),
-                            showSeach: true,
-                            searchHint: 'BTC, ETH, ADA ...',
-                          ),
-                          SizedBox(height: 25),
-                          CustomTextFormField(
-                            labelText: bloc.appLocalizations.cryptoAmount,
-                            hintText: '0.00',
-                            icon: Icons.account_balance_wallet_outlined,
-                            keyboardType: TextInputType.number,
-                            controller: cryptoAmountController,
-                            validator: bloc.validateCryptoAmount,
-                            onChanged: (value) {
-                              var number =
-                                  double.tryParse(cryptoAmountController.text);
-                              tradedAmoutController.text =
-                                  bloc.onChangeCryptoAmountOrPrice(
-                                      amount: value.isEmpty
-                                          ? 0
-                                          : (number == null ? 0 : number));
-                            },
-                          ),
-                          if (bloc.trade.operationType != TradeType.transfer)
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: CustomTextFormField(
-                                labelText: bloc.appLocalizations.tradePrice,
-                                hintText: '\$0.00',
-                                icon: Icons.attach_money_outlined,
-                                keyboardType: TextInputType.number,
-                                controller: priceController,
-                                validator: bloc.validateTradePrice,
-                                onChanged: (value) {
-                                  var number =
-                                      double.tryParse(priceController.text);
-                                  tradedAmoutController.text =
-                                      bloc.onChangeCryptoAmountOrPrice(
-                                          price: value.isEmpty
-                                              ? 0
-                                              : (number == null ? 0 : number));
-                                },
-                              ),
-                            ),
-                          if (bloc.trade.operationType != TradeType.transfer)
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: CustomTextFormField(
-                                labelText:
-                                    bloc.trade.operationType == TradeType.sell
-                                        ? bloc.appLocalizations.soldAmount
-                                        : bloc.appLocalizations.investedAmount,
-                                hintText: '\$0.00',
-                                icon: Icons.savings_outlined,
-                                keyboardType: TextInputType.number,
-                                controller: tradedAmoutController,
-                                validator: bloc.validateTradedAmount,
-                                onChanged: (value) {
-                                  var number = double.tryParse(
-                                      tradedAmoutController.text);
-                                  bloc.onChangeField(
-                                      amountDollars: value.isEmpty
-                                          ? 0
-                                          : (number == null ? 0 : number));
-                                },
-                              ),
-                            ),
-                          SizedBox(height: 10),
-                          CustomTextFormField(
-                            labelText: bloc.appLocalizations.fee,
-                            hintText: '0.00',
-                            icon: Icons.money_off_sharp,
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.done,
-                            controller: feeController,
-                            validator: bloc.validateFee,
-                            onChanged: (value) {
-                              var number = double.tryParse(feeController.text);
-                              bloc.onChangeField(
-                                  fee: value.isEmpty
-                                      ? 0
-                                      : (number == null ? 0 : number));
-                            },
-                          ),
-                          SizedBox(height: 10),
-                          CustomTextFormField(
-                              labelText: bloc.appLocalizations.date,
-                              hintText: bloc.appLocalizations.hintFieldDate,
-                              icon: Icons.calendar_today,
-                              keyboardType: TextInputType.datetime,
-                              controller: dateController,
-                              validator: bloc.validateDate,
-                              readOnly: true,
-                              onTap: () {
-                                showDatePicker(
-                                  context: context,
-                                  initialDate: dateController.text != ''
-                                      ? bloc.trade.date
-                                      : DateTime.now(),
-                                  firstDate: DateTime(2008),
-                                  lastDate: DateTime.now(),
-                                ).then((value) => onChangeDatePicker(value));
-                              }),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      bloc.appLocalizations.hintTrade,
-                      style: textTheme.bodySmall,
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      height: 50,
-                      child: AdWidget(ad: bloc.bannerAd..load()),
-                    ),
-                  ],
-                ),
+          valueListenable: bloc.statusNotifier,
+          builder: (context, status, child) {
+            if (status.statusPage == StatusPage.loading) {
+              return Container(
+                height: SizeConfig.height * 0.8,
+                child: Center(child: CircularProgressIndicator()),
               );
-            }),
+            }
+
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Form(
+                    key: bloc.formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomDropdown(
+                          label: bloc.appLocalizations.operationType,
+                          hint: bloc.appLocalizations.hintFieldOperationType,
+                          searchLabel: bloc.appLocalizations.search,
+                          noResultsLabel: bloc.appLocalizations.noResults,
+                          items: TradeType.list
+                              .map(
+                                (e) => DropdownItem(
+                                  value: e,
+                                  text: ViewHelper.getTradeLabel(
+                                    e,
+                                    bloc.appLocalizations,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (DropdownItem? data) {
+                            if (data != null) {
+                              bloc.onChangeField(operationType: data.value);
+                              setState(() {});
+                            }
+                          },
+                          validator: (item) => bloc.validateDropdown(item),
+                        ),
+                        SizedBox(height: 25),
+                        CustomDropdown(
+                          label: bloc.appLocalizations.crypto,
+                          hint: bloc.appLocalizations.hintFieldCrypto,
+                          searchLabel: bloc.appLocalizations.search,
+                          noResultsLabel: bloc.appLocalizations.noResults,
+                          items: WalletHelper.coinsList
+                              .map(
+                                (e) => DropdownItem(
+                                  text: '${e.symbol} - ${e.name}',
+                                  auxValue: e.symbol,
+                                  value: e.id,
+                                ),
+                              )
+                              .toList(),
+                          selectedItem: getSelectedItem(bloc.trade),
+                          onChanged: (DropdownItem? data) {
+                            if (data != null) {
+                              bloc.onChangeField(
+                                cryptoId: data.value,
+                                cryptoSymbol: data.auxValue,
+                              );
+                              setState(() {});
+                            }
+                          },
+                          validator: (item) => bloc.validateDropdown(item),
+                          showSeach: true,
+                          searchHint: 'BTC, ETH, ADA ...',
+                        ),
+                        SizedBox(height: 25),
+                        CustomTextFormField(
+                          labelText: bloc.appLocalizations.cryptoAmount,
+                          hintText: '0.00',
+                          icon: Icons.account_balance_wallet_outlined,
+                          keyboardType: TextInputType.number,
+                          controller: cryptoAmountController,
+                          validator: bloc.validateCryptoAmount,
+                          onChanged: (value) {
+                            var number = double.tryParse(
+                              cryptoAmountController.text,
+                            );
+                            tradedAmoutController.text = bloc
+                                .onChangeCryptoAmountOrPrice(
+                                  amount: value.isEmpty
+                                      ? 0
+                                      : (number == null ? 0 : number),
+                                );
+                          },
+                        ),
+                        if (bloc.trade.operationType != TradeType.transfer)
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: CustomTextFormField(
+                              labelText: bloc.appLocalizations.tradePrice,
+                              hintText: '\$0.00',
+                              icon: Icons.attach_money_outlined,
+                              keyboardType: TextInputType.number,
+                              controller: priceController,
+                              validator: bloc.validateTradePrice,
+                              onChanged: (value) {
+                                var number = double.tryParse(
+                                  priceController.text,
+                                );
+                                tradedAmoutController.text = bloc
+                                    .onChangeCryptoAmountOrPrice(
+                                      price: value.isEmpty
+                                          ? 0
+                                          : (number == null ? 0 : number),
+                                    );
+                              },
+                            ),
+                          ),
+                        if (bloc.trade.operationType != TradeType.transfer)
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: CustomTextFormField(
+                              labelText:
+                                  bloc.trade.operationType == TradeType.sell
+                                  ? bloc.appLocalizations.soldAmount
+                                  : bloc.appLocalizations.investedAmount,
+                              hintText: '\$0.00',
+                              icon: Icons.savings_outlined,
+                              keyboardType: TextInputType.number,
+                              controller: tradedAmoutController,
+                              validator: bloc.validateTradedAmount,
+                              onChanged: (value) {
+                                var number = double.tryParse(
+                                  tradedAmoutController.text,
+                                );
+                                bloc.onChangeField(
+                                  amountDollars: value.isEmpty
+                                      ? 0
+                                      : (number == null ? 0 : number),
+                                );
+                              },
+                            ),
+                          ),
+                        SizedBox(height: 10),
+                        CustomTextFormField(
+                          labelText: bloc.appLocalizations.fee,
+                          hintText: '0.00',
+                          icon: Icons.money_off_sharp,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          controller: feeController,
+                          validator: bloc.validateFee,
+                          onChanged: (value) {
+                            var number = double.tryParse(feeController.text);
+                            bloc.onChangeField(
+                              fee: value.isEmpty
+                                  ? 0
+                                  : (number == null ? 0 : number),
+                            );
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        CustomTextFormField(
+                          labelText: bloc.appLocalizations.date,
+                          hintText: bloc.appLocalizations.hintFieldDate,
+                          icon: Icons.calendar_today,
+                          keyboardType: TextInputType.datetime,
+                          controller: dateController,
+                          validator: bloc.validateDate,
+                          readOnly: true,
+                          onTap: () {
+                            showDatePicker(
+                              context: context,
+                              initialDate: dateController.text != ''
+                                  ? bloc.trade.date
+                                  : DateTime.now(),
+                              firstDate: DateTime(2008),
+                              lastDate: DateTime.now(),
+                            ).then((value) => onChangeDatePicker(value));
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    bloc.appLocalizations.hintTrade,
+                    style: textTheme.bodySmall,
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    height: 50,
+                    child: AdWidget(ad: bloc.bannerAd..load()),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
       bottomNavigationBar: ValueListenableBuilder<InsertTradeStatus>(
         valueListenable: bloc.statusNotifier,
         builder: (context, status, child) {
           if (status.statusPage != StatusPage.loading) {
             return BottomButtons(
-                fisrtLabel: bloc.appLocalizations.cancel,
-                secondLabel: bloc.appLocalizations.save,
-                secondButtonStyle:
-                    textTheme.labelLarge!.copyWith(color: AppColors.primary),
-                onPressedFirst: () => Navigator.of(context).pop(),
-                onPressedSecond: () => onSave());
+              fisrtLabel: bloc.appLocalizations.cancel,
+              secondLabel: bloc.appLocalizations.save,
+              secondButtonStyle: textTheme.labelLarge!.copyWith(
+                color: AppColors.primary,
+              ),
+              onPressedFirst: () => Navigator.of(context).pop(),
+              onPressedSecond: () => onSave(),
+            );
           }
 
           return SizedBox();

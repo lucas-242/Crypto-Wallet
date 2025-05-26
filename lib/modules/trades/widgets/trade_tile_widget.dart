@@ -1,10 +1,10 @@
 import 'package:crypto_wallet/shared/core/trade_type.dart';
 import 'package:crypto_wallet/shared/helpers/view_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 

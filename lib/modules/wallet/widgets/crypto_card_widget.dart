@@ -1,9 +1,9 @@
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/models/crypto_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 class CryptoCard extends StatefulWidget {

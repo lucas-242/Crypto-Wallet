@@ -1,5 +1,5 @@
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../core/cryptos.dart';
 import '../core/trade_type.dart';

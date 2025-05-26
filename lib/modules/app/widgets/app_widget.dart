@@ -1,9 +1,4 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:crypto_wallet/shared/services/cryptos_service.dart';
-import 'package:crypto_wallet/shared/themes/app_themes.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
-
 import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/insert_trade/insert_trade.dart';
 import 'package:crypto_wallet/modules/login/login.dart';
@@ -11,6 +6,10 @@ import 'package:crypto_wallet/modules/splash/splash.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/repositories/wallet_repository/wallet_repository.dart';
 import 'package:crypto_wallet/shared/core/routes.dart';
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
+import 'package:crypto_wallet/shared/services/cryptos_service.dart';
+import 'package:crypto_wallet/shared/themes/app_themes.dart';
+import 'package:flutter/material.dart';
 
 import 'app_scaffold_widget.dart';
 

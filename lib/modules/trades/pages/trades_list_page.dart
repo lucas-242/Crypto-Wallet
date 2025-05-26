@@ -2,6 +2,7 @@ import 'package:crypto_wallet/blocs/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/core/routes.dart';
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/models/dropdown_item_model.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
@@ -9,7 +10,6 @@ import 'package:crypto_wallet/shared/widgets/app_scaffold/app_scaffold_widget.da
 import 'package:crypto_wallet/shared/widgets/custom_dropdown/custom_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TradesListPage extends StatefulWidget {
   const TradesListPage({Key? key}) : super(key: key);
@@ -98,34 +98,39 @@ class _TradesListPageState extends State<TradesListPage> {
                               bloc.onFilter(item),
                           showSeach: true,
                           searchHint: 'BTC, ETH, ADA ...',
+                          searchLabel: bloc.appLocalizations.search,
+                          noResultsLabel: bloc.appLocalizations.noResults,
                         ),
                         SizedBox(height: 10),
                         Expanded(
                           child: Consumer<TradesBloc>(
-                              builder: (context, bloc, child) {
-                            return TradeTileList(
-                              bloc: bloc,
-                              onTap: (trade) => Navigator.pushNamed(
-                                context,
-                                AppRoutes.tradesDetails,
-                                arguments: {
-                                  'trade': trade,
-                                  'uid': auth.user!.uid
+                            builder: (context, bloc, child) {
+                              return TradeTileList(
+                                bloc: bloc,
+                                onTap: (trade) => Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.tradesDetails,
+                                  arguments: {
+                                    'trade': trade,
+                                    'uid': auth.user!.uid,
+                                  },
+                                ),
+                                onRefresh: () => bloc.getTrades(auth.user!.uid),
+                                onDelete: (trade) {
+                                  final walletBloc = context.read<WalletBloc>();
+                                  bloc
+                                      .onDelete(
+                                        trade: trade,
+                                        uid: auth.user!.uid,
+                                        walletBloc: walletBloc,
+                                      )
+                                      .then(
+                                        (value) => bloc.loadInterstitialAd(),
+                                      );
                                 },
-                              ),
-                              onRefresh: () => bloc.getTrades(auth.user!.uid),
-                              onDelete: (trade) {
-                                final walletBloc = context.read<WalletBloc>();
-                                bloc
-                                    .onDelete(
-                                      trade: trade,
-                                      uid: auth.user!.uid,
-                                      walletBloc: walletBloc,
-                                    )
-                                    .then((value) => bloc.loadInterstitialAd());
-                              },
-                            );
-                          }),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),

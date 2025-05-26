@@ -1,18 +1,17 @@
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '/blocs/wallet/wallet.dart';
 import '/modules/trades/trades.dart';
 import '/repositories/wallet_repository/wallet_repository.dart';
-import '../../../shared/core/trade_type.dart';
 import '/shared/helpers/ad_helper.dart';
 import '/shared/helpers/wallet_helper.dart';
 import '/shared/models/crypto_model.dart';
 import '/shared/models/dropdown_item_model.dart';
 import '/shared/models/trade_model.dart';
 import '/shared/services/cryptos_service.dart';
-
+import '../../../shared/core/trade_type.dart';
 import 'insert_trade_status.dart';
 
 class InsertTradeBloc extends ChangeNotifier {

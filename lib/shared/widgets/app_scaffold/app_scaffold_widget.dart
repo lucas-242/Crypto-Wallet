@@ -4,12 +4,12 @@ import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
 import 'package:crypto_wallet/shared/core/routes.dart';
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_bar/custom_app_bar_widget.dart';
 import 'package:crypto_wallet/shared/widgets/custom_drawer/custom_drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomScaffold extends StatelessWidget {
   final String title;

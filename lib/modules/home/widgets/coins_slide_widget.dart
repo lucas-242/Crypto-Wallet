@@ -1,9 +1,9 @@
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/models/wallet_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/image_fade/image_fade_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CoinsSlide extends StatelessWidget {
   final WalletModel walletdData;
@@ -74,9 +74,9 @@ class CoinsSlide extends StatelessWidget {
                                     ),
                                     SizedBox(height: 5),
                                     Text(
-                                      '${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(cryptoSummary.percent / 100)}',
-                                      style: textTheme.bodyMedium!.copyWith(color: AppColors.white)
-                                    ),
+                                        '${NumberFormat.decimalPercentPattern(decimalDigits: 1).format(cryptoSummary.percent / 100)}',
+                                        style: textTheme.bodyMedium!
+                                            .copyWith(color: AppColors.white)),
                                   ],
                                 )
                               ],

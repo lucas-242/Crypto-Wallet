@@ -3,6 +3,7 @@ import 'package:crypto_wallet/modules/trades/trades.dart';
 import 'package:crypto_wallet/shared/helpers/ad_helper.dart';
 import 'package:crypto_wallet/shared/helpers/view_helper.dart';
 import 'package:crypto_wallet/shared/helpers/wallet_helper.dart';
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/models/trade_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TradesDetails extends StatefulWidget {
   const TradesDetails({Key? key}) : super(key: key);
@@ -94,8 +94,8 @@ class _TradesDetailsState extends State<TradesDetails> {
             child: Column(
               children: [
                 Center(
-                    child:
-                        Text(trade.cryptoSymbol, style: textTheme.displayMedium)),
+                    child: Text(trade.cryptoSymbol,
+                        style: textTheme.displayMedium)),
                 SizedBox(height: 25),
                 TradeDetailsRow(
                   leftText: appLocalizations.operationType,

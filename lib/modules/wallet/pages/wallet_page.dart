@@ -3,6 +3,7 @@ import 'package:crypto_wallet/modules/app/app.dart';
 import 'package:crypto_wallet/modules/wallet/wallet.dart';
 import 'package:crypto_wallet/modules/wallet/widgets/ad_card_widget.dart';
 import 'package:crypto_wallet/shared/auth/auth.dart';
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/models/enums/status_page.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:crypto_wallet/shared/widgets/app_scaffold/app_scaffold_widget.dart';
@@ -10,7 +11,6 @@ import 'package:crypto_wallet/shared/widgets/total_wallet_card/total_wallet_card
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);

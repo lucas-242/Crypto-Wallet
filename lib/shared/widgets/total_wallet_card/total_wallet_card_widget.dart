@@ -1,8 +1,8 @@
+import 'package:crypto_wallet/shared/l10n/app_localizations.dart';
 import 'package:crypto_wallet/shared/models/wallet_model.dart';
 import 'package:crypto_wallet/shared/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TotalWalletCard extends StatelessWidget {
   final WalletModel walletData;
@@ -70,13 +70,16 @@ class TotalWalletCard extends StatelessWidget {
                         '${appLocalizations.totalInvested}',
                         style: textTheme.displayMedium!.copyWith(fontSize: 17),
                       ),
-              showUserTotal ?
-                      Text(
-                        NumberFormat.currency(symbol: '\$')
-                            .format(walletData.totalInvested),
-                        style: textTheme.displayMedium!.copyWith(fontSize: 17),
-                      )
-                      : hideValue(style: textTheme.displayMedium!.copyWith(fontSize: 17))
+                      showUserTotal
+                          ? Text(
+                              NumberFormat.currency(symbol: '\$')
+                                  .format(walletData.totalInvested),
+                              style: textTheme.displayMedium!
+                                  .copyWith(fontSize: 17),
+                            )
+                          : hideValue(
+                              style: textTheme.displayMedium!
+                                  .copyWith(fontSize: 17))
                     ],
                   ),
                 )
